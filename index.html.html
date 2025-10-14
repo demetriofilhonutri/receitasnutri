@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro de Receitas - Demétrio Filho Nutri</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8FA383 0%, #DE8744 100%); padding: 20px; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #8FA383 0%, #2C5F6F 100%); color: white; padding: 30px; text-align: center; }
+        .logo { width: 80px; height: 80px; margin: 0 auto 15px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; color: #8FA383; font-weight: bold; }
+        .header h1 { font-size: 2.2em; margin-bottom: 5px; }
+        .header .subtitle { font-size: 1.1em; opacity: 0.95; margin-bottom: 10px; }
+        .header .instagram { font-size: 0.95em; opacity: 0.9; }
+        .content { padding: 30px; }
+        .info-box { background: #f0f4f0; border-left: 4px solid #8FA383; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .info-box h3 { color: #2C5F6F; margin-bottom: 10px; }
+        .filters { background: #fafafa; padding: 25px; border-radius: 10px; margin-bottom: 30px; border: 2px solid #e9ecef; }
+        .filter-section { margin-bottom: 20px; }
+        .filter-section h3 { color: #2C5F6F; margin-bottom: 12px; font-size: 1.1em; }
+        .filter-row { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 0.9em; color: #666; font-weight: 500; }
+        .filter-group input, .filter-group select { padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; }
+        .checkbox-group { display: flex; gap: 20px; flex-wrap: wrap; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; }
+        .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #8FA383; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: 600; }
+        .btn-primary { background: linear-gradient(135deg, #8FA383 0%, #2C5F6F 100%); color: white; }
+        .btn-success { background: #8FA383; color: white; }
+        .btn-danger { background: #DE8744; color: white; padding: 8px 15px; font-size: 0.9em; }
+        .actions { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .results-info { background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2C5F6F; }
+        .table-container { overflow-x: auto; border-radius: 10px; border: 2px solid #e9ecef; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        thead { background: linear-gradient(135deg, #8FA383 0%, #2C5F6F 100%); color: white; }
+        th { padding: 15px; text-align: left; font-weight: 600; font-size: 0.95em; }
+        td { padding: 12px 15px; border-bottom: 1px solid #e9ecef; }
+        tbody tr:hover { background: #f8f9fa; }
+        .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.85em; font-weight: 500; }
+        .tag-lactose { background: #fff3cd; color: #856404; }
+        .tag-no-lactose { background: #d4edda; color: #155724; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">DN</div>
+            <h1>Demétrio Filho Nutri</h1>
+            <p class="subtitle">Filtro de Receitas Saudáveis</p>
+            <p class="instagram">📱 @demetriofilhonutri</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>👋 Bem-vindo(a)!</h3>
+                <p>Use os filtros para encontrar receitas que se encaixem no seu objetivo. Todas foram cuidadosamente selecionadas!</p>
+            </div>
+            <div class="filters">
+                <div class="filter-section">
+                    <h3>🔥 Calorias</h3>
+                    <div class="filter-row">
+                        <div class="filter-group"><label>Mínimo (kcal)</label><input type="number" id="caloriesMin" placeholder="0"></div>
+                        <div class="filter-group"><label>Máximo (kcal)</label><input type="number" id="caloriesMax" placeholder="1000"></div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h3>💪 Macronutrientes</h3>
+                    <div class="filter-row">
+                        <div class="filter-group"><label>Proteínas Mín (g)</label><input type="number" id="proteinMin" placeholder="0"></div>
+                        <div class="filter-group"><label>Carboidratos Máx (g)</label><input type="number" id="carbsMax" placeholder="100"></div>
+                        <div class="filter-group"><label>Gorduras Máx (g)</label><input type="number" id="fatMax" placeholder="50"></div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h3>🥛 Lactose</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="filterWithLactose" checked><label>Com lactose</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="filterWithoutLactose" checked><label>Sem lactose</label></div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h3>🔥 Método de Preparo</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="filterStove" checked><label>Fogão</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="filterOven" checked><label>Forno</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="filterMicrowave" checked><label>Micro-ondas</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="filterAirfryer" checked><label>Air Fryer</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="filterNoHeat" checked><label>Sem fogo</label></div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;"><button class="btn btn-primary" onclick="applyFilters()">Aplicar Filtros</button></div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-success" onclick="openModal()">➕ Adicionar Receita</button>
+                <button class="btn btn-primary" onclick="exportToExcel()">📊 Exportar para Excel</button>
+            </div>
+            <div class="results-info"><strong id="resultsCount">0</strong> receitas encontradas</div>
+            <div class="table-container">
+                <table><thead><tr><th>Nome</th><th>Calorias</th><th>Proteínas</th><th>Carboidratos</th><th>Gorduras</th><th>Lactose</th><th>Preparo</th><th>Ações</th></tr></thead><tbody id="recipesBody"></tbody></table>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="recipeModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Adicionar Nova Receita</h2></div>
+            <div class="form-group"><label>Nome *</label><input type="text" id="recipeName"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Calorias *</label><input type="number" id="recipeCalories"></div>
+                <div class="form-group"><label>Proteínas *</label><input type="number" id="recipeProtein"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Carboidratos *</label><input type="number" id="recipeCarbs"></div>
+                <div class="form-group"><label>Gorduras *</label><input type="number" id="recipeFat"></div>
+            </div>
+            <div class="form-group"><label>Lactose *</label><select id="recipeLactose"><option value="">Selecione...</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+            <div class="form-group"><label>Preparo *</label><select id="recipeMethod"><option value="">Selecione...</option><option value="fogao">Fogão</option><option value="forno">Forno</option><option value="microondas">Micro-ondas</option><option value="airfryer">Air Fryer</option><option value="semfogo">Sem fogo</option></select></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="saveRecipe()">Salvar</button>
+                <button class="btn" onclick="closeModal()" style="background: #6c757d; color: white;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let recipes = [];
+        let filteredRecipes = [];
+        const methodLabels = {'fogao': 'Fogão', 'forno': 'Forno', 'microondas': 'Micro-ondas', 'airfryer': 'Air Fryer', 'semfogo': 'Sem fogo'};
+        
+        const defaultRecipes = [
+            {id: 1, name: "Crepioca", calories: 248, protein: 21, carbs: 23, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 2, name: "Aveioca", calories: 280, protein: 24, carbs: 28, fat: 9, lactose: "sim", method: "fogao"},
+            {id: 3, name: "Pão Caseiro", calories: 195, protein: 16, carbs: 15, fat: 8, lactose: "sim", method: "microondas"},
+            {id: 4, name: "Torrada com Patê de Frango", calories: 220, protein: 26, carbs: 18, fat: 5, lactose: "sim", method: "semfogo"},
+            {id: 5, name: "Tapiovo", calories: 230, protein: 17, carbs: 24, fat: 7, lactose: "sim", method: "fogao"},
+            {id: 6, name: "Tapioca Crocante", calories: 210, protein: 15, carbs: 22, fat: 6, lactose: "sim", method: "fogao"},
+            {id: 7, name: "Pãovo", calories: 185, protein: 14, carbs: 16, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 8, name: "Pão de Queijo de Frigideira", calories: 265, protein: 20, carbs: 18, fat: 12, lactose: "sim", method: "fogao"},
+            {id: 9, name: "Smoothie", calories: 195, protein: 25, carbs: 22, fat: 2, lactose: "nao", method: "semfogo"},
+            {id: 10, name: "Panqueca de Banana", calories: 215, protein: 14, carbs: 30, fat: 5, lactose: "nao", method: "fogao"},
+            {id: 11, name: "Bolinho de Chocolate", calories: 230, protein: 16, carbs: 28, fat: 6, lactose: "nao", method: "microondas"},
+            {id: 12, name: "Gostosinho de Cuscuz", calories: 320, protein: 22, carbs: 38, fat: 9, lactose: "sim", method: "fogao"},
+            {id: 13, name: "Nescau Proteico", calories: 245, protein: 24, carbs: 28, fat: 5, lactose: "sim", method: "semfogo"},
+            {id: 14, name: "Açaí Proteico", calories: 180, protein: 18, carbs: 22, fat: 4, lactose: "nao", method: "semfogo"},
+            {id: 15, name: "Brusqueta", calories: 210, protein: 12, carbs: 32, fat: 5, lactose: "sim", method: "microondas"},
+            {id: 16, name: "Rap10 com Ovo", calories: 225, protein: 16, carbs: 28, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 17, name: "Iogurte com Frutas", calories: 240, protein: 14, carbs: 35, fat: 6, lactose: "sim", method: "semfogo"},
+            {id: 18, name: "Mingau de Aveia", calories: 280, protein: 18, carbs: 38, fat: 6, lactose: "sim", method: "fogao"},
+            {id: 19, name: "Bananada Fit", calories: 220, protein: 20, carbs: 28, fat: 4, lactose: "sim", method: "semfogo"},
+            {id: 20, name: "Crepe de Banana", calories: 265, protein: 18, carbs: 32, fat: 7, lactose: "sim", method: "fogao"},
+            {id: 21, name: "Mousse de Maracujá", calories: 145, protein: 16, carbs: 15, fat: 3, lactose: "sim", method: "semfogo"},
+            {id: 22, name: "Cookie de Banana", calories: 265, protein: 8, carbs: 45, fat: 6, lactose: "nao", method: "airfryer"},
+            {id: 23, name: "Brownie Saudável", calories: 285, protein: 14, carbs: 32, fat: 12, lactose: "nao", method: "airfryer"},
+            {id: 24, name: "Escondidinho de Batata", calories: 340, protein: 28, carbs: 38, fat: 8, lactose: "sim", method: "forno"},
+            {id: 25, name: "Creme de Galinha", calories: 285, protein: 32, carbs: 24, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 26, name: "Macarronada Bolonhesa", calories: 385, protein: 30, carbs: 45, fat: 9, lactose: "sim", method: "fogao"},
+            {id: 27, name: "Risoto de Camarão", calories: 365, protein: 28, carbs: 42, fat: 10, lactose: "sim", method: "fogao"},
+            {id: 28, name: "Farofa de Ovo", calories: 320, protein: 22, carbs: 35, fat: 10, lactose: "nao", method: "fogao"},
+            {id: 29, name: "Lasanha de Berinjela", calories: 310, protein: 28, carbs: 24, fat: 12, lactose: "sim", method: "forno"},
+            {id: 30, name: "Omelete de Frango", calories: 285, protein: 32, carbs: 18, fat: 10, lactose: "nao", method: "fogao"},
+            {id: 31, name: "Baião com Tilápia", calories: 420, protein: 35, carbs: 48, fat: 10, lactose: "nao", method: "fogao"},
+            {id: 32, name: "Frango Empanado", calories: 395, protein: 38, carbs: 42, fat: 9, lactose: "sim", method: "airfryer"},
+            {id: 33, name: "Strogonoff", calories: 395, protein: 35, carbs: 38, fat: 12, lactose: "sim", method: "fogao"},
+            {id: 34, name: "Peixe ao Molho", calories: 340, protein: 38, carbs: 35, fat: 8, lactose: "nao", method: "forno"},
+            {id: 35, name: "Cuscuz Marroquino", calories: 340, protein: 30, carbs: 42, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 36, name: "Tomate Recheado", calories: 245, protein: 26, carbs: 18, fat: 8, lactose: "sim", method: "forno"},
+            {id: 37, name: "Arroz de Couve-flor", calories: 215, protein: 24, carbs: 15, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 38, name: "Almôndegas", calories: 285, protein: 30, carbs: 22, fat: 9, lactose: "nao", method: "forno"},
+            {id: 39, name: "Salada de Atum", calories: 285, protein: 32, carbs: 25, fat: 8, lactose: "nao", method: "semfogo"},
+            {id: 40, name: "Hambúrguer Fit", calories: 355, protein: 32, carbs: 38, fat: 9, lactose: "sim", method: "fogao"},
+            {id: 41, name: "Salgado de Frango", calories: 285, protein: 30, carbs: 28, fat: 7, lactose: "sim", method: "forno"},
+            {id: 42, name: "Pizza Fit", calories: 320, protein: 26, carbs: 35, fat: 9, lactose: "sim", method: "forno"},
+            {id: 43, name: "Batata Doce Chips", calories: 295, protein: 28, carbs: 32, fat: 7, lactose: "sim", method: "microondas"},
+            {id: 44, name: "Risoto de Frango", calories: 355, protein: 30, carbs: 42, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 45, name: "Omelete de Queijo", calories: 275, protein: 28, carbs: 18, fat: 12, lactose: "sim", method: "fogao"},
+            {id: 46, name: "Sopa de Legumes", calories: 240, protein: 26, carbs: 28, fat: 5, lactose: "nao", method: "fogao"},
+            {id: 47, name: "Ratatouille", calories: 265, protein: 24, carbs: 28, fat: 8, lactose: "nao", method: "forno"},
+            {id: 48, name: "Batata Recheada", calories: 385, protein: 30, carbs: 45, fat: 10, lactose: "sim", method: "forno"},
+            {id: 49, name: "Creme de Abóbora", calories: 295, protein: 28, carbs: 32, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 50, name: "Torta de Frango", calories: 310, protein: 32, carbs: 28, fat: 9, lactose: "sim", method: "forno"},
+            {id: 51, name: "Suflê de Frango", calories: 285, protein: 34, carbs: 22, fat: 8, lactose: "sim", method: "forno"},
+            {id: 52, name: "Nuggets de Frango", calories: 340, protein: 36, carbs: 28, fat: 9, lactose: "nao", method: "airfryer"},
+            {id: 53, name: "Panqueca de Patinho", calories: 295, protein: 26, carbs: 32, fat: 7, lactose: "sim", method: "fogao"},
+            {id: 54, name: "Mingau Proteico", calories: 265, protein: 22, carbs: 35, fat: 6, lactose: "sim", method: "microondas"},
+            {id: 55, name: "Pão de Cenoura Fit", calories: 285, protein: 24, carbs: 32, fat: 8, lactose: "sim", method: "forno"},
+            {id: 56, name: "Empada Fit", calories: 275, protein: 28, carbs: 28, fat: 7, lactose: "sim", method: "forno"},
+            {id: 57, name: "Canja de Galinha", calories: 240, protein: 30, carbs: 22, fat: 5, lactose: "nao", method: "fogao"},
+            {id: 58, name: "Peixe ao Molho Branco", calories: 325, protein: 36, carbs: 28, fat: 8, lactose: "sim", method: "forno"},
+            {id: 59, name: "Pão de Queijo Fit", calories: 255, protein: 22, carbs: 24, fat: 9, lactose: "sim", method: "forno"},
+            {id: 60, name: "Peixe Empanado", calories: 345, protein: 38, carbs: 32, fat: 8, lactose: "sim", method: "airfryer"},
+            {id: 61, name: "Pizza Fake de Micro-ondas", calories: 295, protein: 28, carbs: 30, fat: 8, lactose: "sim", method: "microondas"},
+            {id: 62, name: "Hambúrguer de Frango com Macaxeira", calories: 340, protein: 32, carbs: 38, fat: 8, lactose: "sim", method: "airfryer"},
+            {id: 63, name: "Salada Cítrica", calories: 180, protein: 8, carbs: 32, fat: 5, lactose: "nao", method: "semfogo"},
+            {id: 64, name: "Espaguete de Abobrinha", calories: 255, protein: 28, carbs: 18, fat: 8, lactose: "nao", method: "fogao"},
+            {id: 65, name: "Macarronada de Abobrinha", calories: 265, protein: 26, carbs: 22, fat: 8, lactose: "nao", method: "fogao"},
+            {id: 66, name: "Escondidinho de Jerimum", calories: 295, protein: 26, carbs: 32, fat: 7, lactose: "sim", method: "forno"},
+            {id: 67, name: "Purê de Macaxeira com Peixe", calories: 325, protein: 34, carbs: 38, fat: 7, lactose: "sim", method: "fogao"},
+            {id: 68, name: "Escondidinho de Macaxeira", calories: 365, protein: 32, carbs: 42, fat: 9, lactose: "sim", method: "forno"},
+            {id: 69, name: "Bolinho de Arroz com Frango", calories: 310, protein: 28, carbs: 35, fat: 7, lactose: "nao", method: "forno"},
+            {id: 70, name: "Batata Sauté com Carne", calories: 425, protein: 32, carbs: 48, fat: 12, lactose: "nao", method: "fogao"},
+            {id: 71, name: "Macarrão ao Molho Branco", calories: 365, protein: 28, carbs: 42, fat: 10, lactose: "sim", method: "fogao"},
+            {id: 72, name: "Arroz com Salada e Frango", calories: 385, protein: 36, carbs: 45, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 73, name: "Tapioca de Cuscuz", calories: 285, protein: 20, carbs: 40, fat: 5, lactose: "sim", method: "fogao"},
+            {id: 74, name: "Ninho Proteico", calories: 240, protein: 26, carbs: 22, fat: 8, lactose: "sim", method: "semfogo"},
+            {id: 75, name: "Torrada com Patê de Queijo", calories: 235, protein: 22, carbs: 24, fat: 7, lactose: "sim", method: "semfogo"},
+            {id: 76, name: "Sanduíche Agridoce", calories: 295, protein: 15, carbs: 42, fat: 7, lactose: "sim", method: "fogao"},
+            {id: 77, name: "Bolo de Cenoura", calories: 210, protein: 18, carbs: 24, fat: 6, lactose: "nao", method: "airfryer"},
+            {id: 78, name: "Cupcake de Coco", calories: 235, protein: 16, carbs: 28, fat: 8, lactose: "nao", method: "microondas"},
+            {id: 79, name: "Panqueca de Banana com Whey", calories: 245, protein: 20, carbs: 32, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 80, name: "Ovo de Codorna com Queijo", calories: 195, protein: 18, carbs: 12, fat: 9, lactose: "sim", method: "fogao"},
+            {id: 81, name: "Pipoca com Calda de Whey", calories: 220, protein: 18, carbs: 35, fat: 3, lactose: "nao", method: "microondas"},
+            {id: 82, name: "Suco Verde com Pão", calories: 240, protein: 14, carbs: 38, fat: 5, lactose: "sim", method: "semfogo"},
+            {id: 83, name: "Shake de Chocolate", calories: 265, protein: 22, carbs: 32, fat: 7, lactose: "nao", method: "semfogo"},
+            {id: 84, name: "Cuscuz com Queijo e Ricota", calories: 315, protein: 24, carbs: 38, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 85, name: "Vitamina Laxativa", calories: 235, protein: 24, carbs: 32, fat: 4, lactose: "sim", method: "semfogo"},
+            {id: 86, name: "Tapioca com Coco e Ovo", calories: 285, protein: 18, carbs: 35, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 87, name: "Bombom Gelado", calories: 215, protein: 28, carbs: 18, fat: 6, lactose: "sim", method: "semfogo"},
+            {id: 88, name: "Salgado de Frango com Suco", calories: 295, protein: 32, carbs: 32, fat: 7, lactose: "sim", method: "forno"},
+            {id: 89, name: "Creme de Abacate", calories: 185, protein: 18, carbs: 12, fat: 9, lactose: "sim", method: "semfogo"},
+            {id: 90, name: "Guacamole", calories: 220, protein: 12, carbs: 18, fat: 12, lactose: "sim", method: "semfogo"},
+            {id: 91, name: "Trufa de Uva", calories: 195, protein: 22, carbs: 18, fat: 5, lactose: "sim", method: "semfogo"},
+            {id: 92, name: "Smoothie de Cajá", calories: 210, protein: 24, carbs: 22, fat: 3, lactose: "sim", method: "semfogo"},
+            {id: 93, name: "Taça da Felicidade", calories: 285, protein: 18, carbs: 35, fat: 9, lactose: "sim", method: "semfogo"},
+            {id: 94, name: "Café Proteico Gelado", calories: 210, protein: 26, carbs: 22, fat: 5, lactose: "sim", method: "semfogo"},
+            {id: 95, name: "Brigadeiro YoPro", calories: 240, protein: 28, carbs: 24, fat: 6, lactose: "sim", method: "fogao"},
+            {id: 96, name: "Cappuccino Proteico com Mexidão", calories: 225, protein: 28, carbs: 14, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 97, name: "Banana Caramelizada com Torrada", calories: 240, protein: 11, carbs: 38, fat: 6, lactose: "sim", method: "fogao"},
+            {id: 98, name: "Torrada com Ovo Cremoso", calories: 235, protein: 24, carbs: 22, fat: 8, lactose: "sim", method: "fogao"},
+            {id: 99, name: "Saladona de Frango e Ovo", calories: 295, protein: 34, carbs: 22, fat: 9, lactose: "sim", method: "semfogo"},
+            {id: 100, name: "Arroz de Couve-flor com Carne do Sol", calories: 240, protein: 28, carbs: 18, fat: 9, lactose: "nao", method: "fogao"},
+            {id: 101, name: "Snack de Grão de Bico", calories: 66, protein: 1.9, carbs: 5.4, fat: 4.5, lactose: "nao", method: "forno"},
+            {id: 102, name: "Granola Salgada Low Carb", calories: 278, protein: 9.4, carbs: 16.9, fat: 20.1, lactose: "nao", method: "fogao"},
+            {id: 103, name: "Bolinho Proteico de Abóbora", calories: 55, protein: 7.2, carbs: 3.7, fat: 1.4, lactose: "nao", method: "airfryer"},
+            {id: 104, name: "Pão de Aveia", calories: 565, protein: 34.7, carbs: 58.3, fat: 24.2, lactose: "sim", method: "forno"},
+            {id: 105, name: "Sorvete de Frutas Vermelhas", calories: 198, protein: 8.9, carbs: 32.1, fat: 4.8, lactose: "sim", method: "semfogo"},
+            {id: 106, name: "Panqueca de Chocolate com Frutas", calories: 180, protein: 14.3, carbs: 17.6, fat: 7.6, lactose: "nao", method: "fogao"},
+            {id: 107, name: "Doce de Cacau com Coco", calories: 79, protein: 1.2, carbs: 6.9, fat: 5.6, lactose: "nao", method: "semfogo"},
+            {id: 108, name: "Creme de Abacate com Cacau", calories: 327, protein: 13.8, carbs: 33.5, fat: 18.2, lactose: "sim", method: "semfogo"},
+            {id: 109, name: "Torta de Grão de Bico", calories: 316, protein: 12.8, carbs: 27.7, fat: 18.9, lactose: "nao", method: "forno"},
+            {id: 110, name: "Ratatouille de Legumes", calories: 238, protein: 1.8, carbs: 8.1, fat: 23.1, lactose: "nao", method: "forno"},
+            {id: 111, name: "Suflê de Brócolis", calories: 91, protein: 7.9, carbs: 3, fat: 5.6, lactose: "sim", method: "forno"},
+            {id: 112, name: "Nuggets de Peixe", calories: 117, protein: 9.4, carbs: 17.9, fat: 0.9, lactose: "nao", method: "forno"},
+            {id: 113, name: "Creme de Couve-flor com Limão", calories: 149, protein: 11.6, carbs: 25, fat: 1.3, lactose: "sim", method: "fogao"},
+            {id: 114, name: "Farofa Nutritiva", calories: 59, protein: 2.2, carbs: 5.2, fat: 3.6, lactose: "nao", method: "semfogo"},
+            {id: 115, name: "Milkshake de Chocolate Zero Lactose", calories: 280, protein: 18, carbs: 42, fat: 8, lactose: "nao", method: "semfogo"},
+            {id: 116, name: "Empada de Frango Zero Lactose", calories: 185, protein: 22, carbs: 15, fat: 6, lactose: "nao", method: "forno"},
+            {id: 117, name: "Brusqueta Zero Lactose", calories: 220, protein: 14, carbs: 32, fat: 6, lactose: "nao", method: "microondas"},
+            {id: 118, name: "Cuscuz Recheado Zero Lactose", calories: 295, protein: 24, carbs: 38, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 119, name: "Tapioca Recheada Zero Lactose", calories: 245, protein: 18, carbs: 32, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 120, name: "Panqueca de Banana Zero Lactose", calories: 265, protein: 22, carbs: 35, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 121, name: "Cartola de Banana", calories: 240, protein: 12, carbs: 38, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 122, name: "Açaí Fit Zero Lactose", calories: 295, protein: 24, carbs: 42, fat: 8, lactose: "nao", method: "semfogo"},
+            {id: 123, name: "Bolinho de Cacau Zero Lactose", calories: 245, protein: 20, carbs: 32, fat: 6, lactose: "nao", method: "microondas"},
+            {id: 124, name: "Aveioca Zero Lactose", calories: 265, protein: 22, carbs: 28, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 125, name: "Chips de Batata Doce Zero Lactose", calories: 285, protein: 26, carbs: 32, fat: 6, lactose: "nao", method: "microondas"},
+            {id: 126, name: "Mingau de Aveia Zero Lactose", calories: 275, protein: 20, carbs: 38, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 127, name: "Mousse de Chocolate Zero Lactose", calories: 265, protein: 18, carbs: 32, fat: 9, lactose: "nao", method: "semfogo"},
+            {id: 128, name: "Pão Caseiro Zero Lactose", calories: 215, protein: 18, carbs: 24, fat: 7, lactose: "nao", method: "microondas"},
+            {id: 129, name: "Smoothie de Mamão", calories: 195, protein: 16, carbs: 28, fat: 4, lactose: "nao", method: "semfogo"},
+            {id: 130, name: "Pão com Patê de Queijo Zero Lactose", calories: 245, protein: 16, carbs: 32, fat: 7, lactose: "nao", method: "semfogo"},
+            {id: 131, name: "Salgado de Frango Zero Lactose", calories: 285, protein: 28, carbs: 28, fat: 7, lactose: "nao", method: "forno"},
+            {id: 132, name: "Smoothie de Morango Zero Lactose", calories: 295, protein: 26, carbs: 32, fat: 8, lactose: "nao", method: "semfogo"},
+            {id: 133, name: "Sanduíche Agridoce Zero Lactose", calories: 285, protein: 14, carbs: 42, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 134, name: "Rap10 com Ovo Zero Lactose", calories: 220, protein: 16, carbs: 28, fat: 6, lactose: "nao", method: "fogao"},
+            {id: 135, name: "Tapioca de Cuscuz Zero Lactose", calories: 275, protein: 18, carbs: 40, fat: 5, lactose: "nao", method: "fogao"},
+            {id: 136, name: "Creme de Abacate Zero Lactose", calories: 195, protein: 18, carbs: 14, fat: 9, lactose: "nao", method: "semfogo"},
+            {id: 137, name: "Taça da Felicidade Zero Lactose", calories: 285, protein: 18, carbs: 36, fat: 9, lactose: "nao", method: "semfogo"},
+            {id: 138, name: "Mousse de Maracujá Zero Lactose", calories: 165, protein: 16, carbs: 18, fat: 4, lactose: "nao", method: "semfogo"},
+            {id: 139, name: "Cookie de Banana Zero Lactose", calories: 245, protein: 8, carbs: 42, fat: 6, lactose: "nao", method: "airfryer"},
+            {id: 140, name: "Batata Sauté Zero Lactose", calories: 185, protein: 6, carbs: 32, fat: 5, lactose: "nao", method: "fogao"},
+            {id: 141, name: "Peixe ao Molho de Mostarda Zero Lactose", calories: 325, protein: 36, carbs: 28, fat: 8, lactose: "nao", method: "forno"},
+            {id: 142, name: "Macarronada de Abobrinha Zero Lactose", calories: 265, protein: 26, carbs: 22, fat: 8, lactose: "nao", method: "fogao"},
+            {id: 143, name: "Peixe com Purê Zero Lactose", calories: 305, protein: 34, carbs: 28, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 144, name: "Berinjela Recheada Zero Lactose", calories: 315, protein: 32, carbs: 24, fat: 10, lactose: "nao", method: "forno"},
+            {id: 145, name: "Creme de Galinha Zero Lactose", calories: 295, protein: 30, carbs: 28, fat: 8, lactose: "nao", method: "fogao"},
+            {id: 146, name: "Hambúrguer Fit Zero Lactose", calories: 345, protein: 30, carbs: 36, fat: 9, lactose: "nao", method: "fogao"},
+            {id: 147, name: "Escondidinho Zero Lactose", calories: 325, protein: 26, carbs: 38, fat: 8, lactose: "nao", method: "forno"},
+            {id: 148, name: "Macarrão ao Molho Branco Zero Lactose", calories: 355, protein: 26, carbs: 42, fat: 9, lactose: "nao", method: "fogao"},
+            {id: 149, name: "Omelete de Frango Zero Lactose", calories: 285, protein: 32, carbs: 22, fat: 10, lactose: "nao", method: "fogao"},
+            {id: 150, name: "Salada Verão Zero Lactose", calories: 285, protein: 32, carbs: 25, fat: 8, lactose: "nao", method: "semfogo"},
+            {id: 151, name: "Pizza de Rap10 Zero Lactose", calories: 310, protein: 24, carbs: 34, fat: 8, lactose: "nao", method: "forno"},
+            {id: 152, name: "Refogado de Arroz com Sardinha", calories: 335, protein: 26, carbs: 38, fat: 10, lactose: "nao", method: "fogao"},
+            {id: 153, name: "Ratatouille Zero Lactose", calories: 255, protein: 24, carbs: 26, fat: 8, lactose: "nao", method: "forno"},
+            {id: 154, name: "Frango Empanado Zero Lactose", calories: 385, protein: 36, carbs: 40, fat: 9, lactose: "nao", method: "airfryer"},
+            {id: 155, name: "Risoto de Camarão Zero Lactose", calories: 355, protein: 28, carbs: 40, fat: 9, lactose: "nao", method: "fogao"},
+            {id: 156, name: "Strogonoff Zero Lactose", calories: 385, protein: 34, carbs: 36, fat: 11, lactose: "nao", method: "fogao"},
+            {id: 157, name: "Nuggets de Frango Zero Lactose", calories: 335, protein: 34, carbs: 28, fat: 9, lactose: "nao", method: "airfryer"},
+            {id: 158, name: "Pão de Cenoura Zero Lactose", calories: 275, protein: 22, carbs: 30, fat: 8, lactose: "nao", method: "forno"},
+            {id: 159, name: "Tomate Recheado Zero Lactose", calories: 235, protein: 24, carbs: 18, fat: 8, lactose: "nao", method: "forno"},
+            {id: 160, name: "Farofa Fit Zero Lactose", calories: 58, protein: 2, carbs: 5, fat: 3.5, lactose: "nao", method: "fogao"},
+            {id: 161, name: "Arroz de Couve-flor Zero Lactose", calories: 220, protein: 24, carbs: 16, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 162, name: "Almôndegas Zero Lactose", calories: 285, protein: 30, carbs: 24, fat: 9, lactose: "nao", method: "forno"},
+            {id: 163, name: "Creme de Abóbora Zero Lactose", calories: 285, protein: 26, carbs: 32, fat: 7, lactose: "nao", method: "fogao"},
+            {id: 164, name: "Torta de Frango Zero Lactose", calories: 295, protein: 30, carbs: 26, fat: 8, lactose: "nao", method: "forno"}
+        ];
+        
+        recipes = [...defaultRecipes];
+        
+        function openModal() { document.getElementById('recipeModal').classList.add('active'); }
+        function closeModal() {
+            document.getElementById('recipeModal').classList.remove('active');
+            ['recipeName','recipeCalories','recipeProtein','recipeCarbs','recipeFat','recipeLactose','recipeMethod'].forEach(id => document.getElementById(id).value = '');
+        }
+        
+        function saveRecipe() {
+            const name = document.getElementById('recipeName').value.trim();
+            const calories = parseFloat(document.getElementById('recipeCalories').value);
+            const protein = parseFloat(document.getElementById('recipeProtein').value);
+            const carbs = parseFloat(document.getElementById('recipeCarbs').value);
+            const fat = parseFloat(document.getElementById('recipeFat').value);
+            const lactose = document.getElementById('recipeLactose').value;
+            const method = document.getElementById('recipeMethod').value;
+            
+            if (!name || isNaN(calories) || isNaN(protein) || isNaN(carbs) || isNaN(fat) || !lactose || !method) {
+                alert('Preencha todos os campos obrigatórios!');
+                return;
+            }
+            
+            recipes.push({id: Date.now(), name, calories, protein, carbs, fat, lactose, method});
+            closeModal();
+            applyFilters();
+        }
+        
+        function deleteRecipe(id) {
+            if (confirm('Excluir esta receita?')) {
+                recipes = recipes.filter(r => r.id !== id);
+                applyFilters();
+            }
+        }
+        
+        function applyFilters() {
+            const caloriesMin = parseFloat(document.getElementById('caloriesMin').value) || 0;
+            const caloriesMax = parseFloat(document.getElementById('caloriesMax').value) || Infinity;
+            const proteinMin = parseFloat(document.getElementById('proteinMin').value) || 0;
+            const carbsMax = parseFloat(document.getElementById('carbsMax').value) || Infinity;
+            const fatMax = parseFloat(document.getElementById('fatMax').value) || Infinity;
+            const withLactose = document.getElementById('filterWithLactose').checked;
+            const withoutLactose = document.getElementById('filterWithoutLactose').checked;
+            const methods = [];
+            if (document.getElementById('filterStove').checked) methods.push('fogao');
+            if (document.getElementById('filterOven').checked) methods.push('forno');
+            if (document.getElementById('filterMicrowave').checked) methods.push('microondas');
+            if (document.getElementById('filterAirfryer').checked) methods.push('airfryer');
+            if (document.getElementById('filterNoHeat').checked) methods.push('semfogo');
+            
+            filteredRecipes = recipes.filter(r => {
+                return r.calories >= caloriesMin && r.calories <= caloriesMax &&
+                       r.protein >= proteinMin && r.carbs <= carbsMax && r.fat <= fatMax &&
+                       ((withLactose && r.lactose === 'sim') || (withoutLactose && r.lactose === 'nao')) &&
+                       methods.includes(r.method);
+            });
+            renderTable();
+        }
+        
+        function renderTable() {
+            const tbody = document.getElementById('recipesBody');
+            tbody.innerHTML = '';
+            document.getElementById('resultsCount').textContent = filteredRecipes.length;
+            
+            if (filteredRecipes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: #999;">Nenhuma receita encontrada</td></tr>';
+                return;
+            }
+            
+            filteredRecipes.forEach(r => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${r.name}</strong></td>
+                    <td>${r.calories} kcal</td>
+                    <td>${r.protein}g</td>
+                    <td>${r.carbs}g</td>
+                    <td>${r.fat}g</td>
+                    <td><span class="tag ${r.lactose === 'sim' ? 'tag-lactose' : 'tag-no-lactose'}">${r.lactose === 'sim' ? 'Com lactose' : 'Sem lactose'}</span></td>
+                    <td>${methodLabels[r.method]}</td>
+                    <td><button class="btn btn-danger" onclick="deleteRecipe(${r.id})">Excluir</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function exportToExcel() {
+            if (recipes.length === 0) { alert('Adicione receitas antes de exportar!'); return; }
+            const data = recipes.map(r => ({
+                'Nome': r.name, 'Calorias (kcal)': r.calories, 'Proteínas (g)': r.protein,
+                'Carboidratos (g)': r.carbs, 'Gorduras (g)': r.fat,
+                'Lactose': r.lactose === 'sim' ? 'Sim' : 'Não',
+                'Método de Preparo': methodLabels[r.method]
+            }));
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Receitas');
+            XLSX.writeFile(wb, 'receitas_demetrio_filho_nutri.xlsx');
+        }
+        
+        applyFilters();
+    </script>
+</body>
+</html>
