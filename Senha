@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Site Protegido</title>
+    <meta name="receitaDemetrionutri" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+        #conteudo-protegido { display: none; } /* Esconde o conteúdo por padrão */
+        input { padding: 8px; margin: 10px 0; }
+        button { padding: 10px 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="tela-de-senha">
+        <h2>Acesso Restrito</h2>
+        <p>Por favor, digite a senha para continuar.</p>
+        <input type="password" id="senhaInput" placeholder="Sua senha">
+        <button onclick="verificarSenha()">Acessar</button>
+        <p id="mensagem-erro" style="color:red;"></p>
+    </div>
+
+    <div id="conteudo-protegido">
+        <h1>Bem-vindo(a) ao meu site!</h1>
+        <p>Este é o conteúdo protegido que agora está visível.</p>
+        </div>
+
+    <script>
+        function verificarSenha() {
+            var senhaInserida = document.getElementById("senhaInput").value;
+            var mensagemErro = document.getElementById("mensagem-erro");
+
+            // ATENÇÃO: A senha fica visível no código-fonte da página!
+            // Altere "Demetrionutri" para a sua senha.
+            if (senhaInserida === "Demetrionutri") {
+                document.getElementById("tela-de-senha").style.display = "none";
+                document.getElementById("conteudo-protegido").style.display = "block";
+            } else {
+                mensagemErro.textContent = "Senha incorreta. Tente novamente.";
+            }
+        }
+    </script>
+
+</body>
+</html>
