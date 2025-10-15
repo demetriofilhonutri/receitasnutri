@@ -2,6 +2,34 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <title>Site Protegido</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f0f0f0; }
+        #conteudo-protegido { display: none; } /* Esta linha esconde seu site */
+        .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); display: inline-block; }
+        input { padding: 10px; margin: 10px 0; width: 200px; }
+        button { padding: 10px 20px; cursor: pointer; background-color: #2C5F6F; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="tela-de-senha">
+        <div class="login-box">
+            <h2>Acesso Restrito</h2>
+            <p>Por favor, digite a senha para visualizar o conteúdo.</p>
+            <input type="password" id="senhaInput" placeholder="Sua senha">
+            <button onclick="verificarSenha()">Acessar</button>
+            <p id="mensagem-erro" style="color:red;"></p>
+        </div>
+    </div>
+
+    <div id="conteudo-protegido">
+        
+       <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filtro de Receitas - Demétrio Filho Nutri</title>
     <style>
@@ -858,5 +886,23 @@
             applyFilters();
         });
     </script>
+</body>
+</html>
+
+    <script>
+        function verificarSenha() {
+            var senhaInserida = document.getElementById("senhaInput").value;
+            var mensagemErro = document.getElementById("mensagem-erro");
+
+            // ####### MUDE A SENHA AQUI DENTRO DAS ASPAS #######
+            if (senhaInserida === "demetrionutri") {
+                document.getElementById("tela-de-senha").style.display = "none";
+                document.getElementById("conteudo-protegido").style.display = "block";
+            } else {
+                mensagemErro.textContent = "Senha incorreta. Tente novamente.";
+            }
+        }
+    </script>
+
 </body>
 </html>
