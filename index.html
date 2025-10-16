@@ -136,7 +136,6 @@
                 </div>
             </div>
             <div class="actions">
-                <button class="btn btn-success" onclick="openModal()">➕ Adicionar Receita</button>
                 <button class="btn btn-primary" onclick="exportToPdf()">📄 Exportar para PDF</button>
             </div>
             <div class="results-info"><strong id="resultsCount">0</strong> receitas encontradas</div>
@@ -145,26 +144,7 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="recipeModal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Adicionar Nova Receita</h2></div>
-            <div class="form-group"><label>Nome *</label><input type="text" id="recipeName"></div>
-            <div class="form-row">
-                <div class="form-group"><label>Calorias *</label><input type="number" id="recipeCalories"></div>
-                <div class="form-group"><label>Proteínas *</label><input type="number" id="recipeProtein"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Carboidratos *</label><input type="number" id="recipeCarbs"></div>
-                <div class="form-group"><label>Gorduras *</label><input type="number" id="recipeFat"></div>
-            </div>
-            <div class="form-group"><label>Lactose *</label><select id="recipeLactose"><option value="">Selecione...</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
-            <div class="form-group"><label>Preparo *</label><select id="recipeMethod"><option value="">Selecione...</option><option value="fogao">Fogão</option><option value="forno">Forno</option><option value="microondas">Micro-ondas</option><option value="airfryer">Air Fryer</option><option value="semfogo">Sem fogo</option></select></div>
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="saveRecipe()">Salvar</button>
-                <button class="btn" onclick="closeModal()" style="background: #6c757d; color: white;">Cancelar</button>
-            </div>
-        </div>
-    </div>
+
     <div class="modal" id="viewRecipeModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -871,31 +851,6 @@
         ];
         recipes = [...defaultRecipes];
         
-        function openModal() { document.getElementById('recipeModal').classList.add('active'); }
-        function closeModal() {
-            document.getElementById('recipeModal').classList.remove('active');
-            ['recipeName','recipeCalories','recipeProtein','recipeCarbs','recipeFat','recipeLactose','recipeMethod'].forEach(id => document.getElementById(id).value = '');
-        }
-        
-        function saveRecipe() {
-            const name = document.getElementById('recipeName').value.trim();
-            const calories = parseFloat(document.getElementById('recipeCalories').value);
-            const protein = parseFloat(document.getElementById('recipeProtein').value);
-            const carbs = parseFloat(document.getElementById('recipeCarbs').value);
-            const fat = parseFloat(document.getElementById('recipeFat').value);
-            const lactose = document.getElementById('recipeLactose').value;
-            const method = document.getElementById('recipeMethod').value;
-            
-            if (!name || isNaN(calories) || isNaN(protein) || isNaN(carbs) || isNaN(fat) || !lactose || !method) {
-                alert('Preencha todos os campos obrigatórios!');
-                return;
-            }
-            
-            recipes.push({id: Date.now(), name, calories, protein, carbs, fat, lactose, method});
-            closeModal();
-            applyFilters();
-        }
-        
         function viewRecipe(id) {
             const recipe = recipes.find(r => r.id === id);
             if (!recipe) return;
@@ -1033,7 +988,7 @@
         
         function exportToPdf() {
             if (filteredRecipes.length === 0) {
-                alert('Nenhuma receita para exportar. Aplique filtros diferentes ou adicione novas receitas.');
+                alert('Nenhuma receita para exportar. Aplique filtros diferentes.');
                 return;
             }
 
