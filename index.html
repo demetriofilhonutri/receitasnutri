@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f0f0f0; }
-        #conteudo-protegido { display: none; } /* Esta linha esconde seu site */
+        #conteudo-protegido { display: none; }
         .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); display: inline-block; }
         input { padding: 10px; margin: 10px 0; width: 200px; }
         button { padding: 10px 20px; cursor: pointer; background-color: #2C5F6F; color: white; border: none; border-radius: 5px; }
@@ -32,58 +32,333 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filtro de Receitas - Demétrio Filho Nutri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary-color: #2C5F6F;
+            --secondary-color: #8FA383;
+            --accent-color: #DE8744;
+            --text-dark: #333333;
+            --text-light: #666;
+            --background-light: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8FA383 0%, #DE8744 100%); padding: 20px; min-height: 100vh; }
-        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
-        .header { background: linear-gradient(135deg, #8FA383 0%, #2C5F6F 100%); color: white; padding: 30px; text-align: center; }
-        .logo { width: 80px; height: 80px; margin: 0 auto 15px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; color: #8FA383; font-weight: bold; }
-        .header h1 { font-size: 2.2em; margin-bottom: 5px; }
-        .header .subtitle { font-size: 1.1em; opacity: 0.95; margin-bottom: 10px; }
-        .header .instagram { font-size: 0.95em; opacity: 0.9; }
-        .content { padding: 30px; }
-        .info-box { background: #f0f4f0; border-left: 4px solid #8FA383; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
-        .info-box h3 { color: #2C5F6F; margin-bottom: 10px; }
-        .filters { background: #fafafa; padding: 25px; border-radius: 10px; margin-bottom: 30px; border: 2px solid #e9ecef; }
-        .filter-section { margin-bottom: 20px; }
-        .filter-section:last-child { margin-bottom: 0; }
-        .filter-section h3 { color: #2C5F6F; margin-bottom: 12px; font-size: 1.1em; }
-        .filter-row { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
-        .filter-group { display: flex; flex-direction: column; gap: 5px; }
-        .filter-group label { font-size: 0.9em; color: #666; font-weight: 500; }
-        .filter-group input, .filter-group select { padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; width: 100%; }
-        .checkbox-group { display: flex; gap: 20px; flex-wrap: wrap; }
-        .checkbox-item { display: flex; align-items: center; gap: 8px; }
-        .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #8FA383; }
-        .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: 600; }
-        .btn-primary { background: linear-gradient(135deg, #8FA383 0%, #2C5F6F 100%); color: white; }
-        .btn-success { background: #8FA383; color: white; }
-        .btn-danger { background: #DE8744; color: white; padding: 8px 15px; font-size: 0.9em; }
-        .actions { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .results-info { background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2C5F6F; }
-        .table-container { overflow-x: auto; border-radius: 10px; border: 2px solid #e9ecef; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        thead { background: linear-gradient(135deg, #8FA383 0%, #2C5F6F 100%); color: white; }
-        th { padding: 15px; text-align: left; font-weight: 600; font-size: 0.95em; }
-        td { padding: 12px 15px; border-bottom: 1px solid #e9ecef; }
-        tbody tr:hover { background: #f8f9fa; }
-        .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.85em; font-weight: 500; }
-        .tag-lactose { background: #fff3cd; color: #856404; }
-        .tag-no-lactose { background: #d4edda; color: #155724; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: #f4f7f6;
+            padding: 20px; 
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+        }
+        
+        .header { 
+            background: var(--primary-color);
+            color: white; 
+            padding: 40px 30px; 
+            text-align: center; 
+        }
+        
+        .logo-img { 
+            width: 120px; 
+            height: 120px;
+            margin: 0 auto 20px;
+            object-fit: contain;
+        }
+        
+        .header h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em; 
+            margin-bottom: 8px; 
+            font-weight: 700;
+        }
+        
+        .header .subtitle { 
+            font-size: 1.2em; 
+            opacity: 0.9; 
+            margin-bottom: 20px; 
+        }
+        
+        .header .instagram { 
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1.1em; 
+            opacity: 0.95;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .header .instagram:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .content { 
+            padding: 40px; 
+        }
+        
+        .info-box { 
+            background: #f0f4f0; 
+            border-left: 5px solid var(--secondary-color); 
+            padding: 25px; 
+            border-radius: 8px; 
+            margin-bottom: 30px; 
+        }
+        
+        .info-box h3 { 
+            color: var(--primary-color); 
+            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .info-box p {
+            line-height: 1.6;
+        }
+        
+        .filters { 
+            background: var(--background-light); 
+            padding: 30px; 
+            border-radius: 10px; 
+            margin-bottom: 30px; 
+            border: 1px solid var(--border-color);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+align-items: end;
+        }
+
+        .filter-section h3 { 
+            color: var(--primary-color); 
+            margin-bottom: 15px; 
+            font-size: 1.1em;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        
+        .filter-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        
+        .filter-group label { 
+            font-size: 0.9em; 
+            color: var(--text-light); 
+            font-weight: 500; 
+        }
+        
+        .filter-group input, .filter-group select { 
+            padding: 12px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 1em; 
+            width: 100%; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(143, 163, 131, 0.2);
+        }
+        
+        .checkbox-group { 
+            display: flex; 
+            gap: 20px; 
+            flex-wrap: wrap; 
+        }
+        
+        .checkbox-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        
+        .checkbox-item input[type="checkbox"] { 
+            width: 18px; 
+            height: 18px; 
+            cursor: pointer; 
+            accent-color: var(--secondary-color); 
+        }
+        
+        .btn { 
+            padding: 12px 25px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 1em; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .btn-primary { 
+            background: var(--primary-color); 
+            color: white; 
+        }
+        .btn-primary:hover {
+            background: #224a57;
+        }
+
+        .actions { 
+            display: flex; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+        }
+        
+        .results-info { 
+            background: #e9f1ff; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            border-left: 5px solid var(--primary-color); 
+        }
+        
+        .table-container { 
+            overflow-x: auto; 
+            border-radius: 10px; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: white; 
+        }
+        
+        thead { 
+            background: var(--primary-color); 
+            color: white; 
+        }
+        
+        th { 
+            padding: 18px 20px; 
+            text-align: left; 
+            font-weight: 600; 
+            font-size: 0.95em;
+            font-family: 'Montserrat', sans-serif; 
+        }
+        
+        td { 
+            padding: 18px 20px; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+
+        td strong {
+            font-weight: 500;
+        }
+        
+        tbody tr {
+            transition: background-color 0.2s;
+        }
+        tbody tr:hover { 
+            background: #f1f5f9; 
+        }
+        
+        .tag { 
+            display: inline-block; 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-size: 0.85em; 
+            font-weight: 500; 
+        }
+        
+        .tag-lactose { 
+            background: #fff3cd; 
+            color: #856404; 
+        }
+        
+        .tag-no-lactose { 
+            background: #d4edda; 
+            color: #155724; 
+        }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; }
+        
+        .modal-content { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            max-width: 650px; 
+            width: 90%; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modal-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .modal-actions { 
+            display: flex; 
+            gap: 10px; 
+            justify-content: flex-end; 
+            margin-top: 30px; 
+        }
+
+        .instructions-list {
+            list-style-type: none;
+            counter-reset: step-counter;
+            padding-left: 0;
+            margin: 0;
+            color: var(--text-dark);
+        }
+        .instructions-list li {
+            counter-increment: step-counter;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.6;
+        }
+        .instructions-list li:last-child {
+            margin-bottom: 0;
+        }
+        .instructions-list li::before {
+            content: counter(step-counter);
+            margin-right: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: bold;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">DN</div>
+            <img src="https://i.ibb.co/FLSGH3rr/logo-FUNDO-TRANSPARENTE-18.png" alt="logo-FUNDO-TRANSPARENTE-18" border="0"></a>
             <h1>Demétrio Filho Nutri</h1>
             <p class="subtitle">Filtro de Receitas Saudáveis</p>
             <p class="instagram">📱 @demetriofilhonutri</p>
@@ -91,47 +366,52 @@
         <div class="content">
             <div class="info-box">
                 <h3>👋 Bem-vindo(a)!</h3>
-                <p>Use os filtros para encontrar receitas que se encaixem no seu objetivo. Todas foram cuidadosamente selecionadas!</p>
+                <p>Utilize os filtros abaixo para encontrar receitas que se encaixem perfeitamente em seus objetivos. Todas foram cuidadosamente selecionadas para promover uma alimentação saudável e equilibrada.</p>
             </div>
             <div class="filters">
-                <div class="filter-section">
-                    <h3>🔎 Buscar por Nome</h3>
-                    <div class="filter-row">
-                        <div class="filter-group" style="flex-grow: 1;">
-                            <input type="text" id="searchName" placeholder="Digite o nome da receita..." onkeyup="applyFilters()">
+                <div class="filter-grid">
+                    <div class="filter-section">
+                        <h3>🔎 Buscar por Nome</h3>
+                        <div class="filter-group">
+                            <input type="text" id="searchName" placeholder="Ex: Crepioca, Salada..." onkeyup="applyFilters()">
                         </div>
                     </div>
-                </div>
-                <div class="filter-section">
-                    <h3>🔥 Calorias</h3>
-                    <div class="filter-row">
-                        <div class="filter-group"><label>Mínimo (kcal)</label><input type="number" id="caloriesMin" placeholder="0" onkeyup="applyFilters()"></div>
-                        <div class="filter-group"><label>Máximo (kcal)</label><input type="number" id="caloriesMax" placeholder="1000" onkeyup="applyFilters()"></div>
+                    <div class="filter-section">
+                        <h3>🔥 Calorias (kcal)</h3>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <div class="filter-group"><label>Mínimo</label><input type="number" id="caloriesMin" placeholder="0" onkeyup="applyFilters()"></div>
+                            <div class="filter-group"><label>Máximo</label><input type="number" id="caloriesMax" placeholder="1000" onkeyup="applyFilters()"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="filter-section">
-                    <h3>💪 Macronutrientes</h3>
-                    <div class="filter-row">
-                        <div class="filter-group"><label>Proteínas Mín (g)</label><input type="number" id="proteinMin" placeholder="0" onkeyup="applyFilters()"></div>
-                        <div class="filter-group"><label>Carboidratos Máx (g)</label><input type="number" id="carbsMax" placeholder="100" onkeyup="applyFilters()"></div>
-                        <div class="filter-group"><label>Gorduras Máx (g)</label><input type="number" id="fatMax" placeholder="50" onkeyup="applyFilters()"></div>
+                    <div class="filter-section">
+                        <h3>💪 Macronutrientes (g)</h3>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <div class="filter-group"><label>Prot. Mín</label><input type="number" id="proteinMin" placeholder="0" onkeyup="applyFilters()"></div>
+                            <div class="filter-group"><label>Carb. Máx</label><input type="number" id="carbsMax" placeholder="100" onkeyup="applyFilters()"></div>
+                            <div class="filter-group"><label>Gord. Máx</label><input type="number" id="fatMax" placeholder="50" onkeyup="applyFilters()"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="filter-section">
-                    <h3>🥛 Lactose</h3>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item"><input type="checkbox" id="filterWithLactose" checked onchange="applyFilters()"><label>Com lactose</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="filterWithoutLactose" checked onchange="applyFilters()"><label>Sem lactose</label></div>
+ </div>
                     </div>
-                </div>
-                <div class="filter-section">
-                    <h3>🍳 Método de Preparo</h3>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item"><input type="checkbox" id="filterStove" checked onchange="applyFilters()"><label>Fogão</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="filterOven" checked onchange="applyFilters()"><label>Forno</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="filterMicrowave" checked onchange="applyFilters()"><label>Micro-ondas</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="filterAirfryer" checked onchange="applyFilters()"><label>Air Fryer</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="filterNoHeat" checked onchange="applyFilters()"><label>Sem fogo</label></div>
+                     <div class="filter-section">
+                        <h3>🍰 Preferências</h3>
+                         <div class="checkbox-group" style="margin-bottom: 30px; justify-content: center;">
+                            <div class="checkbox-item"><input type="checkbox" id="filterDoce" checked onchange="applyFilters()"><label>Doce</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="filterSalgado" checked onchange="applyFilters()"><label>Salgado</label></div>
+                         <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="filterWithLactose" checked onchange="applyFilters()"><label>Com lactose</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="filterWithoutLactose" checked onchange="applyFilters()"><label>Sem lactose</label></div>
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h3>🍳 Método de Preparo</h3>
+                        <div class="checkbox-group" style="margin-bottom: 30px; justify-content: center;">
+                            <div class="checkbox-item"><input type="checkbox" id="filterStove" checked onchange="applyFilters()"><label>Fogão</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="filterOven" checked onchange="applyFilters()"><label>Forno</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="filterMicrowave" checked onchange="applyFilters()"><label>Micro-ondas</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="filterAirfryer" checked onchange="applyFilters()"><label>Air Fryer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="filterNoHeat" checked onchange="applyFilters()"><label>Sem fogo</label></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -148,14 +428,15 @@
     <div class="modal" id="viewRecipeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="viewRecipeTitle" style="color: #8FA383;">Detalhes da Receita</h2>
+                <h2 id="viewRecipeTitle">Detalhes da Receita</h2>
             </div>
-            <div id="viewRecipeContent" style="line-height: 1.8;"></div>
+            <div id="viewRecipeContent" style="line-height: 1.7;"></div>
             <div class="modal-actions">
                 <button class="btn btn-primary" onclick="closeViewModal()">Fechar</button>
             </div>
         </div>
     </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script>
@@ -164,690 +445,596 @@
         const methodLabels = {'fogao': 'Fogão', 'forno': 'Forno', 'microondas': 'Micro-ondas', 'airfryer': 'Air Fryer', 'semfogo': 'Sem fogo'};
         
         const defaultRecipes = [
-            {id: 1, name: "Crepioca", calories: 261, protein: 17, carbs: 24, fat: 11, lactose: "sim", method: "fogao", 
+            {id: 1, name: "Crepioca", calories: 261, protein: 17, carbs: 24, fat: 11, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "1 ovo de galinha\n1 col (sopa) de goma de tapioca (15g)\n3 fatias (pequena) de queijo minas frescal light (60g)\nErvas finas e açafrão a gosto",
                 instructions: "1. Para a massa: pegue um recipiente e adicione um ovo de galinha inteiro; em seguida, uma colher de sopa de goma de tapioca e temperos a gosto (açafrão, chimichurri, sal e orégano).\n2. Bata tudo com um garfo até ficar uma mistura homogênea.\n3. Despeje essa mistura em uma frigideira pré-aquecida. Se achar necessário, unte a frigideira com uma pequena quantidade de azeite ou manteiga.\n4. Em seguida, ao pegar consistência vire a massa e recheie com fatias de queijos ou queijo ralado."},
-            {id: 2, name: "Aveioca", calories: 261, protein: 22, carbs: 25, fat: 7, lactose: "sim", method: "fogao",
+            {id: 2, name: "Aveioca", calories: 261, protein: 22, carbs: 25, fat: 7, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "1 ovo de galinha\n1 col (sopa) de farelo de aveia (10g)\n1 col (sopa) de goma de tapioca (15g)\n2 col (sopa) filé de frango cozido desfiado (40g) ou 3 fatias (pequena) de queijo minas frescal light (60g)\nCurry e orégano a gosto",
                 instructions: "1. Para a massa: coloque o ovo, a aveia e a goma de tapioca em um recipiente.\n2. Em seguida, misture com um garfo até obter uma mistura homogênea.\n3. Despeje a massa em uma frigideira pré-aquecida e untada com azeite.\n4. Após pegar consistência, vire a massa para assar o outro lado e finalize recheando com frango ou queijo."},
-            {id: 3, name: "Pão Caseiro", calories: 278, protein: 19, carbs: 15, fat: 14, lactose: "sim", method: "microondas",
+            {id: 3, name: "Pão Caseiro", calories: 278, protein: 19, carbs: 15, fat: 14, lactose: "sim", method: "microondas", type: "salgado",
                 ingredients: "1 ovo de galinha\n1 col (sopa) de requeijão light (30g)\n1 col (sopa) de farelo de aveia (10g)\n1 col (sopa) de chia em semente (10g)\n1 fatia (grande) de queijo minas frescal light (30g)\n½ col (chá) de fermento biológico seco (2,5g)\nGergelim e açafrão a gosto",
                 instructions: "1. Para a massa: coloque ovo, requeijão, farelo de aveia, chia e fermento em um recipiente de vidro.\n2. Misture tudo até ficar uma massa leve homogênea.\n3. Em seguida, leve ao micro-ondas por 2 minutos e espere o pão crescer.\n4. Após os 2 minutos, retire o pão do recipiente e corte ao meio.\n5. Leve o pão a uma sanduicheira, com a fatia de queijo para rechear, e espere o pão dourar bem para consumi-lo."},
-            {id: 4, name: "Torrada com Patê de Frango", calories: 252, protein: 24, carbs: 27, fat: 5, lactose: "sim", method: "semfogo",
+            {id: 4, name: "Torrada com Patê de Frango", calories: 252, protein: 24, carbs: 27, fat: 5, lactose: "sim", method: "semfogo", type: "salgado",
                 ingredients: "3 torradas integrais\n1 col (sopa) de requeijão light (15g)\n3 col (sopa) de filé de frango cozido desfiado (60g)\nOrégano e noz moscada a gosto",
                 instructions: "1. Para o recheio: coloque o frango desfiado em um recipiente, em seguida adicione o requeijão.\n2. Misture esses dois ingredientes com um garfo até ficar homogêneo.\n3. Recheie a torrada com a mistura e consuma acompanhado de uma fruta."},
-            {id: 5, name: "Tapiovo", calories: 249, protein: 14, carbs: 27, fat: 9, lactose: "sim", method: "fogao",
+            {id: 5, name: "Tapiovo", calories: 249, protein: 14, carbs: 27, fat: 9, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "1 ovo de galinha\n3 col (sopa) de goma de tapioca (45g)\n2 fatias (pequenas) de queijo minas frescal light (40g)\nErvas finas e curry a gosto",
                 instructions: "1. Para a massa: peneire a goma e deixe a massa pronta.\n2. Adicione a quantidade na frigideira pré-aquecida.\n3. Quando estiver pegando consistência, quebre um ovo em cima da massa que foi despejada na frigideira e espere que o ovo fique mais firme.\n4. Em seguida, adicione o queijo ralado e feche para consumir."},
-            {id: 6, name: "Tapioca Crocante", calories: 288, protein: 15, carbs: 36, fat: 9, lactose: "sim", method: "fogao",
+            {id: 6, name: "Tapioca Crocante", calories: 288, protein: 15, carbs: 36, fat: 9, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "3 col (sopa) de goma de tapioca (45g)\n1 ovo de galinha\n2 fatias (pequenas) de queijo minas frescal light (40g)\nOrégano e açafrão a gosto",
                 instructions: "1. Peneire a goma em uma frigideira pré-aquecida.\n2. Acrescente metade do queijo ralado; após pegar consistência, vire para dourar.\n3. Em outra frigideira, faça um ovo mexido com a outra metade do queijo.\n4. Recheie a tapioca com o ovo e queijo."},
-            {id: 7, name: "Pãovo", calories: 293, protein: 26, carbs: 15, fat: 14, lactose: "sim", method: "fogao",
+            {id: 7, name: "Pãovo", calories: 293, protein: 26, carbs: 15, fat: 14, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "1 fatia de pão de forma integral\n1 ovo de galinha\n1 fatia de queijo minas frescal light (30g)\nErvas finas e noz moscada a gosto",
                 instructions: "1. Faça uma abertura redonda no meio do pão.\n2. Coloque o pão na frigideira com um pouco de manteiga e quebre o ovo no meio da abertura.\n3. Tempere a gosto.\n4. Quando pegar consistência, vire para dourar o outro lado.\n5. O miolo do pão pode ser tostado com queijo por cima."},
-            {id: 8, name: "Pão de Queijo de Frigideira", calories: 281, protein: 20, carbs: 18, fat: 14, lactose: "sim", method: "fogao",
+            {id: 8, name: "Pão de Queijo de Frigideira", calories: 281, protein: 20, carbs: 18, fat: 14, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "2 ovos de galinha\n1 col (chá) de açafrão\n1 col (sobremesa) de requeijão light (7g)\n1 fatia de queijo minas frescal light (30g)\n1 col (sopa) de farelo de aveia (10g)\nOrégano e curry a gosto",
                 instructions: "1. Em um recipiente, misture os ovos, o requeijão, o queijo ralado e o açafrão.\n2. Despeje a massa em uma frigideira pré-aquecida.\n3. Quando a massa ficar firme, feche-a e sirva."},
-            {id: 9, name: "Smoothie de Morango Zero Lactose", calories: 281, protein: 30, carbs: 21, fat: 8, lactose: "nao", method: "semfogo",
+            {id: 9, name: "Smoothie de Morango Zero Lactose", calories: 281, protein: 30, carbs: 21, fat: 8, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "100ml de água\n1 banana pequena congelada\n1 polpa de morango congelada\n1 col (sopa) de pasta de amendoim integral\n3 colheres de sopa de proteína vegana",
                 instructions: "Bater tudo no liquidificador com duas pedras de gelo."},
-            {id: 10, name: "Panqueca de Banana Zero Lactose", calories: 294, protein: 23, carbs: 28, fat: 12, lactose: "nao", method: "fogao",
+            {id: 10, name: "Panqueca de Banana Zero Lactose", calories: 294, protein: 23, carbs: 28, fat: 12, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "1 banana média\n2 ovos de galinha\n1 colher de sopa de farelo de aveia\n1 colher de proteína vegana",
                 instructions: "1. Bata os 2 ovos, a banana, o farelo de aveia e a proteína vegana no liquidificador.\n2. Despeje a massa na frigideira antiaderente bem aquecida, vire quando pegar consistência.\n3. Pode acrescentar mais rodelas de banana na panqueca pronta."},
-            {id: 11, name: "Bolinho de Cacau Zero Lactose", calories: 260, protein: 26, carbs: 28, fat: 7, lactose: "nao", method: "microondas",
+            {id: 11, name: "Bolinho de Cacau Zero Lactose", calories: 260, protein: 26, carbs: 28, fat: 7, lactose: "nao", method: "microondas", type: "doce",
                 ingredients: "1 ovo de galinha\n1 banana média\n1 colher de sobremesa de cacau em pó\n1 colher de sopa de farelo de aveia\n2 colheres de sopa de proteína vegana",
                 instructions: "1. Bata o ovo, a banana, o farelo de aveia, o cacau em pó e a proteína vegana no liquidificador.\n2. Coloque na forminha de silicone e leve ao micro-ondas por 2 minutos."},
-            {id: 12, name: "Gostosinho de Cuscuz", calories: 274, protein: 18, carbs: 23, fat: 11, lactose: "sim", method: "fogao",
+            {id: 12, name: "Gostosinho de Cuscuz", calories: 274, protein: 18, carbs: 23, fat: 11, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "5 col (sopa) de cuscuz (75g)\n1 ovo de galinha\n2 col (sopa) de requeijão light (30g)\n1 fatia de queijo minas frescal light (30g)\nOrégano e chia a gosto",
                 instructions: "1. Em uma frigideira, faça um ovo mexido.\n2. Adicione o requeijão e o cuscuz já pronto e misture bem.\n3. Finalize com orégano e queijo ralado por cima."},
-            {id: 13, name: "Nescau Proteico", calories: 252, protein: 24, carbs: 21, fat: 9, lactose: "sim", method: "semfogo",
+            {id: 13, name: "Nescau Proteico", calories: 252, protein: 24, carbs: 21, fat: 9, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "150ml de água\n1 dosador de whey protein (15g)\n1 col (sobremesa) de cacau em pó\n3 torradas integrais\n3 fatias de queijo minas frescal light (60g)",
                 instructions: "1. Bata a água, o cacau em pó, o whey e 2 pedras de gelo no liquidificador.\n2. Sirva com as torradas e o queijo."},
-            {id: 14, name: "Açaí Proteico", calories: 220, protein: 13, carbs: 21, fat: 10, lactose: "nao", method: "semfogo",
+            {id: 14, name: "Açaí Proteico", calories: 220, protein: 13, carbs: 21, fat: 10, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "1/2 polpa de açaí (100g)\n1 banana média (75g)\n1 dosador de whey protein (15g)\n100ml de água",
                 instructions: "Bata todos os ingredientes no liquidificador até obter uma mistura homogênea."},
-            {id: 15, name: "Brusqueta", calories: 290, protein: 14, carbs: 46, fat: 7, lactose: "sim", method: "microondas",
+            {id: 15, name: "Brusqueta", calories: 290, protein: 14, carbs: 46, fat: 7, lactose: "sim", method: "microondas", type: "salgado",
                 ingredients: "2 fatias de pão de forma integral\n2 col (sopa) de extrato de tomate\n2 fatias de queijo minas frescal light (40g)\n1 col (chá) de orégano\nManjericão a gosto",
                 instructions: "1. Pincele azeite nas fatias de pão.\n2. Adicione o molho de tomate, o queijo e o orégano.\n3. Leve ao micro-ondas por 30 segundos."},
-            {id: 16, name: "Rap10 com Ovo", calories: 195, protein: 10, carbs: 21, fat: 8, lactose: "nao", method: "fogao",
+            {id: 16, name: "Rap10 com Ovo", calories: 195, protein: 10, carbs: 21, fat: 8, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "1 unidade de Rap10 integral\n1 ovo de galinha\nCafé com canela a gosto",
                 instructions: "1. Aqueça a massa do Rap10 na frigideira até dourar.\n2. Faça um ovo mexido e recheie a massa."},
-            {id: 17, name: "Iogurte com Frutas", calories: 180, protein: 7, carbs: 27, fat: 6, lactose: "sim", method: "semfogo",
+            {id: 17, name: "Iogurte com Frutas", calories: 180, protein: 7, carbs: 27, fat: 6, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1 pote de iogurte desnatado (150g)\n6 morangos\n6 uvas\n6 castanhas de caju\n1 col (sopa) de cereal matinal (10g)",
                 instructions: "1. Em um recipiente, despeje o iogurte.\n2. Adicione as frutas picadas, as castanhas trituradas e o cereal."},
-            {id: 18, name: "Mingau de Aveia", calories: 239, protein: 17, carbs: 39, fat: 3, lactose: "sim", method: "fogao",
+            {id: 18, name: "Mingau de Aveia", calories: 239, protein: 17, carbs: 39, fat: 3, lactose: "sim", method: "fogao", type: "doce",
                 ingredients: "180ml de leite desnatado\n1 col (café) de canela em pó\n2 col (sopa) de farelo de aveia (20g)\n1 col (sopa) de whey protein (10g)\n1 banana média",
                 instructions: "1. Leve ao fogo o leite, a aveia e a canela, misturando até ficar homogêneo.\n2. Desligue o fogo, acrescente o whey e mexa bem.\n3. Sirva com a banana picada."},
-            {id: 19, name: "Bananada Fit", calories: 230, protein: 20, carbs: 35, fat: 2, lactose: "sim", method: "semfogo",
+            {id: 19, name: "Bananada Fit", calories: 230, protein: 20, carbs: 35, fat: 2, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "200ml de leite desnatado\n100ml de água\n1 col (sopa) de farelo de aveia (10g)\n1 banana média\n1 dosador de whey protein (15g)\nGranola a gosto",
                 instructions: "Bata todos os ingredientes no liquidificador com duas pedras de gelo até obter uma mistura homogênea."},
-            {id: 20, name: "Crepe de Banana", calories: 246, protein: 17, carbs: 20, fat: 11, lactose: "sim", method: "fogao",
+            {id: 20, name: "Crepe de Banana", calories: 246, protein: 17, carbs: 20, fat: 11, lactose: "sim", method: "fogao", type: "doce",
                 ingredients: "1 ovo de galinha\n1 col (sopa) de goma de tapioca (15g)\n3 fatias de queijo minas frescal light (60g)\n1 banana pequena\nCanela a gosto",
                 instructions: "1. Misture o ovo e a goma de tapioca.\n2. Despeje em uma frigideira aquecida e doure dos dois lados.\n3. Recheie com o queijo e a banana em rodelas."},
-            {id: 21, name: "Mousse de Maracujá", calories: 165, protein: 16, carbs: 23, fat: 2, lactose: "sim", method: "semfogo",
+            {id: 21, name: "Mousse de Maracujá", calories: 165, protein: 16, carbs: 23, fat: 2, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1 pote de iogurte desnatado (170g)\n1 col (sopa) de whey protein (10g)\n1 maracujá médio\nHortelã a gosto",
                 instructions: "1. Misture o iogurte e o whey.\n2. Adicione a polpa do maracujá e misture bem.\n3. Leve à geladeira por 1 hora antes de servir."},
-            {id: 22, name: "Cookie de Banana", calories: 158, protein: 3, carbs: 28, fat: 5, lactose: "nao", method: "airfryer",
+            {id: 22, name: "Cookie de Banana", calories: 158, protein: 3, carbs: 28, fat: 5, lactose: "nao", method: "airfryer", type: "doce",
                 ingredients: "1 banana média\n1 col (sopa) de farelo de aveia (10g)\n10g de chocolate 70% cacau",
                 instructions: "1. Amasse as bananas até ficar uma mistura homogênea.\n2. Em seguida, acrescente a canela e misture bem.\n3. Adicione a aveia aos poucos, até que atinja uma consistência mais firme para que você possa moldar o cookie.\n4. Para finalizar, corte o chocolate e adicione junto à massa.\n5. Em seguida, faça bolinhas do tamanho que achar melhor e leve para a airfryer por 15 minutos."},
-            {id: 23, name: "Brownie Saudável", calories: 285, protein: 14, carbs: 32, fat: 12, lactose: "nao", method: "airfryer",
+            {id: 23, name: "Brownie Saudável", calories: 285, protein: 14, carbs: 32, fat: 12, lactose: "nao", method: "airfryer", type: "doce",
                 ingredients: "2 ovos de galinha\n5 quadradinhos de chocolate 60% cacau\n1 col (sopa) de farinha de aveia\nGranola a gosto",
                 instructions: "1. Em um recipiente adicione os ovos e bata bem.\n2. Após isso, derreta o chocolate no micro-ondas, de 30 em 30 segundos.\n3. Acrescente o chocolate derretido aos ovos e mexa bem, até atingir uma mistura homogênea.\n4. Em seguida, adicione a farinha de aveia e bata tudo muito bem.\n5. Passe essa massa para um recipiente.\n6. Você pode colocar mais um quadradinho de chocolate na massa pronta.\n7. Por fim, leve à airfryer por 3 a 4 minutos, a 260ºC."},
-            {id: 24, name: "Escondidinho de Batata", calories: 340, protein: 28, carbs: 38, fat: 8, lactose: "sim", method: "forno",
+            {id: 24, name: "Escondidinho de Batata", calories: 340, protein: 28, carbs: 38, fat: 8, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "120g de batata inglesa cozida\n80g de filé de frango cozido\n1 col (sopa) de requeijão light (15g)\n20g de queijo minas frescal light\nOrégano a gosto",
                 instructions: "1. Amasse a batata cozida até ficar uma massa homogênea.\n2. Acrescente o requeijão e misture até ficar uma mistura lisa e ponha em um refratário de vidro.\n3. Adicione o frango e o queijo ralado e orégano.\n4. Ponha na airfryer ou micro-ondas para gratinar."},
-            {id: 25, name: "Creme de Galinha", calories: 316, protein: 26, carbs: 30, fat: 10, lactose: "sim", method: "fogao",
+            {id: 25, name: "Creme de Galinha", calories: 316, protein: 26, carbs: 30, fat: 10, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "50ml de leite desnatado\n1 col (sobremesa) de amido de milho\n1 col (sopa) de requeijão light (30g)\n70g de filé de frango cozido\n50g de arroz integral cozido\nSalada e temperos a gosto",
                 instructions: "1. Desfie o frango.\n2. Em um recipiente, dissolva o amido de milho em um pouco de leite.\n3. Em uma panela, aqueça o requeijão, o restante do leite e a mistura de amido.\n4. Adicione o frango e temperos e cozinhe até obter um creme.\n5. Sirva com o arroz e salada."},
-            {id: 26, name: "Macarronada Bolonhesa", calories: 385, protein: 30, carbs: 45, fat: 9, lactose: "sim", method: "fogao",
+            {id: 26, name: "Macarronada Bolonhesa", calories: 385, protein: 30, carbs: 45, fat: 9, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "70g de macarrão integral cozido\n80g de patinho moído cozido\n20g de queijo minas frescal light\n2 col (sopa) de extrato de tomate\nOrégano e temperos a gosto",
                 instructions: "1. Cozinhe o macarrão conforme as instruções da embalagem.\n2. Refogue o extrato de tomate com cebola e azeite.\n3. Adicione o macarrão cozido e o patinho moído.\n4. Finalize com o queijo ralado."},
-            {id: 27, name: "Risoto de Camarão", calories: 295, protein: 22, carbs: 34, fat: 8, lactose: "sim", method: "fogao",
+            {id: 27, name: "Risoto de Camarão", calories: 295, protein: 22, carbs: 34, fat: 8, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "80g de camarão cozido\n50ml de leite desnatado\n1 col (sobremesa) de amido de milho\n1 col (sopa) de requeijão light (30g)\n70g de arroz integral cozido\nTemperos a gosto",
                 instructions: "1. Refogue o camarão com temperos.\n2. Dissolva o amido de milho no leite.\n3. Em uma panela, aqueça o requeijão, a mistura de leite e amido, e cozinhe até engrossar.\n4. Adicione o camarão e sirva com o arroz."},
-            {id: 28, name: "Farofa de Ovo", calories: 320, protein: 22, carbs: 35, fat: 10, lactose: "nao", method: "fogao",
+            {id: 28, name: "Farofa de Ovo", calories: 320, protein: 22, carbs: 35, fat: 10, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "2 ovos de galinha\n2 col (sopa) de farofa fit (20g)\n60g de arroz branco cozido\nSalada e temperos a gosto",
                 instructions: "1. Em uma frigideira, faça os ovos mexidos.\n2. Adicione a farofa fit e misture bem.\n3. Sirva com o arroz e salada."},
-            {id: 29, name: "Lasanha de Berinjela", calories: 310, protein: 28, carbs: 24, fat: 12, lactose: "sim", method: "forno",
+            {id: 29, name: "Lasanha de Berinjela", calories: 310, protein: 28, carbs: 24, fat: 12, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "200g de berinjela cozida\n40g de queijo minas frescal light\n80g de patinho moído cozido\nMolho de tomate, manjericão e temperos a gosto",
                 instructions: "1. Fatie a berinjela em lâminas finas.\n2. Em um refratário, monte camadas de molho de tomate, berinjela, patinho moído e queijo.\n3. Leve ao forno médio por 20 minutos."},
-            {id: 30, name: "Omelete de Frango", calories: 332, protein: 37, carbs: 13, fat: 13, lactose: "nao", method: "fogao",
+            {id: 30, name: "Omelete de Frango", calories: 332, protein: 37, carbs: 13, fat: 13, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "2 ovos de galinha\n60g de filé de frango cozido e desfiado\n150g de salada de legumes cozida\nTemperos a gosto",
                 instructions: "1. Bata os ovos com um garfo.\n2. Adicione o frango e os temperos.\n3. Despeje na frigideira e doure dos dois lados.\n4. Sirva com a salada de legumes."},
-            {id: 31, name: "Baião com Tilápia", calories: 420, protein: 35, carbs: 48, fat: 10, lactose: "nao", method: "fogao",
+            {id: 31, name: "Baião com Tilápia", calories: 420, protein: 35, carbs: 48, fat: 10, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "100g de filé de tilápia\n120g de baião de dois\nSalada e temperos a gosto",
                 instructions: "1. Grelhe a tilápia com temperos a gosto.\n2. Sirva com o baião de dois e a salada."},
-            {id: 32, name: "Frango Empanado", calories: 299, protein: 35, carbs: 24, fat: 6, lactose: "sim", method: "airfryer",
+            {id: 32, name: "Frango Empanado", calories: 299, protein: 35, carbs: 24, fat: 6, lactose: "sim", method: "airfryer", type: "salgado",
                 ingredients: "100g de filé de frango\n2 col (sopa) de farelo de aveia (30g)\n1 col (sopa) de queijo parmesão ralado (11g)\nAçafrão e lemon pepper a gosto",
                 instructions: "1. Em um recipiente adicione a aveia e o parmesão.\n2. Em seguida, acrescente o peito de frango nesse recipiente.\n3. Misture a aveia e o parmesão no frango, como se estivesse empanando.\n4. Após isso, leve para airfryer por 20 min (em média) a 180 graus."},
-            {id: 33, name: "Strogonoff", calories: 262, protein: 34, carbs: 18, fat: 5, lactose: "sim", method: "fogao",
+            {id: 33, name: "Strogonoff", calories: 262, protein: 34, carbs: 18, fat: 5, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "80g de patinho em cubos\n5 col (sopa) de molho de tomate\n3 col (sopa) de iogurte natural\n60g de arroz integral cozido\nSalada e temperos a gosto",
                 instructions: "1. Refogue a carne com temperos.\n2. Adicione o molho de tomate e o iogurte e cozinhe até a carne ficar macia.\n3. Sirva com o arroz e salada."},
-            {id: 34, name: "Peixe ao Molho", calories: 217, protein: 34, carbs: 11, fat: 4, lactose: "nao", method: "forno",
+            {id: 34, name: "Peixe ao Molho", calories: 217, protein: 34, carbs: 11, fat: 4, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "120g de peixe\n70g de arroz integral cozido\nMolho: 1 col (chá) de azeite, suco de 1/2 limão, 1 col (sobremesa) de mel, 2 col (sopa) de mostarda\nTemperos a gosto",
                 instructions: "1. Misture os ingredientes do molho.\n2. Despeje sobre o peixe e leve ao forno.\n3. Sirva com o arroz."},
-            {id: 35, name: "Cuscuz Marroquino", calories: 340, protein: 30, carbs: 42, fat: 8, lactose: "sim", method: "fogao",
+            {id: 35, name: "Cuscuz Marroquino", calories: 340, protein: 30, carbs: 42, fat: 8, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "75g de cuscuz\n1 col (sopa) de requeijão light\n1 col (sopa) de molho de tomate\n80g de filé de frango cozido e desfiado\nTomate em cubos e coentro a gosto",
                 instructions: "1. Em uma frigideira, refogue o cuscuz já pronto com o tomate, molho de tomate, requeijão e frango.\n2. Finalize com coentro."},
-            {id: 36, name: "Tomate Recheado", calories: 306, protein: 26, carbs: 15, fat: 16, lactose: "sim", method: "forno",
+            {id: 36, name: "Tomate Recheado", calories: 306, protein: 26, carbs: 15, fat: 16, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "1 tomate\n60g de patinho moído cozido\n30g de requeijão light\n40g de queijo minas frescal light\nTemperos a gosto",
                 instructions: "1. Corte a tampa do tomate e retire a polpa.\n2. Recheie com o patinho moído e o queijo.\n3. Leve ao forno por 10 minutos para gratinar."},
-            {id: 37, name: "Arroz de Couve-flor", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao",
+            {id: 37, name: "Arroz de Couve-flor", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "150g de couve-flor\n1 dente de alho\n1 col (chá) de azeite\n60g de carne de sol cozida e desfiada\nTemperos a gosto",
                 instructions: "1. Triture a couve-flor até obter uma consistência de arroz.\n2. Refogue o alho no azeite, adicione a couve-flor e cozinhe por 6 minutos.\n3. Misture com a carne de sol e sirva."},
-            {id: 38, name: "Almôndegas", calories: 303, protein: 36, carbs: 15, fat: 11, lactose: "nao", method: "forno",
+            {id: 38, name: "Almôndegas", calories: 303, protein: 36, carbs: 15, fat: 11, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "90g de patinho moído\nCebola, alho, farelo de aveia, temperos a gosto para a massa\n30g de arroz branco cozido\nBrócolis picado a gosto",
                 instructions: "1. Misture a carne moída com os temperos e o farelo de aveia e modele as almôndegas.\n2. Leve ao forno por 20 minutos.\n3. Prepare o arroz de brócolis e sirva com as almôndegas."},
-            {id: 39, name: "Salada de Atum", calories: 311, protein: 25, carbs: 29, fat: 13, lactose: "nao", method: "semfogo",
+            {id: 39, name: "Salada de Atum", calories: 311, protein: 25, carbs: 29, fat: 13, lactose: "nao", method: "semfogo", type: "salgado",
                 ingredients: "Folhas verdes, 3 col (sopa) de milho, 2 col (sopa) de cenoura ralada, 2 col (sopa) de beterraba ralada, 4 tomates cereja, 5 ovos de codorna, 3 col (sopa) de atum em óleo",
                 instructions: "Misture todos os ingredientes e sirva."},
-            {id: 40, name: "Hambúrguer Fit", calories: 379, protein: 29, carbs: 40, fat: 11, lactose: "sim", method: "fogao",
+            {id: 40, name: "Hambúrguer Fit", calories: 379, protein: 29, carbs: 40, fat: 11, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "2 fatias de pão integral\n80g de patinho moído\n2 col (sopa) de molho de tomate\n1 fatia de queijo minas frescal light\nCebola e temperos a gosto",
                 instructions: "1. Tempere a carne moída e modele o hambúrguer.\n2. Grelhe o hambúrguer.\n3. Monte o sanduíche com o pão, o molho, o queijo e a cebola."},
-            {id: 41, name: "Salgado de Frango", calories: 228, protein: 26, carbs: 14, fat: 7, lactose: "sim", method: "forno",
+            {id: 41, name: "Salgado de Frango", calories: 228, protein: 26, carbs: 14, fat: 7, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "60g de batata doce cozida\n100g de filé de frango cozido\n1 col (sopa) de requeijão light\nAçafrão e temperos a gosto",
                 instructions: "1. Triture o frango e misture com a batata doce amassada e o requeijão.\n2. Modele em formato de salgado e leve ao forno por 20-25 minutos."},
-            {id: 42, name: "Pizza Fit", calories: 297, protein: 21, carbs: 27, fat: 11, lactose: "sim", method: "forno",
+            {id: 42, name: "Pizza Fit", calories: 297, protein: 21, carbs: 27, fat: 11, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "1 unidade de Rap10 integral\n54g de filé de frango desfiado\n2 col (sopa) de molho de tomate\n20g de queijo minas frescal light\nOrégano e tomate a gosto",
                 instructions: "1. Aqueça a massa na frigideira.\n2. Adicione o molho, o frango, o queijo e o orégano.\n3. Leve ao forno para gratinar."},
-            {id: 43, name: "Batata Doce Chips", calories: 303, protein: 27, carbs: 27, fat: 9, lactose: "sim", method: "microondas",
+            {id: 43, name: "Batata Doce Chips", calories: 303, protein: 27, carbs: 27, fat: 9, lactose: "sim", method: "microondas", type: "salgado",
                 ingredients: "100g de batata doce cozida\n80g de filé de frango cozido\n1 col (sopa) de creme de ricota\nTemperos a gosto",
                 instructions: "1. Corte a batata doce em rodelas finas e leve ao micro-ondas por 3 minutos, virando na metade do tempo.\n2. Prepare um patê com o frango e o creme de ricota e sirva com os chips."},
-            {id: 44, name: "Risoto de Frango", calories: 355, protein: 30, carbs: 42, fat: 8, lactose: "sim", method: "fogao",
+            {id: 44, name: "Risoto de Frango", calories: 355, protein: 30, carbs: 42, fat: 8, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "80g de filé de frango cozido\n80g de arroz cozido\n1 col (sopa) de requeijão light\nOrégano e temperos a gosto\nSalada para acompanhar",
                 instructions: "1. Em uma panela, aqueça o arroz com o frango e um pouco de água.\n2. Adicione o requeijão e mexa até ficar cremoso.\n3. Sirva com a salada."},
-            {id: 45, name: "Omelete de Queijo", calories: 275, protein: 28, carbs: 18, fat: 12, lactose: "sim", method: "fogao",
+            {id: 45, name: "Omelete de Queijo", calories: 275, protein: 28, carbs: 18, fat: 12, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "2 ovos de galinha\n50g de queijo minas frescal light\n100g de salada de legumes cozida\nTemperos a gosto",
                 instructions: "1. Bata os ovos com o queijo e temperos.\n2. Despeje na frigideira e doure dos dois lados.\n3. Sirva com a salada de legumes."},
-            {id: 46, name: "Sopa de Legumes", calories: 240, protein: 26, carbs: 28, fat: 5, lactose: "nao", method: "fogao",
+            {id: 46, name: "Sopa de Legumes", calories: 240, protein: 26, carbs: 28, fat: 5, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "Legumes variados\n80g de filé de frango em cubos\nMacarrão ou arroz a gosto\nTemperos naturais",
                 instructions: "1. Cozinhe o frango com os temperos.\n2. Adicione os legumes e o carboidrato e cozinhe até ficarem macios."},
-            {id: 47, name: "Ratatouille", calories: 202, protein: 27, carbs: 10, fat: 4, lactose: "nao", method: "forno",
+            {id: 47, name: "Ratatouille", calories: 202, protein: 27, carbs: 10, fat: 4, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "60g de patinho moído cozido\n120g de abobrinha em rodelas\nBerinjela em rodelas\n60g de extrato de tomate\nTemperos a gosto",
                 instructions: "1. Em um refratário, intercale camadas de legumes e molho de tomate.\n2. Cubra com o patinho moído e leve ao forno por 10 minutos."},
-            {id: 48, name: "Batata Recheada", calories: 385, protein: 30, carbs: 45, fat: 10, lactose: "sim", method: "forno",
+            {id: 48, name: "Batata Recheada", calories: 385, protein: 30, carbs: 45, fat: 10, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "1 batata inglesa média cozida\n70g de patinho moído cozido\n2 col (sopa) de requeijão light\n30g de queijo minas frescal light\nTemperos a gosto",
                 instructions: "1. Retire a polpa da batata e misture com o patinho e o requeijão.\n2. Recheie a batata com a mistura, cubra com queijo e leve ao forno por 20 minutos."},
-            {id: 49, name: "Creme de Abóbora", calories: 279, protein: 36, carbs: 25, fat: 5, lactose: "sim", method: "fogao",
+            {id: 49, name: "Creme de Abóbora", calories: 279, protein: 36, carbs: 25, fat: 5, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "300g de abóbora cozida\n100g de filé de frango cozido\n1/2 abobrinha crua\nTemperos naturais a gosto",
                 instructions: "1. Bata a abóbora, o frango e a abobrinha no liquidificador.\n2. Leve ao fogo com temperos e cozinhe até engrossar."},
-            {id: 50, name: "Torta de Frango", calories: 307, protein: 31, carbs: 21, fat: 11, lactose: "sim", method: "forno",
+            {id: 50, name: "Torta de Frango", calories: 307, protein: 31, carbs: 21, fat: 11, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "50g de couve-flor cozida\n70g de filé de frango cozido\n1 ovo\n1 col (sobremesa) de requeijão light\n15g de farinha de arroz\n1 col (chá) de fermento\nTemperos a gosto",
                 instructions: "1. Bata a couve-flor, 20g de frango, o ovo e os temperos no liquidificador.\n2. Misture a farinha e o fermento.\n3. Em uma forma, coloque metade da massa, o recheio de frango com requeijão e o resto da massa.\n4. Asse por 15 minutos."},
-            {id: 51, name: "Suflê de Frango", calories: 285, protein: 34, carbs: 22, fat: 8, lactose: "sim", method: "forno",
+            {id: 51, name: "Suflê de Frango", calories: 285, protein: 34, carbs: 22, fat: 8, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "80g de filé de frango desfiado\n1 ovo\n1 clara\nTomate picado\n30g de queijo minas frescal\n15g de queijo parmesão ralado\nTemperos a gosto",
                 instructions: "1. Bata o ovo e a clara.\n2. Misture com o frango, o tomate e os temperos.\n3. Despeje em uma travessa, cubra com os queijos e leve ao forno até dourar."},
-            {id: 52, name: "Nuggets de Frango", calories: 286, protein: 33, carbs: 14, fat: 9, lactose: "nao", method: "airfryer",
+            {id: 52, name: "Nuggets de Frango", calories: 286, protein: 33, carbs: 14, fat: 9, lactose: "nao", method: "airfryer", type: "salgado",
                 ingredients: "80g filé de frango cru\n1 dente de alho\n1 col (café) de páprica\n½ col (café) de pimenta do reino em pó\n1 pitada de sal\n15g de farinha de aveia\n1 ovo de galinha\n1 col (sopa) cheia de flocos de milho",
                 instructions: "1. Comece triturando o frango e misture com o alho, a páprica, a pimenta do reino, o sal e a farinha de aveia, até atingir uma massa homogênea.\n2. Em seguida, modele a massa no formato que desejar.\n3. Para finalizar, passe a massa modelada no ovo e, em seguida, nos flocos de milho.\n4. Asse, em uma frigideira, com um fio de azeite."},
-            {id: 53, name: "Panqueca de Patinho", calories: 295, protein: 26, carbs: 32, fat: 7, lactose: "sim", method: "fogao",
+            {id: 53, name: "Panqueca de Patinho", calories: 295, protein: 26, carbs: 32, fat: 7, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "Massa: 2 col (sopa) de goma de tapioca, 1 ovo, 1/2 col (sopa) de chia\nRecheio: 20g de patinho moído cozido, 1 col (sopa) de creme de ricota\nTemperos a gosto",
                 instructions: "1. Misture os ingredientes da massa e prepare a panqueca na frigideira.\n2. Misture os ingredientes do recheio e recheie a panqueca."},
-            {id: 54, name: "Mingau Proteico", calories: 265, protein: 22, carbs: 35, fat: 6, lactose: "sim", method: "microondas",
+            {id: 54, name: "Mingau Proteico", calories: 265, protein: 22, carbs: 35, fat: 6, lactose: "sim", method: "microondas", type: "doce",
                 ingredients: "1 dosador de whey protein\n1 col (sopa) de aveia em flocos\n2 col (sopa) de cacau em pó\n1 banana média\n2 col (sopa) de granola\nCanela e coco ralado a gosto",
                 instructions: "1. Cozinhe a aveia com água no micro-ondas por 1 minuto.\n2. Adicione o whey e o cacau e misture bem.\n3. Sirva com a banana e a granola."},
-            {id: 55, name: "Pão de Cenoura Fit", calories: 291, protein: 23, carbs: 21, fat: 13, lactose: "sim", method: "forno",
+            {id: 55, name: "Pão de Cenoura Fit", calories: 291, protein: 23, carbs: 21, fat: 13, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "1 ovo\n1 col (sopa) de farinha de aveia\n1/2 col (chá) de linhaça\n1 col (sopa) de cenoura ralada\nTemperos, azeite, fermento e sal a gosto\nRecheio: 40g de frango desfiado, 30g de queijo minas frescal",
                 instructions: "1. Bata todos os ingredientes da massa (exceto o fermento) no liquidificador.\n2. Adicione o fermento e misture.\n3. Asse em forno pré-aquecido por 10 minutos.\n4. Recheie o pão e doure na frigideira."},
-            {id: 56, name: "Empada Fit", calories: 275, protein: 28, carbs: 28, fat: 7, lactose: "sim", method: "forno",
+            {id: 56, name: "Empada Fit", calories: 275, protein: 28, carbs: 28, fat: 7, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "Massa: 1 ovo, 2 col (sopa) de goma de tapioca, 1 col (chá) de fermento, sal\nRecheio: 60g de frango desfiado, 1/2 col (sopa) de requeijão cremoso\nTemperos a gosto",
                 instructions: "1. Bata os ingredientes da massa no liquidificador.\n2. Misture os ingredientes do recheio.\n3. Em forminhas de silicone, coloque a massa e o recheio.\n4. Asse por 15 minutos."},
-            {id: 57, name: "Canja de Galinha", calories: 240, protein: 30, carbs: 22, fat: 5, lactose: "nao", method: "fogao",
+            {id: 57, name: "Canja de Galinha", calories: 240, protein: 30, carbs: 22, fat: 5, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "100g de filé de frango\nLegumes picados (abobrinha, cenoura, tomate, cebola)\nTemperos naturais e azeite a gosto",
                 instructions: "1. Cozinhe o frango com os temperos e desfie.\n2. No caldo do cozimento, adicione os legumes e cozinhe até amolecerem.\n3. Volte o frango para a panela e sirva."},
-            {id: 58, name: "Peixe ao Molho Branco", calories: 325, protein: 36, carbs: 28, fat: 8, lactose: "sim", method: "forno",
+            {id: 58, name: "Peixe ao Molho Branco", calories: 325, protein: 36, carbs: 28, fat: 8, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "100g de peixe\nMolho: 1 col (sobremesa) de requeijão, 1 col (sopa) de leite de coco light, 40g de queijo minas frescal\nTemperos a gosto",
                 instructions: "1. Grelhe o peixe temperado.\n2. Prepare o molho branco com os ingredientes e despeje sobre o peixe.\n3. Leve ao forno para gratinar."},
-            {id: 59, name: "Pão de Queijo Fit", calories: 255, protein: 22, carbs: 24, fat: 9, lactose: "sim", method: "forno",
+            {id: 59, name: "Pão de Queijo Fit", calories: 255, protein: 22, carbs: 24, fat: 9, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "1 ovo\n1 col (sopa) de polvilho azedo\n1 col (sopa) de requeijão cremoso\n2 fatias de queijo minas frescal\n1 col (chá) de fermento\nAçafrão e orégano a gosto",
                 instructions: "1. Misture todos os ingredientes.\n2. Despeje em forminhas de silicone e asse por 10-15 minutos."},
-            {id: 60, name: "Peixe Empanado", calories: 345, protein: 38, carbs: 32, fat: 8, lactose: "sim", method: "airfryer",
+            {id: 60, name: "Peixe Empanado", calories: 345, protein: 38, carbs: 32, fat: 8, lactose: "sim", method: "airfryer", type: "salgado",
                 ingredients: "100g de peixe\n1 col (sopa) de farelo de aveia\n1 col (sopa) de queijo parmesão ralado\nTemperos a gosto",
                 instructions: "1. Tempere o peixe e empane na mistura de aveia e parmesão.\n2. Leve à airfryer por 30 minutos."},
-            {id: 61, name: "Pizza Fake de Micro-ondas", calories: 295, protein: 28, carbs: 30, fat: 8, lactose: "sim", method: "microondas",
+            {id: 61, name: "Pizza Fake de Micro-ondas", calories: 295, protein: 28, carbs: 30, fat: 8, lactose: "sim", method: "microondas", type: "salgado",
                 ingredients: "Massa: 1 ovo, 1 clara, 2 col (sopa) de batata doce cozida, fermento e sal\nCobertura: Molho de tomate, frango desfiado, queijo minas, orégano",
                 instructions: "1. Bata os ingredientes da massa e leve ao micro-ondas por 2 minutos.\n2. Adicione a cobertura e leve ao micro-ondas por mais 30 segundos."},
-            {id: 62, name: "Hambúrguer de Frango com Macaxeira", calories: 340, protein: 32, carbs: 38, fat: 8, lactose: "sim", method: "airfryer",
+            {id: 62, name: "Hambúrguer de Frango com Macaxeira", calories: 340, protein: 32, carbs: 38, fat: 8, lactose: "sim", method: "airfryer", type: "salgado",
                 ingredients: "90g de filé de frango cru\nTemperos (salsa, cebola, alho, páprica, pimenta)\n60g de macaxeira cozida\n1/2 col (sopa) de creme de ricota",
                 instructions: "1. Processe o frango com os temperos e modele o hambúrguer.\n2. Leve à airfryer por 15 minutos.\n3. Sirva com a macaxeira e o creme de ricota."},
-            {id: 63, name: "Salada Cítrica", calories: 180, protein: 8, carbs: 32, fat: 5, lactose: "nao", method: "semfogo",
+            {id: 63, name: "Salada Cítrica", calories: 180, protein: 8, carbs: 32, fat: 5, lactose: "nao", method: "semfogo", type: "salgado",
                 ingredients: "1 limão\n1 tangerina\n1 laranja\nCebola, sal, azeite\n5 folhas de alface",
                 instructions: "1. Misture os gomos das frutas cítricas com a cebola, suco e raspas de limão.\n2. Tempere com sal e azeite e sirva sobre as folhas de alface."},
-            {id: 64, name: "Espaguete de Abobrinha", calories: 255, protein: 28, carbs: 18, fat: 8, lactose: "nao", method: "fogao",
+            {id: 64, name: "Espaguete de Abobrinha", calories: 255, protein: 28, carbs: 18, fat: 8, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "1 abobrinha\nAzeite, cebola, sal\n60g de extrato de tomate\n80g de patinho moído cozido",
                 instructions: "1. Fatie a abobrinha em formato de espaguete.\n2. Refogue a cebola no azeite, adicione a abobrinha e cozinhe.\n3. Adicione o molho de tomate e a carne moída."},
-            {id: 65, name: "Macarronada de Abobrinha", calories: 204, protein: 30, carbs: 6, fat: 4, lactose: "nao", method: "fogao",
+            {id: 65, name: "Macarronada de Abobrinha", calories: 204, protein: 30, carbs: 6, fat: 4, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "80g de patinho moído cozido\n150g de abobrinha cozida\n45g de extrato de tomate\nManjericão a gosto",
                 instructions: "1. Rale a abobrinha em fatias finas.\n2. Refogue a abobrinha com o extrato de tomate e a carne moída."},
-            {id: 66, name: "Escondidinho de Jerimum", calories: 295, protein: 26, carbs: 32, fat: 7, lactose: "sim", method: "forno",
+            {id: 66, name: "Escondidinho de Jerimum", calories: 295, protein: 26, carbs: 32, fat: 7, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "150g de jerimum cozido\n80g de filé de frango cozido\n1 col (sopa) de requeijão light\n20g de queijo minas frescal light\nOrégano a gosto",
                 instructions: "1. Amasse o jerimum com o requeijão.\n2. Em um refratário, coloque o purê, o frango e o queijo.\n3. Leve para gratinar."},
-            {id: 67, name: "Purê de Macaxeira com Peixe", calories: 325, protein: 34, carbs: 38, fat: 7, lactose: "sim", method: "fogao",
+            {id: 67, name: "Purê de Macaxeira com Peixe", calories: 325, protein: 34, carbs: 38, fat: 7, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "80g de macaxeira cozida\n40g de leite desnatado\n1 col (sopa) de requeijão light\n1 filé de peixe (100g)\nAzeite e temperos a gosto",
                 instructions: "1. Amasse a macaxeira com o leite e o requeijão para fazer o purê.\n2. Grelhe o peixe com temperos.\n3. Sirva o peixe com o purê."},
-            {id: 68, name: "Escondidinho de Macaxeira", calories: 365, protein: 32, carbs: 42, fat: 9, lactose: "sim", method: "forno",
+            {id: 68, name: "Escondidinho de Macaxeira", calories: 365, protein: 32, carbs: 42, fat: 9, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "80g de macaxeira cozida\n80g de filé de frango cozido\n1 col (sopa) de requeijão light\n20g de queijo minas frescal light\nOrégano a gosto",
                 instructions: "1. Amasse a macaxeira com o requeijão.\n2. Monte o escondidinho com o purê, o frango e o queijo.\n3. Leve para gratinar."},
-            {id: 69, name: "Bolinho de Arroz com Frango", calories: 310, protein: 28, carbs: 35, fat: 7, lactose: "nao", method: "forno",
+            {id: 69, name: "Bolinho de Arroz com Frango", calories: 310, protein: 28, carbs: 35, fat: 7, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "1/2 xícara de arroz cozido\n1 filé de frango cozido e desfiado\n1 col (sopa) de farelo de aveia\nTomate, manjericão, azeite e temperos a gosto",
                 instructions: "1. Misture todos os ingredientes até formar uma massa.\n2. Modele os bolinhos e asse a 200ºC por 20 minutos."},
-            {id: 70, name: "Batata Sauté com Carne", calories: 425, protein: 32, carbs: 48, fat: 12, lactose: "nao", method: "fogao",
+            {id: 70, name: "Batata Sauté com Carne", calories: 425, protein: 32, carbs: 48, fat: 12, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "90g de batata inglesa cozida\n1 filé de patinho assado (80g)\n1 col (sopa) de farofa fit\nAzeite, orégano e temperos a gosto",
                 instructions: "1. Corte a batata em cubos e refogue no azeite com temperos.\n2. Sirva com a carne e a farofa."},
-            {id: 71, name: "Macarrão ao Molho Branco", calories: 319, protein: 20, carbs: 34, fat: 12, lactose: "sim", method: "fogao",
+            {id: 71, name: "Macarrão ao Molho Branco", calories: 319, protein: 20, carbs: 34, fat: 12, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "80g de macarrão integral cozido\n60g de atum em óleo\nMolho: 40ml de leite desnatado, 1 col (sobremesa) de amido de milho, 1 col (sopa) de requeijão light\nTemperos a gosto",
                 instructions: "1. Prepare o molho branco cozinhando os ingredientes até engrossar.\n2. Adicione o atum e sirva com o macarrão."},
-            {id: 72, name: "Arroz com Salada e Frango", calories: 385, protein: 36, carbs: 45, fat: 8, lactose: "sim", method: "fogao",
+            {id: 72, name: "Arroz com Salada e Frango", calories: 385, protein: 36, carbs: 45, fat: 8, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "60g de arroz branco cozido\n100g de filé de frango cozido\nSalada de legumes e folhas à vontade\nTemperos a gosto",
                 instructions: "Monte o prato com o arroz, o frango grelhado e a salada."},
-            {id: 73, name: "Tapioca de Cuscuz", calories: 194, protein: 13, carbs: 21, fat: 6, lactose: "sim", method: "fogao",
+            {id: 73, name: "Tapioca de Cuscuz", calories: 194, protein: 13, carbs: 21, fat: 6, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "4 col (sopa) de massa para cuscuz\n60g de queijo minas frescal light\nOrégano a gosto",
                 instructions: "1. Hidrate a massa de cuscuz e espalhe em uma frigideira quente para formar um disco.\n2. Doure dos dois lados e recheie com o queijo."},
-            {id: 74, name: "Ninho Proteico", calories: 260, protein: 19, carbs: 21, fat: 11, lactose: "sim", method: "semfogo",
+            {id: 74, name: "Ninho Proteico", calories: 260, protein: 19, carbs: 21, fat: 11, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1 dosador de whey protein (15g)\n1 col (sopa) de leite em pó desnatado\nFrutas (uva, morango)\n1 col (sopa) de pasta de amendoim\nChocolate 60% para decorar",
                 instructions: "1. Misture o whey com o leite em pó e um pouco de água para formar um creme.\n2. Sirva com as frutas, a pasta de amendoim e raspas de chocolate."},
-            {id: 75, name: "Torrada com Patê de Queijo", calories: 212, protein: 14, carbs: 19, fat: 8, lactose: "sim", method: "semfogo",
+            {id: 75, name: "Torrada com Patê de Queijo", calories: 212, protein: 14, carbs: 19, fat: 8, lactose: "sim", method: "semfogo", type: "salgado",
                 ingredients: "3 torradas integrais\n2 col (sopa) de requeijão light\n40g de queijo minas frescal light ralado\nOrégano e chia a gosto",
                 instructions: "1. Misture o requeijão com o queijo ralado e os temperos.\n2. Sirva sobre as torradas."},
-            {id: 76, name: "Sanduíche Agridoce", calories: 247, protein: 12, carbs: 38, fat: 6, lactose: "sim", method: "fogao",
+            {id: 76, name: "Sanduíche Agridoce", calories: 247, protein: 12, carbs: 38, fat: 6, lactose: "sim", method: "fogao", type: "doce",
                 ingredients: "2 fatias de pão integral\n40g de queijo minas frescal light\n1 banana pequena\n1 col (chá) de mel\nCanela a gosto",
                 instructions: "1. Grelhe a banana com o mel e a canela.\n2. Monte o sanduíche com o pão, a banana e o queijo."},
-            {id: 77, name: "Bolo de Cenoura", calories: 286, protein: 20, carbs: 22, fat: 13, lactose: "nao", method: "airfryer",
+            {id: 77, name: "Bolo de Cenoura", calories: 286, protein: 20, carbs: 22, fat: 13, lactose: "nao", method: "airfryer", type: "doce",
                 ingredients: "1 ovo\n1 col (sopa) de farelo de aveia\n60g de cenoura ralada\n1 dosador de whey protein (15g)\n2 quadradinhos de chocolate 60%",
                 instructions: "1. Bata o ovo, a aveia, a cenoura e o whey.\n2. Coloque em uma forma, adicione o chocolate e leve à airfryer por 2 minutos."},
-            {id: 78, name: "Cupcake de Coco", calories: 291, protein: 20, carbs: 24, fat: 14, lactose: "nao", method: "microondas",
+            {id: 78, name: "Cupcake de Coco", calories: 291, protein: 20, carbs: 24, fat: 14, lactose: "nao", method: "microondas", type: "doce",
                 ingredients: "1 ovo\n1 banana média\n1 dosador de whey protein (15g)\n1 col (sopa) de coco ralado\n1 col (sopa) de pasta de amendoim de coco",
                 instructions: "1. Bata o ovo, a banana, o whey e o coco.\n2. Leve ao micro-ondas por 2 minutos em uma forma de silicone.\n3. Sirva com a pasta de amendoim por cima."},
-            {id: 79, name: "Panqueca de Banana com Whey", calories: 289, protein: 19, carbs: 25, fat: 14, lactose: "nao", method: "fogao",
+            {id: 79, name: "Panqueca de Banana com Whey", calories: 289, protein: 19, carbs: 25, fat: 14, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "1 ovo\n1 banana média\n1 col (sobremesa) de cacau em pó\n1 col (sopa) de pasta de amendoim\n1 dosador de whey protein (15g)",
                 instructions: "1. Bata o ovo, a banana, o cacau e a pasta de amendoim.\n2. Faça a panqueca na frigideira.\n3. Prepare uma calda com o whey e água e sirva sobre a panqueca."},
-            {id: 80, name: "Ovo de Codorna com Queijo", calories: 206, protein: 15, carbs: 12, fat: 11, lactose: "sim", method: "fogao",
+            {id: 80, name: "Ovo de Codorna com Queijo", calories: 206, protein: 15, carbs: 12, fat: 11, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "6 ovos de codorna cozidos\n30g de queijo minas frescal light em cubos\n2 col (sopa) de molho de tomate\n3 torradas\nTemperos a gosto",
                 instructions: "Misture os ovos com o queijo e o molho e sirva com as torradas."},
-            {id: 81, name: "Pipoca com Calda de Whey", calories: 229, protein: 14, carbs: 29, fat: 7, lactose: "nao", method: "microondas",
+            {id: 81, name: "Pipoca com Calda de Whey", calories: 229, protein: 14, carbs: 29, fat: 7, lactose: "nao", method: "microondas", type: "doce",
                 ingredients: "2 col (sopa) de milho para pipoca\n1 dosador de whey protein (15g)\nCanela ou cacau em pó a gosto",
                 instructions: "1. Estoure a pipoca no micro-ondas com um pouco de água.\n2. Prepare uma calda com o whey e água e despeje sobre a pipoca."},
-            {id: 82, name: "Suco Verde com Pão", calories: 184, protein: 11, carbs: 27, fat: 5, lactose: "sim", method: "semfogo",
+            {id: 82, name: "Suco Verde com Pão", calories: 184, protein: 11, carbs: 27, fat: 5, lactose: "sim", method: "semfogo", type: "salgado",
                 ingredients: "Suco: 1 fatia de abacaxi, 2 folhas de couve, hortelã, suco de limão\nPão: 1 fatia de pão integral com 40g de queijo minas frescal light",
                 instructions: "Bata os ingredientes do suco no liquidificador e sirva com o pão."},
-            {id: 83, name: "Shake de Chocolate", calories: 276, protein: 17, carbs: 33, fat: 12, lactose: "nao", method: "semfogo",
+            {id: 83, name: "Shake de Chocolate", calories: 276, protein: 17, carbs: 33, fat: 12, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "100ml de água\n20g de castanha de caju\n1 col (sobremesa) de farelo de aveia\n1 banana média\n1 dosador de whey protein (15g)\n1 col (sobremesa) de cacau em pó",
                 instructions: "Bata todos os ingredientes no liquidificador com gelo."},
-            {id: 84, name: "Cuscuz com Queijo e Ricota", calories: 219, protein: 14, carbs: 22, fat: 8, lactose: "sim", method: "fogao",
+            {id: 84, name: "Cuscuz com Queijo e Ricota", calories: 219, protein: 14, carbs: 22, fat: 8, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "75g de cuscuz\n1 col (sopa) de creme de ricota (30g)\n40g de queijo minas frescal light\nOrégano e chia a gosto",
                 instructions: "Prepare o cuscuz recheado com o creme de ricota e o queijo."},
-            {id: 85, name: "Vitamina Laxativa", calories: 206, protein: 17, carbs: 32, fat: 3, lactose: "sim", method: "semfogo",
+            {id: 85, name: "Vitamina Laxativa", calories: 206, protein: 17, carbs: 32, fat: 3, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "170g de mamão\n1 ameixa vermelha\n1 col (sopa) de farelo de aveia\n2 col (sopa) de whey protein (20g)\n200ml de água",
                 instructions: "Bata todos os ingredientes no liquidificador."},
-            {id: 86, name: "Tapioca com Coco e Ovo", calories: 275, protein: 17, carbs: 29, fat: 9, lactose: "sim", method: "fogao",
+            {id: 86, name: "Tapioca com Coco e Ovo", calories: 275, protein: 17, carbs: 29, fat: 9, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "60g de goma de tapioca\n1 col (sobremesa) de coco ralado\n1 ovo\n1 col (sopa) de requeijão light\n1 col (sopa) de whey protein no café",
                 instructions: "1. Prepare a tapioca com o coco na massa.\n2. Faça um ovo mexido com o requeijão para o recheio.\n3. Sirva com o café com whey."},
-            {id: 87, name: "Bombom Gelado", calories: 215, protein: 28, carbs: 18, fat: 6, lactose: "sim", method: "semfogo",
+            {id: 87, name: "Bombom Gelado", calories: 215, protein: 28, carbs: 18, fat: 6, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1 colher de sopa de pasta de amendoim\n1 scoop de whey de baunilha\n1 colher de chá de cacau em pó",
                 instructions: "1. Misture a pasta de amendoim e o whey (sem o cacau), com um pouco de água até obter consistência de brigadeiro.\n2. Coloque metade da mistura em uma forminha de silicone e congele por 1 hora.\n3. Na outra metade da mistura, adicione o cacau em pó com um pouco mais de água.\n4. Após 1 hora, adicione a segunda camada (com cacau) sobre a primeira e congele por mais 1 hora."},
-            {id: 88, name: "Salgado de Frango com Suco", calories: 295, protein: 32, carbs: 32, fat: 7, lactose: "sim", method: "forno",
+            {id: 88, name: "Salgado de Frango com Suco", calories: 295, protein: 32, carbs: 32, fat: 7, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "50g de batata doce cozida\n80g de filé de frango cozido\n1 col (sopa) de requeijão light\nAçafrão e temperos a gosto",
                 instructions: "1. Triture o frango e misture com a batata doce amassada e o requeijão.\n2. Modele e leve ao forno por 20-25 minutos."},
-            {id: 89, name: "Creme de Abacate", calories: 246, protein: 18, carbs: 17, fat: 13, lactose: "sim", method: "semfogo",
+            {id: 89, name: "Creme de Abacate", calories: 246, protein: 18, carbs: 17, fat: 13, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "80g de abacate amassado e congelado\n1 dosador de whey protein (15g)\n100ml de iogurte natural",
                 instructions: "Bata todos os ingredientes no processador ou liquidificador."},
-            {id: 90, name: "Guacamole", calories: 220, protein: 12, carbs: 18, fat: 12, lactose: "sim", method: "semfogo",
+            {id: 90, name: "Guacamole", calories: 220, protein: 12, carbs: 18, fat: 12, lactose: "sim", method: "semfogo", type: "salgado",
                 ingredients: "60g de abacate amassado\nCebola, tomate, suco de limão, azeite e sal a gosto\n2 torradas integrais\n40g de queijo minas frescal light",
                 instructions: "1. Misture o abacate com os temperos.\n2. Sirva com as torradas e o queijo."},
-            {id: 91, name: "Trufa de Uva", calories: 195, protein: 22, carbs: 18, fat: 5, lactose: "sim", method: "semfogo",
+            {id: 91, name: "Trufa de Uva", calories: 195, protein: 22, carbs: 18, fat: 5, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "2 dosadores de whey protein (30g)\n1 col (sopa) de leite em pó desnatado\n2 col (sopa) de creme de leite\n5 uvas\nChocolate 60% para decorar",
                 instructions: "1. Misture o whey, o leite em pó e o creme de leite até formar um creme firme.\n2. Modele as trufas com uma uva no centro.\n3. Passe no leite em pó e decore com raspas de chocolate."},
-            {id: 92, name: "Smoothie de Cajá", calories: 210, protein: 24, carbs: 22, fat: 3, lactose: "sim", method: "semfogo",
+            {id: 92, name: "Smoothie de Cajá", calories: 210, protein: 24, carbs: 22, fat: 3, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1/2 polpa de cajá (100g)\n1 col (sopa) de leite em pó desnatado\n2 dosadores de whey protein (30g)",
                 instructions: "Bata todos os ingredientes com gelo no liquidificador."},
-            {id: 93, name: "Taça da Felicidade", calories: 360, protein: 11, carbs: 28, fat: 24, lactose: "sim", method: "semfogo",
+            {id: 93, name: "Taça da Felicidade", calories: 360, protein: 11, carbs: 28, fat: 24, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "Creme: 3 col (sopa) de creme de leite, 1 dosador de whey\nMontagem: 3 biscoitos integrais, 6 uvas, 4 quadradinhos de chocolate 60%, 10g de castanha de caju",
                 instructions: "1. Prepare o creme de whey.\n2. Derreta o chocolate.\n3. Monte a taça em camadas: creme, uvas, biscoito, chocolate e castanhas."},
-            {id: 94, name: "Café Proteico Gelado", calories: 210, protein: 26, carbs: 22, fat: 5, lactose: "sim", method: "semfogo",
+            {id: 94, name: "Café Proteico Gelado", calories: 210, protein: 26, carbs: 22, fat: 5, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "Café congelado em cubos\n1 dosador de whey protein (15g)\n1 col (sobremesa) de cacau em pó\n3 torradas com requeijão e queijo minas",
                 instructions: "1. Bata os cubos de café com o whey e o cacau.\n2. Sirva com as torradas."},
-            {id: 95, name: "Brigadeiro YoPro", calories: 240, protein: 28, carbs: 24, fat: 6, lactose: "sim", method: "fogao",
+            {id: 95, name: "Brigadeiro YoPro", calories: 240, protein: 28, carbs: 24, fat: 6, lactose: "sim", method: "fogao", type: "doce",
                 ingredients: "1 unidade de YoPro chocolate (250ml)\n1 col (chá) de manteiga ghee\n4 uvas",
                 instructions: "1. Cozinhe o YoPro com a manteiga em fogo médio, mexendo até dar ponto de brigadeiro.\n2. Sirva com as uvas."},
-            {id: 96, name: "Cappuccino Proteico com Mexidão", calories: 243, protein: 24, carbs: 6, fat: 13, lactose: "sim", method: "fogao",
+            {id: 96, name: "Cappuccino Proteico com Mexidão", calories: 243, protein: 24, carbs: 6, fat: 13, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "Cappuccino: 1 xícara de café, 1 col (sopa) de whey protein, canela\nMexidão: 2 ovos, 60g de queijo minas frescal",
                 instructions: "1. Prepare o cappuccino misturando os ingredientes.\n2. Faça os ovos mexidos com o queijo e sirva junto."},
-            {id: 97, name: "Banana Caramelizada com Torrada", calories: 254, protein: 9, carbs: 37, fat: 9, lactose: "sim", method: "fogao",
+            {id: 97, name: "Banana Caramelizada com Torrada", calories: 254, protein: 9, carbs: 37, fat: 9, lactose: "sim", method: "fogao", type: "doce",
                 ingredients: "1 banana média\n1 col (sobremesa) de mel\n1 col (sobremesa) de manteiga ghee\n2 torradas integrais\n40g de queijo minas frescal light",
                 instructions: "1. Caramelize a banana na manteiga e mel.\n2. Sirva sobre as torradas com o queijo."},
-            {id: 98, name: "Torrada com Ovo Cremoso", calories: 268, protein: 23, carbs: 19, fat: 10, lactose: "sim", method: "fogao",
+            {id: 98, name: "Torrada com Ovo Cremoso", calories: 268, protein: 23, carbs: 19, fat: 10, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "3 torradas integrais\n1 ovo\n1 col (sopa) de requeijão light (30g)\nCafé com whey a gosto",
                 instructions: "1. Faça um ovo mexido cremoso com o requeijão.\n2. Sirva sobre as torradas com o café."},
-            {id: 99, name: "Saladona de Frango e Ovo", calories: 295, protein: 34, carbs: 22, fat: 9, lactose: "sim", method: "semfogo",
+            {id: 99, name: "Saladona de Frango e Ovo", calories: 295, protein: 34, carbs: 22, fat: 9, lactose: "sim", method: "semfogo", type: "salgado",
                 ingredients: "Folhas, cenoura e beterraba ralada, tomate cereja\n1 col (sopa) de requeijão light\n60g de frango desfiado\n4 ovos de codorna",
                 instructions: "Misture todos os ingredientes e sirva."},
-            {id: 100, name: "Arroz de Couve-flor com Carne do Sol", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao",
+            {id: 100, name: "Arroz de Couve-flor com Carne do Sol", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "150g de couve-flor\n60g de carne de sol desfiada\nAzeite e temperos a gosto",
                 instructions: "1. Triture a couve-flor e refogue com temperos.\n2. Misture com a carne de sol e sirva."},
-            {id: 101, name: "Snack de Grão de Bico", calories: 66, protein: 2, carbs: 5, fat: 5, lactose: "nao", method: "forno",
+            {id: 101, name: "Snack de Grão de Bico", calories: 66, protein: 2, carbs: 5, fat: 5, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "2 xícaras de grão de bico cozido\n5 col (sopa) de azeite\nPáprica, orégano, pimenta e sal a gosto",
                 instructions: "1. Tempere o grão de bico cozido com o azeite e os temperos.\n2. Leve ao forno a 210°C por cerca de 40 minutos, mexendo a cada 15 minutos, até ficarem crocantes."},
-            {id: 102, name: "Granola Salgada Low Carb", calories: 278, protein: 9, carbs: 17, fat: 20, lactose: "nao", method: "fogao",
+            {id: 102, name: "Granola Salgada Low Carb", calories: 278, protein: 9, carbs: 17, fat: 20, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "Sementes (abóbora, gergelim, chia)\nOleaginosas (amêndoas, castanha de caju)\nAzeite, sal e páprica a gosto",
                 instructions: "Misture todos os ingredientes em uma frigideira e mexa em fogo médio até dourar."},
-            {id: 103, name: "Bolinho Proteico de Abóbora", calories: 55, protein: 7, carbs: 4, fat: 1, lactose: "nao", method: "airfryer",
+            {id: 103, name: "Bolinho Proteico de Abóbora", calories: 55, protein: 7, carbs: 4, fat: 1, lactose: "nao", method: "airfryer", type: "salgado",
                 ingredients: "2 xícaras de abóbora cozida e amassada\n2 col (sopa) de farelo de aveia\n1 e 1/2 xícara de frango desfiado\n1 ovo",
                 instructions: "1. Misture todos os ingredientes até formar uma massa.\n2. Modele os bolinhos e asse na airfryer por 10 minutos."},
-            {id: 104, name: "Pão de Aveia", calories: 565, protein: 35, carbs: 58, fat: 24, lactose: "sim", method: "forno",
+            {id: 104, name: "Pão de Aveia", calories: 565, protein: 35, carbs: 58, fat: 24, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "1 pote de iogurte natural\n3 ovos\n12 col (sopa) de farelo de aveia\n1 col (sopa) de fermento\nSal a gosto",
                 instructions: "1. Bata os ovos e o iogurte no liquidificador.\n2. Adicione a aveia, o sal e por último o fermento.\n3. Asse em forno pré-aquecido."},
-            {id: 105, name: "Sorvete de Frutas Vermelhas", calories: 198, protein: 9, carbs: 32, fat: 5, lactose: "sim", method: "semfogo",
+            {id: 105, name: "Sorvete de Frutas Vermelhas", calories: 198, protein: 9, carbs: 32, fat: 5, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1 banana madura congelada\n1 xícara de frutas vermelhas congeladas\n1 iogurte natural",
                 instructions: "Bata as frutas congeladas com o iogurte no liquidificador ou processador até obter um creme."},
-            {id: 106, name: "Panqueca de Chocolate com Frutas", calories: 180, protein: 14, carbs: 18, fat: 8, lactose: "nao", method: "fogao",
+            {id: 106, name: "Panqueca de Chocolate com Frutas", calories: 180, protein: 14, carbs: 18, fat: 8, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "1 ovo\n1 clara\n2 col (sopa) de farelo de aveia\n1 col (sopa) de cacau em pó",
                 instructions: "1. Misture todos os ingredientes.\n2. Faça a panqueca em uma frigideira antiaderente.\n3. Recheie com frutas."},
-            {id: 107, name: "Doce de Cacau com Coco", calories: 79, protein: 1, carbs: 7, fat: 6, lactose: "nao", method: "semfogo",
+            {id: 107, name: "Doce de Cacau com Coco", calories: 79, protein: 1, carbs: 7, fat: 6, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "1 banana prata pequena\n2 quadradinhos de chocolate 70%\n4 col (sopa) de coco em lascas\n2 col (sopa) de farelo de aveia",
                 instructions: "1. Amasse a banana e misture com o chocolate derretido, a aveia e o coco.\n2. Modele em bolinhas e leve ao congelador por 20 minutos."},
-            {id: 108, name: "Creme de Abacate com Cacau", calories: 327, protein: 14, carbs: 34, fat: 18, lactose: "sim", method: "semfogo",
+            {id: 108, name: "Creme de Abacate com Cacau", calories: 327, protein: 14, carbs: 34, fat: 18, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1/2 abacate\n1 col (sopa) de cacau em pó\n2 col (sopa) de leite em pó ou 1/2 scoop de whey\n1 fio de mel\n1 col (sopa) de amêndoas picadas",
                 instructions: "Bata todos os ingredientes (exceto as amêndoas) no liquidificador e sirva com as amêndoas por cima."},
-            {id: 109, name: "Torta de Grão de Bico", calories: 316, protein: 13, carbs: 28, fat: 19, lactose: "nao", method: "forno",
+            {id: 109, name: "Torta de Grão de Bico", calories: 316, protein: 13, carbs: 28, fat: 19, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "1 xícara de grão de bico cozido\n3 ovos\n3/4 xícara de líquido (água ou leite vegetal)\nSementes (gergelim, linhaça)\nFlocão de milho, azeite, fermento\nRecheio a gosto (frango, carne, etc)",
                 instructions: "1. Bata todos os ingredientes da massa (exceto o fermento) no liquidificador.\n2. Adicione o fermento.\n3. Coloque metade da massa em uma forma, adicione o recheio e cubra com o resto da massa.\n4. Asse por 30-40 minutos a 180°C."},
-            {id: 110, name: "Ratatouille de Legumes", calories: 238, protein: 2, carbs: 8, fat: 23, lactose: "nao", method: "forno",
+            {id: 110, name: "Ratatouille de Legumes", calories: 238, protein: 2, carbs: 8, fat: 23, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "1 abobrinha\n1 berinjela\n3 tomates\n2 pimentões\n1/4 xícara de azeite\nMolho de tomate e temperos a gosto",
                 instructions: "1. Fatie os vegetais em rodelas finas.\n2. Em uma assadeira, coloque uma camada de molho de tomate e intercale as rodelas de vegetais.\n3. Regue com azeite, tempere e asse por 20-30 minutos a 200°C."},
-            {id: 111, name: "Suflê de Brócolis", calories: 91, protein: 8, carbs: 3, fat: 6, lactose: "sim", method: "forno",
+            {id: 111, name: "Suflê de Brócolis", calories: 91, protein: 8, carbs: 3, fat: 6, lactose: "sim", method: "forno", type: "salgado",
                 ingredients: "Brócolis cozido picado\n2 fatias de ricota\n3 gemas\n3 claras em neve\nTemperos a gosto",
                 instructions: "1. Bata o brócolis, a ricota e as gemas no liquidificador.\n2. Incorpore delicadamente as claras em neve.\n3. Asse em forno a 200°C por 20-30 minutos."},
-            {id: 112, name: "Nuggets de Peixe", calories: 117, protein: 9, carbs: 18, fat: 1, lactose: "nao", method: "forno",
+            {id: 112, name: "Nuggets de Peixe", calories: 117, protein: 9, carbs: 18, fat: 1, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "4 filés de tilápia\nCebola, alho, cebolinha\n2 xícaras de flocos de milho\nSal e pimenta a gosto",
                 instructions: "1. Processe o peixe com os temperos.\n2. Modele os nuggets e passe nos flocos de milho.\n3. Asse em forno pré-aquecido, virando na metade do tempo."},
-            {id: 113, name: "Creme de Couve-flor com Limão", calories: 149, protein: 12, carbs: 25, fat: 1, lactose: "sim", method: "fogao",
+            {id: 113, name: "Creme de Couve-flor com Limão", calories: 149, protein: 12, carbs: 25, fat: 1, lactose: "sim", method: "fogao", type: "salgado",
                 ingredients: "4 ramos de couve-flor cozida\n1 pote de iogurte natural desnatado\nCebolinha, raspas de limão e sal a gosto",
                 instructions: "Bata a couve-flor com o iogurte e o sal no liquidificador. Sirva com as raspas de limão e cebolinha."},
-            {id: 114, name: "Farofa Nutritiva", calories: 59, protein: 2, carbs: 5, fat: 4, lactose: "nao", method: "semfogo",
+            {id: 114, name: "Farofa Nutritiva", calories: 59, protein: 2, carbs: 5, fat: 4, lactose: "nao", method: "semfogo", type: "salgado",
                 ingredients: "1/2 xícara de aveia em flocos\n1/2 xícara de gergelim torrado\n1/4 xícara de farinha de casca de cebola",
                 instructions: "Bata todos os ingredientes no liquidificador até obter uma farofa."},
-            {id: 115, name: "Milkshake de Chocolate Zero Lactose", calories: 244, protein: 4, carbs: 48, fat: 7, lactose: "nao", method: "semfogo",
+            {id: 115, name: "Milkshake de Chocolate Zero Lactose", calories: 244, protein: 4, carbs: 48, fat: 7, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "150ml de leite de amêndoa\n1 banana congelada\n1 col (chá) de cacau em pó\n4 tâmaras\nCacau nibs para decorar",
                 instructions: "Bata todos os ingredientes (exceto os nibs) no liquidificador. Sirva com os nibs por cima."},
-            {id: 116, name: "Empada de Frango Zero Lactose", calories: 328, protein: 25, carbs: 3, fat: 13, lactose: "nao", method: "forno",
+            {id: 116, name: "Empada de Frango Zero Lactose", calories: 328, protein: 25, carbs: 3, fat: 13, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "Massa: 3 col (sopa) de farinha de castanha, 1 gema, 1 col (chá) de manteiga vegetal\nRecheio: 40g de frango desfiado",
                 instructions: "1. Misture os ingredientes da massa.\n2. Forre uma forminha com a massa, adicione o recheio e leve ao forno por 25 minutos."},
-            {id: 117, name: "Brusqueta Zero Lactose", calories: 311, protein: 9, carbs: 53, fat: 8, lactose: "nao", method: "microondas",
+            {id: 117, name: "Brusqueta Zero Lactose", calories: 311, protein: 9, carbs: 53, fat: 8, lactose: "nao", method: "microondas", type: "salgado",
                 ingredients: "2 fatias de pão integral\n2 col (sopa) de extrato de tomate\n1 fatia de queijo de castanha\nOrégano e manjericão a gosto",
                 instructions: "1. Pincele azeite no pão, adicione o molho, o queijo e os temperos.\n2. Leve ao micro-ondas por 30 segundos."},
-            {id: 118, name: "Cuscuz Recheado Zero Lactose", calories: 276, protein: 26, carbs: 22, fat: 9, lactose: "nao", method: "fogao",
+            {id: 118, name: "Cuscuz Recheado Zero Lactose", calories: 276, protein: 26, carbs: 22, fat: 9, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "5 col (sopa) de cuscuz\n1 col (sopa) de requeijão de castanha\n3 col (sopa) de patinho moído cozido",
                 instructions: "Prepare o cuscuz e recheie com o requeijão de castanha e a carne."},
-            {id: 119, name: "Tapioca Recheada Zero Lactose", calories: 333, protein: 9, carbs: 49, fat: 11, lactose: "nao", method: "fogao",
+            {id: 119, name: "Tapioca Recheada Zero Lactose", calories: 333, protein: 9, carbs: 49, fat: 11, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "50g de goma de tapioca\n1 fatia de queijo de castanha\n1 ovo\n1 col (sopa) de requeijão de castanha",
                 instructions: "Prepare a tapioca na frigideira e recheie com o ovo mexido, o requeijão e o queijo de castanha."},
-            {id: 120, name: "Panqueca de Banana Zero Lactose", calories: 294, protein: 23, carbs: 28, fat: 12, lactose: "nao", method: "fogao",
+            {id: 120, name: "Panqueca de Banana Zero Lactose", calories: 294, protein: 23, carbs: 28, fat: 12, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "1 banana\n2 ovos\n1 col (sopa) de farelo de aveia\n1 colher de proteína vegana",
                 instructions: "Bata todos os ingredientes e prepare a panqueca na frigideira."},
-            {id: 121, name: "Cartola de Banana", calories: 249, protein: 3, carbs: 40, fat: 10, lactose: "nao", method: "fogao",
+            {id: 121, name: "Cartola de Banana", calories: 249, protein: 3, carbs: 40, fat: 10, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "1 banana\n1 fatia de queijo de castanha\n1 col (sopa) de mel\nAzeite para grelhar",
                 instructions: "Grelhe a banana no azeite, adicione o mel e o queijo por cima."},
-            {id: 122, name: "Açaí Fit Zero Lactose", calories: 394, protein: 26, carbs: 27, fat: 21, lactose: "nao", method: "semfogo",
+            {id: 122, name: "Açaí Fit Zero Lactose", calories: 394, protein: 26, carbs: 27, fat: 21, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "200g de polpa de açaí\n1 banana\n1 dosador de whey vegano\n1 col (sopa) de farelo de aveia\n100ml de água",
                 instructions: "Bata todos os ingredientes no liquidificador com gelo."},
-            {id: 123, name: "Bolinho de Cacau Zero Lactose", calories: 260, protein: 26, carbs: 28, fat: 7, lactose: "nao", method: "microondas",
+            {id: 123, name: "Bolinho de Cacau Zero Lactose", calories: 260, protein: 26, carbs: 28, fat: 7, lactose: "nao", method: "microondas", type: "doce",
                 ingredients: "1 ovo\n1 banana\n1 col (sobremesa) de cacau em pó\n1 col (sopa) de farelo de aveia\n2 col (sopa) de proteína vegana",
                 instructions: "Bata todos os ingredientes e leve ao micro-ondas em uma forma de silicone por 2 minutos."},
-            {id: 124, name: "Aveioca Zero Lactose", calories: 204, protein: 20, carbs: 14, fat: 7, lactose: "nao", method: "fogao",
+            {id: 124, name: "Aveioca Zero Lactose", calories: 204, protein: 20, carbs: 14, fat: 7, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "1 ovo\n1 col (sopa) de farelo de aveia\n1 col (sopa) de goma de tapioca\nRecheio de frango desfiado",
                 instructions: "Misture os ingredientes da massa, faça na frigideira e recheie com o frango."},
-            {id: 125, name: "Chips de Batata Doce Zero Lactose", calories: 303, protein: 27, carbs: 27, fat: 9, lactose: "nao", method: "microondas",
+            {id: 125, name: "Chips de Batata Doce Zero Lactose", calories: 303, protein: 27, carbs: 27, fat: 9, lactose: "nao", method: "microondas", type: "salgado",
                 ingredients: "100g de batata doce cozida\n80g de filé de frango cozido\n1 col (sopa) de requeijão de castanha",
                 instructions: "1. Fatie a batata doce e leve ao micro-ondas por 3 minutos.\n2. Prepare um patê com o frango e o requeijão e sirva com os chips."},
-            {id: 126, name: "Mingau de Aveia Zero Lactose", calories: 225, protein: 14, carbs: 30, fat: 6, lactose: "nao", method: "fogao",
+            {id: 126, name: "Mingau de Aveia Zero Lactose", calories: 225, protein: 14, carbs: 30, fat: 6, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "180ml de leite de amêndoas\n2 col (sopa) de farelo de aveia\n1 col (sopa) de proteína vegana\n1 banana\nCanela a gosto",
                 instructions: "1. Cozinhe o leite com a aveia até formar um mingau.\n2. Adicione a proteína vegana e a canela e sirva com a banana."},
-            {id: 127, name: "Mousse de Chocolate Zero Lactose", calories: 342, protein: 13, carbs: 35, fat: 18, lactose: "nao", method: "semfogo",
+            {id: 127, name: "Mousse de Chocolate Zero Lactose", calories: 342, protein: 13, carbs: 35, fat: 18, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "90g de abacate congelado\n1 banana congelada\n1 col (sopa) de proteína vegana de chocolate\n1 col (sopa) de cacau em pó\n10g de chocolate zero lactose picado",
                 instructions: "Bata o abacate, a banana, a proteína e o cacau no liquidificador. Sirva com o chocolate picado por cima."},
-            {id: 128, name: "Pão Caseiro Zero Lactose", calories: 275, protein: 12, carbs: 18, fat: 18, lactose: "nao", method: "microondas",
+            {id: 128, name: "Pão Caseiro Zero Lactose", calories: 275, protein: 12, carbs: 18, fat: 18, lactose: "nao", method: "microondas", type: "salgado",
                 ingredients: "1 ovo\n1 col (sopa) de requeijão vegetal\n1 col (sopa) de farelo de aveia\n1 col (sopa) de chia\n2 fatias de queijo de castanha\n1 col (café) de fermento",
                 instructions: "1. Misture todos os ingredientes da massa.\n2. Leve ao micro-ondas por 2 minutos.\n3. Recheie com o queijo e doure em uma sanduicheira."},
-            {id: 129, name: "Smoothie de Mamão", calories: 150, protein: 5, carbs: 19, fat: 7, lactose: "nao", method: "semfogo",
+            {id: 129, name: "Smoothie de Mamão", calories: 150, protein: 5, carbs: 19, fat: 7, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "2 xícaras de leite de amêndoas\n150g de mamão congelado\n1 col (sopa) de farinha de linhaça dourada\nGelo",
                 instructions: "Bata todos os ingredientes no liquidificador."},
-            {id: 130, name: "Pão com Patê de Queijo Zero Lactose", calories: 316, protein: 9, carbs: 35, fat: 16, lactose: "nao", method: "semfogo",
+            {id: 130, name: "Pão com Patê de Queijo Zero Lactose", calories: 316, protein: 9, carbs: 35, fat: 16, lactose: "nao", method: "semfogo", type: "salgado",
                 ingredients: "2 fatias de pão integral\n50g de queijo de castanha\n1 col (sopa) de requeijão de castanha\nOrégano a gosto",
                 instructions: "Misture o queijo com o requeijão e o orégano e sirva com o pão."},
-            {id: 131, name: "Salgado de Frango Zero Lactose", calories: 228, protein: 26, carbs: 14, fat: 7, lactose: "nao", method: "forno",
+            {id: 131, name: "Salgado de Frango Zero Lactose", calories: 228, protein: 26, carbs: 14, fat: 7, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "50g de batata doce cozida\n80g de filé de frango cozido\n1 col (sopa) de requeijão de castanha\nAçafrão e temperos a gosto",
                 instructions: "1. Triture o frango e misture com a batata doce e o requeijão.\n2. Modele e leve ao forno por 20-25 minutos."},
-            {id: 132, name: "Smoothie de Morango Zero Lactose", calories: 281, protein: 30, carbs: 21, fat: 8, lactose: "nao", method: "semfogo",
+            {id: 132, name: "Smoothie de Morango Zero Lactose", calories: 281, protein: 30, carbs: 21, fat: 8, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "100ml de água\n1 banana congelada\n1 polpa de morango congelada\n1 col (sopa) de pasta de amendoim\n3 col (sopa) de proteína vegana",
                 instructions: "Bata todos os ingredientes com gelo no liquidificador."},
-            {id: 133, name: "Sanduíche Agridoce Zero Lactose", calories: 258, protein: 7, carbs: 43, fat: 7, lactose: "nao", method: "fogao",
+            {id: 133, name: "Sanduíche Agridoce Zero Lactose", calories: 258, protein: 7, carbs: 43, fat: 7, lactose: "nao", method: "fogao", type: "doce",
                 ingredients: "2 fatias de pão integral\n30g de queijo de castanha\n1 banana pequena\n1 col (chá) de mel\nOrégano a gosto",
                 instructions: "1. Grelhe a banana com o mel.\n2. Monte o sanduíche com o queijo e a banana grelhada."},
-            {id: 134, name: "Rap10 com Ovo Zero Lactose", calories: 195, protein: 10, carbs: 21, fat: 8, lactose: "nao", method: "fogao",
+            {id: 134, name: "Rap10 com Ovo Zero Lactose", calories: 195, protein: 10, carbs: 21, fat: 8, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "1 Rap10 integral\n1 ovo\nCafé com canela a gosto",
                 instructions: "1. Aqueça o Rap10 na frigideira.\n2. Faça um ovo mexido e recheie a massa."},
-            {id: 135, name: "Tapioca de Cuscuz Zero Lactose", calories: 196, protein: 5, carbs: 27, fat: 7, lactose: "nao", method: "fogao",
+            {id: 135, name: "Tapioca de Cuscuz Zero Lactose", calories: 196, protein: 5, carbs: 27, fat: 7, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "4 col (sopa) de massa de cuscuz\n40g de queijo de castanha\nOrégano a gosto",
                 instructions: "Faça um disco de cuscuz na frigideira, doure dos dois lados e recheie com o queijo."},
-            {id: 136, name: "Creme de Abacate Zero Lactose", calories: 246, protein: 18, carbs: 17, fat: 13, lactose: "nao", method: "semfogo",
+            {id: 136, name: "Creme de Abacate Zero Lactose", calories: 246, protein: 18, carbs: 17, fat: 13, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "80g de abacate congelado\n1 colher de proteína vegana de baunilha\n100ml de iogurte vegetal",
                 instructions: "Bata todos os ingredientes no processador ou liquidificador."},
-            {id: 137, name: "Taça da Felicidade Zero Lactose", calories: 360, protein: 11, carbs: 28, fat: 24, lactose: "nao", method: "semfogo",
+            {id: 137, name: "Taça da Felicidade Zero Lactose", calories: 360, protein: 11, carbs: 28, fat: 24, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "Creme: 3 col (sopa) de creme de leite de coco, 1 colher de proteína vegana\nMontagem: 3 biscoitos integrais, uvas, chocolate zero lactose, castanhas",
                 instructions: "Monte a taça em camadas com o creme, as frutas, o biscoito, o chocolate derretido e as castanhas."},
-            {id: 138, name: "Mousse de Maracujá Zero Lactose", calories: 154, protein: 10, carbs: 22, fat: 3, lactose: "nao", method: "semfogo",
+            {id: 138, name: "Mousse de Maracujá Zero Lactose", calories: 154, protein: 10, carbs: 22, fat: 3, lactose: "nao", method: "semfogo", type: "doce",
                 ingredients: "1 maracujá\n100ml de leite de amêndoas\n170g de iogurte vegetal",
                 instructions: "Misture todos os ingredientes e leve para gelar."},
-            {id: 139, name: "Cookie de Banana Zero Lactose", calories: 158, protein: 3, carbs: 28, fat: 5, lactose: "nao", method: "airfryer",
+            {id: 139, name: "Cookie de Banana Zero Lactose", calories: 158, protein: 3, carbs: 28, fat: 5, lactose: "nao", method: "airfryer", type: "doce",
                 ingredients: "1 banana\n1 col (sopa) de farelo de aveia\n10g de chocolate zero lactose",
                 instructions: "1. Amasse a banana e misture com a aveia e o chocolate picado.\n2. Modele os cookies e leve à airfryer por 15 minutos."},
-            {id: 140, name: "Batata Sauté Zero Lactose", calories: 85, protein: 1, carbs: 11, fat: 4, lactose: "nao", method: "fogao",
+            {id: 140, name: "Batata Sauté Zero Lactose", calories: 85, protein: 1, carbs: 11, fat: 4, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "90g de batata inglesa cozida\n1 col (sobremesa) de azeite\nOrégano e temperos a gosto",
                 instructions: "Corte a batata em cubos e refogue no azeite com os temperos."},
-            {id: 141, name: "Peixe ao Molho de Mostarda Zero Lactose", calories: 217, protein: 34, carbs: 11, fat: 4, lactose: "nao", method: "forno",
+            {id: 141, name: "Peixe ao Molho de Mostarda Zero Lactose", calories: 217, protein: 34, carbs: 11, fat: 4, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "120g de peixe\nMolho: mostarda, mel, azeite, suco de limão",
                 instructions: "Cubra o peixe com o molho e leve ao forno."},
-            {id: 142, name: "Macarronada de Abobrinha Zero Lactose", calories: 204, protein: 30, carbs: 6, fat: 4, lactose: "nao", method: "fogao",
+            {id: 142, name: "Macarronada de Abobrinha Zero Lactose", calories: 204, protein: 30, carbs: 6, fat: 4, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "1 abobrinha em fios\n80g de patinho moído cozido\nMolho de tomate e temperos a gosto",
                 instructions: "Refogue a abobrinha com o molho e a carne."},
-            {id: 143, name: "Peixe com Purê Zero Lactose", calories: 254, protein: 36, carbs: 9, fat: 8, lactose: "nao", method: "fogao",
+            {id: 143, name: "Peixe com Purê Zero Lactose", calories: 254, protein: 36, carbs: 9, fat: 8, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "140g de peixe\nPurê: 150g de abobrinha ou berinjela cozida, 1 col (sopa) de requeijão de castanha",
                 instructions: "Amasse o legume com o requeijão para fazer o purê e sirva com o peixe grelhado."},
-            {id: 144, name: "Berinjela Recheada Zero Lactose", calories: 320, protein: 43, carbs: 9, fat: 12, lactose: "nao", method: "forno",
+            {id: 144, name: "Berinjela Recheada Zero Lactose", calories: 320, protein: 43, carbs: 9, fat: 12, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "130g de berinjela\n1 ovo\n100g de frango ou 90g de patinho moído cozido",
                 instructions: "Corte a berinjela, retire a polpa e misture com a carne e o ovo. Recheie a berinjela e leve ao forno."},
-            {id: 145, name: "Creme de Galinha Zero Lactose", calories: 316, protein: 26, carbs: 30, fat: 10, lactose: "nao", method: "fogao",
+            {id: 145, name: "Creme de Galinha Zero Lactose", calories: 316, protein: 26, carbs: 30, fat: 10, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "70g de frango desfiado\n50ml de leite de soja\n1 col (sobremesa) de amido de milho\n1 col de requeijão de castanha\n70g de arroz integral",
                 instructions: "Cozinhe o frango, o leite, o amido e o requeijão até formar um creme. Sirva com o arroz."},
-            {id: 146, name: "Hambúrguer Fit Zero Lactose", calories: 379, protein: 29, carbs: 40, fat: 11, lactose: "nao", method: "fogao",
+            {id: 146, name: "Hambúrguer Fit Zero Lactose", calories: 379, protein: 29, carbs: 40, fat: 11, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "2 fatias de pão integral\n80g de patinho moído\nMolho de tomate, queijo de castanha, cebola caramelizada com mel",
                 instructions: "Grelhe o hambúrguer e monte o sanduíche."},
-            {id: 147, name: "Escondidinho Zero Lactose", calories: 289, protein: 26, carbs: 29, fat: 7, lactose: "nao", method: "forno",
+            {id: 147, name: "Escondidinho Zero Lactose", calories: 289, protein: 26, carbs: 29, fat: 7, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "120g de batata inglesa cozida\n4 col (sopa) de frango desfiado\n2 col (sopa) de leite de coco light",
                 instructions: "Amasse a batata com o leite de coco, monte o escondidinho com o frango e leve para gratinar."},
-            {id: 148, name: "Macarrão ao Molho Branco Zero Lactose", calories: 319, protein: 20, carbs: 34, fat: 12, lactose: "nao", method: "fogao",
+            {id: 148, name: "Macarrão ao Molho Branco Zero Lactose", calories: 319, protein: 20, carbs: 34, fat: 12, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "80g de macarrão integral\nAtum\nMolho: 40ml de leite de soja, amido de milho, requeijão de castanha",
                 instructions: "Prepare o molho branco e misture com o atum e o macarrão."},
-            {id: 149, name: "Omelete de Frango Zero Lactose", calories: 332, protein: 37, carbs: 13, fat: 13, lactose: "nao", method: "fogao",
+            {id: 149, name: "Omelete de Frango Zero Lactose", calories: 332, protein: 37, carbs: 13, fat: 13, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "2 ovos\n4 col (sopa) de frango desfiado\n4 col (sopa) de arroz integral",
                 instructions: "Bata os ovos com o frango, faça o omelete e sirva com o arroz."},
-            {id: 150, name: "Salada Verão Zero Lactose", calories: 311, protein: 25, carbs: 29, fat: 13, lactose: "nao", method: "semfogo",
+            {id: 150, name: "Salada Verão Zero Lactose", calories: 311, protein: 25, carbs: 29, fat: 13, lactose: "nao", method: "semfogo", type: "salgado",
                 ingredients: "Folhas, legumes ralados, tomate, ovo de codorna, atum",
                 instructions: "Misture todos os ingredientes."},
-            {id: 151, name: "Pizza de Rap10 Zero Lactose", calories: 297, protein: 21, carbs: 27, fat: 11, lactose: "nao", method: "forno",
+            {id: 151, name: "Pizza de Rap10 Zero Lactose", calories: 297, protein: 21, carbs: 27, fat: 11, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "1 Rap10\nFrango ou carne moída\nMolho de tomate, queijo de castanha, orégano",
                 instructions: "Monte a pizza sobre o Rap10 e leve ao forno."},
-            {id: 152, name: "Refogado de Arroz com Sardinha", calories: 336, protein: 22, carbs: 31, fat: 14, lactose: "nao", method: "fogao",
+            {id: 152, name: "Refogado de Arroz com Sardinha", calories: 336, protein: 22, carbs: 31, fat: 14, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "80g de arroz cozido\n2 sardinhas em óleo\n20g de requeijão de castanha\n15g de queijo de castanha ralado",
                 instructions: "Refogue o arroz com a sardinha e o requeijão. Finalize com o queijo ralado."},
-            {id: 153, name: "Ratatouille Zero Lactose", calories: 202, protein: 27, carbs: 10, fat: 4, lactose: "nao", method: "forno",
+            {id: 153, name: "Ratatouille Zero Lactose", calories: 202, protein: 27, carbs: 10, fat: 4, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "Legumes fatiados (abobrinha, berinjela)\nMolho de tomate\n70g de patinho moído",
                 instructions: "Monte camadas de legumes, molho e carne moída e asse."},
-            {id: 154, name: "Frango Empanado Zero Lactose", calories: 299, protein: 35, carbs: 24, fat: 6, lactose: "nao", method: "airfryer",
+            {id: 154, name: "Frango Empanado Zero Lactose", calories: 299, protein: 35, carbs: 24, fat: 6, lactose: "nao", method: "airfryer", type: "salgado",
                 ingredients: "100g de frango\n2 col (sopa) de farelo de aveia",
                 instructions: "Tempere o frango, empane na aveia e leve à airfryer."},
-            {id: 155, name: "Risoto de Camarão Zero Lactose", calories: 295, protein: 22, carbs: 34, fat: 8, lactose: "nao", method: "fogao",
+            {id: 155, name: "Risoto de Camarão Zero Lactose", calories: 295, protein: 22, carbs: 34, fat: 8, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "80g de camarão\n70g de arroz integral\nCreme: leite de coco, amido de milho, requeijão de castanha",
                 instructions: "Prepare o creme, adicione o camarão e sirva com o arroz."},
-            {id: 156, name: "Strogonoff Zero Lactose", calories: 262, protein: 34, carbs: 18, fat: 5, lactose: "nao", method: "fogao",
+            {id: 156, name: "Strogonoff Zero Lactose", calories: 262, protein: 34, carbs: 18, fat: 5, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "80g de patinho em cubos\nMolho de tomate\nIogurte vegetal\nArroz integral",
                 instructions: "Cozinhe a carne com o molho e o iogurte. Sirva com o arroz."},
-            {id: 157, name: "Nuggets de Frango Zero Lactose", calories: 286, protein: 33, carbs: 14, fat: 9, lactose: "nao", method: "airfryer",
+            {id: 157, name: "Nuggets de Frango Zero Lactose", calories: 286, protein: 33, carbs: 14, fat: 9, lactose: "nao", method: "airfryer", type: "salgado",
                 ingredients: "80g de frango moído\nFarinha de aveia, ovo, flocos de milho, temperos",
                 instructions: "Misture o frango com os temperos e a farinha, modele, passe no ovo e nos flocos de milho e asse na airfryer."},
-            {id: 158, name: "Pão de Cenoura Zero Lactose", calories: 291, protein: 23, carbs: 21, fat: 13, lactose: "nao", method: "forno",
+            {id: 158, name: "Pão de Cenoura Zero Lactose", calories: 291, protein: 23, carbs: 21, fat: 13, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "Massa: ovo, farinha de aveia, linhaça, cenoura ralada, fermento\nRecheio: frango, queijo de castanha",
                 instructions: "Bata os ingredientes da massa, asse, recheie e doure na frigideira."},
-            {id: 159, name: "Tomate Recheado Zero Lactose", calories: 306, protein: 26, carbs: 15, fat: 16, lactose: "nao", method: "forno",
+            {id: 159, name: "Tomate Recheado Zero Lactose", calories: 306, protein: 26, carbs: 15, fat: 16, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "1 tomate\n60g de patinho moído\nRequeijão de castanha, queijo de castanha",
                 instructions: "Recheie o tomate com a carne e os queijos e leve ao forno."},
-            {id: 160, name: "Farofa Fit Zero Lactose", calories: 37, protein: 1, carbs: 4, fat: 2, lactose: "nao", method: "fogao",
+            {id: 160, name: "Farofa Fit Zero Lactose", calories: 37, protein: 1, carbs: 4, fat: 2, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "Farelo de aveia, alho, azeite e temperos",
                 instructions: "Refogue o alho no azeite, adicione o farelo de aveia e os temperos."},
-            {id: 161, name: "Arroz de Couve-flor Zero Lactose", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao",
+            {id: 161, name: "Arroz de Couve-flor Zero Lactose", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "Couve-flor triturada, carne de sol desfiada, temperos",
                 instructions: "Refogue a couve-flor e misture com a carne de sol."},
-            {id: 162, name: "Almôndegas Zero Lactose", calories: 303, protein: 36, carbs: 15, fat: 11, lactose: "nao", method: "forno",
+            {id: 162, name: "Almôndegas Zero Lactose", calories: 303, protein: 36, carbs: 15, fat: 11, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "90g de patinho moído, cebola, alho, farelo de aveia, temperos\nArroz com brócolis para acompanhar",
                 instructions: "Modele as almôndegas e asse. Sirva com o arroz."},
-            {id: 163, name: "Creme de Abóbora Zero Lactose", calories: 279, protein: 36, carbs: 25, fat: 5, lactose: "nao", method: "fogao",
+            {id: 163, name: "Creme de Abóbora Zero Lactose", calories: 279, protein: 36, carbs: 25, fat: 5, lactose: "nao", method: "fogao", type: "salgado",
                 ingredients: "300g de abóbora cozida, 100g de frango cozido, abobrinha, temperos",
                 instructions: "Bata os ingredientes no liquidificador e cozinhe até engrossar."},
-            {id: 164, name: "Torta de Frango Zero Lactose", calories: 307, protein: 31, carbs: 21, fat: 11, lactose: "nao", method: "forno",
+            {id: 164, name: "Torta de Frango Zero Lactose", calories: 307, protein: 31, carbs: 21, fat: 11, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "Massa: couve-flor, frango, ovo, farinha de arroz, fermento\nRecheio: frango com requeijão de castanha",
                 instructions: "Bata os ingredientes da massa, monte a torta com o recheio e asse."},
-            {id: 165, name: "Baked Oats", calories: 350, protein: 15, carbs: 45, fat: 12, lactose: "sim", method: "forno",
+            {id: 165, name: "Baked Oats", calories: 350, protein: 15, carbs: 45, fat: 12, lactose: "sim", method: "forno", type: "doce",
                 ingredients: "1 xícara de aveia em flocos\n1 banana\n1 ovo\n1/2 xícara de leite desnatado\n1 colher de sopa de pasta de amendoim\n2 colheres de sopa de mel\nChocolate 70% a gosto",
                 instructions: "1. Adicionar todos os ingredientes em um liquidificador ou processador e bater até ficar bem homogêneo.\n2. Montagem: em um potinho adicione um pouco do creme, depois 1 quadrinho de chocolate, mais uma camada de creme e por cima mais 1 quadrinho de chocolate.\n3. Leve ao forno a 180° por 25 minutos."},
-            {id: 166, name: "Bolinho de Maçã", calories: 250, protein: 5, carbs: 30, fat: 13, lactose: "nao", method: "forno",
+            {id: 166, name: "Bolinho de Maçã", calories: 250, protein: 5, carbs: 30, fat: 13, lactose: "nao", method: "forno", type: "doce",
                 ingredients: "2 ovos\n1 maçã média\n1/2 xícara de azeite\n1 xícara de farinha de trigo integral\n3 colheres de sopa de farinha de aveia\n1 xícara de açúcar mascavo ou demerara\n1/2 colher de sopa de fermento\nCanela à gosto",
                 instructions: "1. Bata no liquidificador os ovos, o azeite, açúcar e a casca da maçã.\n2. Em outro recipiente, misture a massa com a maçã ralada, canela e as farinhas.\n3. Acrescente o fermento.\n4. Distribua em forminhas e leve ao forno pré-aquecido a 180°C por 15-20 minutos."},
-            {id: 167, name: "Bolo de Chocolate", calories: 280, protein: 8, carbs: 35, fat: 12, lactose: "sim", method: "forno",
+            {id: 167, name: "Bolo de Chocolate", calories: 280, protein: 8, carbs: 35, fat: 12, lactose: "sim", method: "forno", type: "doce",
                 ingredients: "2 ovos\n1/2 xic. de açúcar mascavo\n3 col de sopa de manteiga\n1/2 xíc de leite desnatado\n1 xíc de farinha de aveia\n3 col de sopa de cacau em pó\n1/2 col de sopa de essência de baunilha\n1 col de chá de fermento",
                 instructions: "1. Bata os ovos com o açúcar, baunilha e manteiga.\n2. Adicione o leite e os ingredientes secos (deixando o fermento por último).\n3. Despeje em uma forma untada e leve ao forno pré-aquecido a 180° por 30-35 min."},
-            {id: 168, name: "Brownie de Banana", calories: 200, protein: 5, carbs: 25, fat: 9, lactose: "sim", method: "forno",
+            {id: 168, name: "Brownie de Banana", calories: 200, protein: 5, carbs: 25, fat: 9, lactose: "sim", method: "forno", type: "doce",
                 ingredients: "4 bananas maduras\n2 ovos\n2 col de sopa de cacau\n3 col de sopa de manteiga\n30g de chocolate\n3 col de sopa de açúcar mascavo\n5 col de sopa de farinha de aveia",
                 instructions: "1. Misture todos os ingredientes e por fim os quadradinhos de chocolate.\n2. Distribua em uma forma untada e leve ao forno por 15 a 20 minutos."},
-            {id: 169, name: "Capuccino Fit", calories: 120, protein: 8, carbs: 15, fat: 4, lactose: "sim", method: "semfogo",
+            {id: 169, name: "Capuccino Fit", calories: 120, protein: 8, carbs: 15, fat: 4, lactose: "sim", method: "semfogo", type: "doce",
                 ingredients: "1 col de sopa de leite desnatado em pó\n75ml de água morna\n2 quadradinhos de chocolate amargo\n1 col de sobremesa de café solúvel\n1/2 col de sobremesa de cacau em pó\nCanela a gosto",
                 instructions: "1. Dilua o leite em pó na água.\n2. Derreta o chocolate, adicione ao leite e mexa.\n3. Adicione o café e o cacau e misture.\n4. Polvilhe canela por cima."},
-            {id: 170, name: "Cookies Fit", calories: 90, protein: 3, carbs: 4, fat: 7, lactose: "sim", method: "forno",
+            {id: 170, name: "Cookies Fit", calories: 90, protein: 3, carbs: 4, fat: 7, lactose: "sim", method: "forno", type: "doce",
                 ingredients: "30g de farinha de coco\n50g de pasta de amendoim\n2 col de sopa de creme de leite light\n1 col de sopa de adoçante natural\nChocolate amargo\n1 col de sobremesa de fermento",
                 instructions: "1. Misture todos os ingredientes (exceto o fermento).\n2. Adicione o fermento e misture com as mãos.\n3. Modele os cookies, coloque chocolate por cima e leve ao forno a 180° até dourar."},
-    {
-        id: 171,
-        name: "Frappucino",
-        calories: 205,
-        protein: 32,
-        carbs: 13,
-        fat: 3,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "200ml de leite desnatado\n10 cubinhos de café congelado ou 1 col de chá de café solúvel\n1 scoop de whey de chocolate (aprox. 30g)\nChocolate 70% para polvilhar",
-        instructions: "Bata tudo no liquidificador e aproveite seu frappucino super cremoso."
-    },
-    {
-        id: 172,
-        name: "Mousse de Chocolate",
-        calories: 325,
-        protein: 36,
-        carbs: 27,
-        fat: 13,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "1 iogurte desnatado (aprox. 170g)\n1 barra de chocolate 70% (25g)\n1 scoop de whey (chocolate ou baunilha, aprox. 30g)",
-        instructions: "Derreta a barra de chocolate no micro-ondas. Misture o iogurte com o chocolate derretido e o whey. Em seguida, coloque no congelador por umas 2h até adquirir a consistência de mousse."
-    },
-    {
-        id: 173,
-        name: "Sorvete Proteico",
-        calories: 210,
-        protein: 28,
-        carbs: 18,
-        fat: 2,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "Morango ou fruta da sua preferência congelada (aprox. 150g)\n1 scoop de whey de baunilha (aprox. 30g)\n100 ml de leite desnatado",
-        instructions: "Bata tudo no mixer. Se necessário, leve ao congelador para chegar na consistência desejada."
-    },
-    {
-        id: 174,
-        name: "Pastel de Frango (Airfryer)",
-        calories: 374,
-        protein: 26.2,
-        carbs: 48.8,
-        fat: 8,
-        lactose: "sim",
-        method: "airfryer",
-        ingredients: "Massa de Pastel - Massa Leve (3 unidades - 90g)\nFrango Desfiado (80g)\nRequeijão Cremoso Light (15g)",
-        instructions: "Recheie os discos de pastel com o frango e o requeijão. Feche bem as bordas. Leve à airfryer pré-aquecida a 180°C por cerca de 10-15 minutos, ou até dourar."
-    },
-    {
-        id: 175,
-        name: "Milkshake Proteico",
-        calories: 355,
-        protein: 28.8,
-        carbs: 38.8,
-        fat: 10.2,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "Aveia em flocos finos - Quaker® (15g)\nFresh Whey Chocolate e Avelã - DUX (30g)\nDoce de Leite Aviação (15g)\nLeite de vaca desnatado (100ml)\nChicabom Zero Açúcar (80g)",
-        instructions: "Bata todos os ingredientes no liquidificador com algumas pedras de gelo até obter uma mistura cremosa e homogênea."
-    },
-    {
-        id: 176,
-        name: "Poke",
-        calories: 348,
-        protein: 29.6,
-        carbs: 26,
-        fat: 13.2,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "Arroz branco cozido (80g)\nCream cheese light - Danúbio® (20g)\nSalmão cozido (100g)\nCouve (10g)\nManga (30g)",
-        instructions: "Em uma tigela, monte uma base com o arroz. Adicione o salmão, a couve fatiada e a manga em cubos. Finalize com o cream cheese."
-    },
-    
-        {id: 177, name: "Salgado de Frango", calories: 290, protein: 25.1, carbs: 19.9, fat: 11.7, lactose: "sim", method: "forno", ingredients: "Ovo de galinha (1 unidade - 45g)\nRequeijão Cremoso Light (20g)\nFrango Desfiado (60g)\nAveia em flocos finos - Quaker® (30g)", instructions: "Misture todos os ingredientes até formar uma massa modelável. Faça bolinhos e asse no forno ou airfryer a 180°C por cerca de 20 minutos, ou até dourar."},
-    {
-        id: 178,
-        name: "Pudim Proteico",
-        calories: 161,
-        protein: 18.3,
-        carbs: 16.9,
-        fat: 2,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "500ml de leite desnatado\n2 scoops de whey de chocolate branco (aprox. 60g)\n12g de gelatina incolor\n60g de doce de leite\nÁgua morna",
-        instructions: "1. Calda: Misture o doce de leite com um pouco de água morna, coloque nos copinhos e leve ao congelador. 2. Pudim: Misture o leite, o whey e a gelatina incolor já hidratada. 3. Despeje sobre a calda congelada e leve à geladeira até firmar."
-    },
-    {
-        id: 179,
-        name: "Petit Gateau de Doce de Leite",
-        calories: 75,
-        protein: 6.1,
-        carbs: 7.5,
-        fat: 2.8,
-        lactose: "sim",
-        method: "airfryer",
-        ingredients: "1 ovo\n15g de farinha de aveia\n10g de whey de doce de leite\n40g de doce de leite zero açúcar",
-        instructions: "Bata o ovo, adicione a farinha e o whey. Incorpore 15g do doce de leite. Coloque em forminhas, adicione mais 5g de doce de leite no centro de cada um e asse na airfryer por 5 min a 180°C."
-    },
-    {
-        id: 180,
-        name: "Torta de Frango (Airfryer)",
-        calories: 497,
-        protein: 38,
-        carbs: 52,
-        fat: 17,
-        lactose: "sim",
-        method: "airfryer",
-        ingredients: "2 ovos\n4 col. sopa de farinha de aveia\nSal a gosto\n½ col. chá de Psyllium\nFrango desfiado, cozido e temperado\n1 col. sopa de requeijão light ou ricota\nQueijo mussarela e parmesão ralado",
-        instructions: "Bata os ovos, farinha, sal e psyllium. Adicione fermento. Em uma forma, coloque metade da massa, o recheio (frango com requeijão) e o resto da massa. Finalize com queijo e asse na airfryer por 25min a 180°C."
-    },
-    {
-        id: 181,
-        name: "Magic Toast com Doce de Leite",
-        calories: 78,
-        protein: 1.6,
-        carbs: 13,
-        fat: 2.5,
-        lactose: "sim",
-        method: "semfogo",
-        ingredients: "1 pacotinho de Magic Toast Cacau\n30g de doce de leite\n15g de chocolate amargo",
-        instructions: "Coloque 10g de doce de leite em cada Magic Toast, passe chocolate derretido por cima e leve à geladeira para endurecer. A receita rende 3 bolachas."
-    },
-    {
-        id: 182,name: "Doce de Coco Proteico",calories: 66,protein: 6,carbs: 5,fat: 3,lactose: "sim",method: "fogao",ingredients: "1 xícara de leite de coco light\n30g de whey (sabor leite em pó)\n3 colheres de sopa de leite em pó desnatado\n½ xícara de coco ralado sem açúcar",instructions: "Em uma panela coloque leite de coco, whey protein, leite em pó desnatado e coco ralado, em fogo baixo mexa até chegar em ponto de brigadeiro, em um prato com plastico filme por cima coloque porções e leve para a geladeira por no minimo 2 horas e ta pronto. Rende 7 porções"
-    },
-    {id: 183,name: "Tabule",calories: 103,protein: 2.6,carbs: 10.4,fat: 7.1,lactose: "nao",method: "semfogo",ingredients: "¼ xícara de chá de trigo fino\n1 tomate em cubos\n2 colheres de sopa de cebola em cubos\n½ pepino em cubos\n3 colheres de sopa de folhas de salsinha\n2 colheres de sopa de hortelã fresca\nSuco de 1 limão\n4 colheres de sopa de azeite de oliva\nSal e pimenta a gosto",instructions: "Lave o trigo e cubra com água por 15 minutos. Escorra e esprema o excesso. Misture o trigo com os vegetais e ervas. Tempere com limão, azeite, sal e pimenta."
-    },
-    {id: 184, name: "Molho de Iogurte", calories: 45, protein: 2, carbs: 2, fat: 3, lactose: "sim", method: "semfogo", ingredients: "1 pote de iogurte natural\n1 col de sopa de cebola picada\n1 dente de alho picado\n1 col de sopa de salsinha picada\n1 col de sopa de azeite\nPimenta-do-reino e sal a gosto", instructions: "Misture todos os ingredientes."},
-    {id: 185, name: "Molho Mostarda e Mel", calories: 80, protein: 0.5, carbs: 12, fat: 4, lactose: "nao", method: "semfogo", ingredients: "2 col de sopa de mostarda\n2 col de sopa de mel\n1 col de sopa de azeite\n½ unidade de limão espremido", instructions: "Misture todos os ingredientes."},
-    {id: 186, name: "Molho Balsâmico", calories: 90, protein: 0.1, carbs: 2, fat: 9, lactose: "nao", method: "semfogo", ingredients: "2 col de sopa de azeite\n2 col de sopa de vinagre balsâmico\n2 col de sopa de água\nTemperos e sal a gosto", instructions: "Misture todos os ingredientes."},
-    {id: 187, name: "Molho Caesar", calories: 55, protein: 3, carbs: 2, fat: 4, lactose: "sim", method: "semfogo", ingredients: "2 potes de iogurte natural\n2 col de sopa de azeite\n1 col de sopa de mostarda\n1 limão espremido\n3 col de sopa de queijo ralado\n1 col de sopa de sal, cebola e alho desidratado\n1 col de chá de Xylitol", instructions: "Bata todos os ingredientes no liquidificador."},
-    {id: 188, name: "Molho de Maracujá", calories: 60, protein: 0.5, carbs: 5, fat: 4.5, lactose: "nao", method: "semfogo", ingredients: "Polpa de 3 maracujás\n2 col de sopa de azeite\n1 col de sopa de mel\n½ limão espremido\nSal e pimenta-do-reino a gosto", instructions: "Misture todos os ingredientes."},
-    {id: 189, name: "Molho de Laranja", calories: 95, protein: 0.3, carbs: 6, fat: 8, lactose: "nao", method: "semfogo", ingredients: "4 col de sopa de suco de laranja\n2 col de sopa de azeite\n1 col de chá de mostarda Dijon\n2 col de chá de mel\nSal e pimenta-do-reino a gosto", instructions: "Misture todos os ingredientes."},
-    {id: 190, name: "Molho Pesto", calories: 150, protein: 4, carbs: 1, fat: 15, lactose: "sim", method: "semfogo", ingredients: "1 xíc de chá de folhas de manjericão\n3 col de sopa de castanhas trituradas\n100g de queijo ralado\n4 dentes de alho\n½ xíc de chá de azeite\nSal e pimenta-do-reino a gosto", instructions: "Bata todos os ingredientes no processador."},
-    {id: 191, name: "Molho de Cottage", calories: 100, protein: 4, carbs: 1, fat: 9, lactose: "sim", method: "semfogo", ingredients: "4 col de sopa de queijo Cottage\n½ limão espremido\n2 col de sopa de azeite\n2 col de sopa de manjericão fresco\nSal e pimenta-do-reino a gosto", instructions: "Bata todos os ingredientes no liquidificador."},
-    {id: 192, name: "Molho de Ervas Secas", calories: 125, protein: 0.2, carbs: 1, fat: 14, lactose: "nao", method: "semfogo", ingredients: "4 col de azeite\n½ col de sopa de alecrim, orégano e manjericão secos (de cada)\n½ limão espremido\nSal a gosto", instructions: "Misture todos os ingredientes."},
-    {id: 193, name: "Molho Rosé", calories: 35, protein: 1.5, carbs: 4, fat: 1.5, lactose: "sim", method: "semfogo", ingredients: "4 col de sopa de extrato de tomate\n2 col de sopa de mostarda\n1 limão espremido\n6 col de sopa de creme de ricota light\n3 col de café de molho Shoyu de Coco\nSal a gosto", instructions: "Misture todos os ingredientes."},
-    {id: 194, name: "Barra de Cereal Caseira", calories: 225, protein: 4.4, carbs: 38.7, fat: 6.8, lactose: "nao", method: "semfogo", ingredients: "1 xícara de aveia em flocos\n½ xícara de mel\n½ xícara de frutas secas\n½ xícara de sementes\n¼ xícara de amêndoas ou castanhas\n¼ xícara de pasta de amendoim\nPitada de sal", instructions: "Misture os secos. Aqueça o mel, pasta de amendoim e sal. Junte tudo, pressione em uma forma e refrigere por 2h."},
-    {id: 195, name: "Chips de Maçã com Canela", calories: 59, protein: 0.3, carbs: 14.7, fat: 0.4, lactose: "nao", method: "forno", ingredients: "2 maçãs\n1 colher de chá de canela", instructions: "Fatie as maçãs, misture com canela e asse a 100°C por 1-2 horas, virando na metade do tempo."},
-    {id: 196, name: "Bolo de Abacaxi Saudável", calories: 54, protein: 2.3, carbs: 5, fat: 2.9, lactose: "sim", method: "forno", ingredients: "200g de abacaxi picado\n2 ovos\n90g de iogurte desnatado\n25g de coco sem açúcar\n1 colher de chá de fermento", instructions: "Ferva o abacaxi por 5 min. Bata ovos e iogurte. Misture com os outros ingredientes. Asse a 200°C por 30 min."},
-    {id: 197, name: "Bolo Pão de Mel", calories: 219, protein: 19.05, carbs: 24.9, fat: 6, lactose: "sim", method: "microondas", ingredients: "1 ovo\n2 col de sopa de farinha de aveia\n1 col de sopa de cacau em pó\n1 dosador de whey de chocolate\n1 col de chá de mel\n1 col de café de canela\n45ml de leite desnatado\n1 tablete de fermento\nCobertura: 1 dosador de whey de doce de leite, 10g de doce de leite zero, água", instructions: "Misture os ingredientes da massa e leve ao micro-ondas por 1:30-2:00 min. Faça a calda e despeje por cima."},
-    {id: 198, name: "Biscoito de Queijo", calories: 268, protein: 20.6, carbs: 10.9, fat: 15.6, lactose: "sim", method: "forno", ingredients: "60g de queijo mussarela\n45g de queijo parmesão ralado\n40g de ricota\n20g de polvilho azedo\n1 clara de ovo", instructions: "Misture todos os ingredientes, modele e asse a 180°C por 20-25 minutos."},
-    {id: 199, name: "Bolo de Maçã na Frigideira", calories: 273, protein: 7.8, carbs: 47.3, fat: 7.6, lactose: "nao", method: "fogao", ingredients: "1 ovo\n1 maçã grande\n8g de adoçante em pó\n5ml de óleo de coco\n72g de farinha de aveia\n3g de fermento\n2g de mel", instructions: "Bata o ovo com adoçante e óleo. Adicione a farinha e o fermento. Incorpore a maçã em cubos. Cozinhe na frigideira em fogo baixo, tampado, por 8-10 min, virando para dourar."},
-    {id: 200, name: "Bolinho de Batata (Airfryer)", calories: 247, protein: 5.4, carbs: 54, fat: 1.6, lactose: "nao", method: "airfryer", ingredients: "200g de batata inglesa cozida e amassada\n20g de amido\n15g de aveia em flocos\n20g de psyllium\n4g de orégano\nSal a gosto", instructions: "Misture todos os ingredientes, modele os bolinhos e asse na airfryer a 200°C por 20-25 minutos."},
-    {id: 201, name: "Focaccia na Airfryer", calories: 248, protein: 14.8, carbs: 21.6, fat: 12, lactose: "sim", method: "airfryer", ingredients: "2 ovos\n54g de farinha de aveia\n15g de fermento\n60g de tomate cereja\n3g de manjericão\n15g de parmesão ralado\n4g de páprica\n5g de azeite\nSal", instructions: "Bata os ovos com sal e páprica. Adicione a farinha e o fermento. Despeje em uma forma, cubra com tomate, manjericão e queijo. Regue com azeite e asse a 180°C por 10-15 min."},
-    {id: 202, name: "Bolo de Maçã com Canela", calories: 287, protein: 18.8, carbs: 35.1, fat: 9, lactose: "sim", method: "forno", ingredients: "2 maçãs\n2 ovos\n4 scoops de whey de baunilha\n120g de aveia em flocos\n8ml de óleo de coco\n240ml de bebida de amêndoas\n10g de fermento\n4g de canela", instructions: "Pique as maçãs. Bata os ovos, bebida vegetal e óleo. Adicione whey, aveia e canela. Incorpore o fermento e a maçã. Asse a 180°C por 30-40 min."},
-    {id: 203, name: "Salada de Quinoa com Legumes", calories: 360, protein: 12.7, carbs: 58.2, fat: 10.2, lactose: "nao", method: "fogao", ingredients: "1 xícara de quinoa crua\n2 xícaras de água\n1 cebola\n2 dentes de alho\n2 colheres de sopa de azeite\nSuco de 1 limão\n1 berinjela\n1 abobrinha", instructions: "Cozinhe a quinoa. Refogue a cebola, alho, berinjela e abobrinha no azeite. Misture tudo com a quinoa cozida e tempere com limão e sal."},
-    {id: 204, name: "Salada de Grão de Bico Completa", calories: 267, protein: 12.6, carbs: 37.2, fat: 9.8, lactose: "nao", method: "semfogo", ingredients: "345g de grão-de-bico cru\n3 dentes de alho\n1 cebola\n1 pimentão amarelo\n1 tomate\nFolhas de hortelã\nSuco de 1 limão\n5 colheres de sopa de azeite\nSal", instructions: "Deixe o grão-de-bico de molho e cozinhe. Pique os vegetais e a hortelã. Misture tudo com o grão-de-bico cozido e tempere com limão, azeite e sal."},
-    {id: 205, name: "Salada de Frango com Manga", calories: 352, protein: 39.8, carbs: 35.6, fat: 7.8, lactose: "sim", method: "semfogo", ingredients: "100g de frango desfiado\n1 xícara de manga fatiada\n1 cenoura ralada\n2 folhas de alface\n10 folhas de rúcula\n1 pote de iogurte natural\nAgrião, sal e pimenta", instructions: "Monte a salada com as folhas, frango, manga e cenoura. Finalize com o iogurte temperado."},
-    {id: 206, name: "Salada de Lentilha com Tomate", calories: 184, protein: 7.3, carbs: 23.2, fat: 8.8, lactose: "nao", method: "semfogo", ingredients: "85g de lentilha cozida\n10 tomates cereja\n4g de hortelã picada\n8g de azeite\n30g de suco de limão\nSal", instructions: "Misture a lentilha cozida com os tomates e a hortelã. Tempere com limão, azeite e sal."},
-    {id: 207, name: "Salada de Feijão Fradinho", calories: 228, protein: 14, carbs: 42.3, fat: 5.3, lactose: "nao", method: "semfogo", ingredients: "240g de feijão fradinho cozido\n100g de tomate cereja\n52g de pimentões (verde/vermelho/amarelo)\n21g de azeitona preta\n10g de salsinha\n1g de azeite", instructions: "Misture o feijão cozido com os vegetais picados, azeitonas e salsinha. Tempere com azeite e sal."},
-    {id: 208, name: "Salada de Pepino, Tomate e Iogurte", calories: 135, protein: 8.4, carbs: 17.2, fat: 4.5, lactose: "sim", method: "semfogo", ingredients: "100g de pepino em rodelas\n100g de tomate cereja\n165ml de iogurte natural\n4g de hortelã\n30g de suco de limão\nSal e pimenta", instructions: "Corte os vegetais. Misture o iogurte com limão, hortelã e temperos para fazer o molho. Incorpore os vegetais ao molho."},
-    {id: 209, name: "Bowl Premium de Salmão", calories: 478, protein: 23.2, carbs: 76.7, fat: 9.5, lactose: "nao", method: "semfogo", ingredients: "60g de arroz cozido\n80g de salmão cru em cubos\n70g de manga\n29g de pepino\n40g de tomate-cereja\nFolhas (alface, rúcula, agrião)\n10g de cebola\n60g de chips de batata-doce", instructions: "Monte uma base de arroz no bowl. Adicione o salmão, as folhas, frutas e vegetais. Finalize com os chips de batata-doce."},
-    {id: 210, name: "Salada de Abobrinha com Ovo", calories: 171, protein: 12.3, carbs: 10, fat: 9.6, lactose: "nao", method: "fogao", ingredients: "100g de abobrinha em lâminas\n40g de suco de limão\n4g de hortelã\n1g de azeite\n32g de tomate\n6g de rúcula\n2 ovos cozidos\nSal", instructions: "Cozinhe e fatie os ovos. Marine a abobrinha no limão, hortelã, azeite e sal por 10-15 minutos. Monte a salada com todos os ingredientes."},
-    {id: 211, name: "Salada de Rúcula com Morango e Castanhas", calories: 175, protein: 4.5, carbs: 7.8, fat: 15.5, lactose: "nao", method: "semfogo", ingredients: "48g de rúcula\n60g de morangos fatiados\n20g de castanha de caju picadas\n2ml de azeite\nBalsâmico e sal a gosto", instructions: "Monte uma base com a rúcula. Adicione os morangos e as castanhas. Tempere com azeite, balsâmico e sal."},
-    {id: 212, name: "Salada Tropical", calories: 265, protein: 33.4, carbs: 18.9, fat: 7, lactose: "nao", method: "semfogo", ingredients: "45g de alface\n10g de agrião\n33g de repolho roxo\n100g de filé de frango grelhado\n40g de brócolis cozido\n50g de cenoura ralada\n50g de tomate cereja\n20g de chips de banana\n36g de pepino\n75g de abacaxi", instructions: "Monte uma base com as folhas. Distribua os demais ingredientes por cima e sirva."},
-    {id: 213, name: "Salada de Alface com Ovo e Grão-de-Bico Crocante", calories: 296, protein: 15.8, carbs: 28.7, fat: 15.4, lactose: "nao", method: "forno", ingredients: "72g de alface americana\n1 ovo cozido\n120g de grão-de-bico cozido\n1.7g de páprica\n8ml de azeite\n30g de suco de limão\nSal", instructions: "Cozinhe e fatie o ovo. Tempere o grão-de-bico com azeite, páprica, sal e limão e asse a 200°C por 30-40 min. Monte a salada."},
-    {id: 214, name: "Salada de Couve Kale com Laranja", calories: 190, protein: 4.3, carbs: 34, fat: 5.1, lactose: "nao", method: "semfogo", ingredients: "60g de couve kale picada\n216g de laranja em cubos\n10g de amêndoas picadas\n2g de azeite\n40g de suco de limão\nSal", instructions: "Massageie a couve com sal e suco de limão. Adicione a laranja, amêndoas e azeite."},
-    {id: 215, name: "Salada de Beterraba com Tahine", calories: 335, protein: 11.7, carbs: 26.6, fat: 22, lactose: "nao", method: "forno", ingredients: "140g de beterraba\n60g de tahini\n40g de rúcula\n35g de agrião\n40g de suco de limão\n6g de salsinha\nSal", instructions: "Asse a beterraba. Prepare um molho com tahine, limão e temperos. Fatie a beterraba assada e misture com o molho e as folhas."},
-    {id: 216, name: "Bowl Tropical com Salmão e Quinoa", calories: 460, protein: 32.6, carbs: 39.1, fat: 20.8, lactose: "nao", method: "fogao", ingredients: "100g de filé de salmão grelhado\n6g de quinoa cozida\nFolhas (alface, acelga)\n60g de manga\n75g de abacaxi\n36g de pepino\nGergelim, limão, azeite, pimenta", instructions: "Grelhe o salmão e cozinhe a quinoa. Monte um bowl com as folhas, quinoa, salmão e frutas. Tempere e sirva."},
-    {id: 217, name: "Salada Mediterrânea", calories: 454, protein: 27.1, carbs: 33.3, fat: 24.7, lactose: "sim", method: "semfogo", ingredients: "100g de cuscuz marroquino\n165ml de água fervente\nFolhas (rúcula, agrião)\n5 ovos de codorna cozidos\n40g de tomate cereja\n20g de crouton integral\n20g de palmito\n30g de queijo parmesão\n40g de cenoura ralada", instructions: "Hidrate o cuscuz na água fervente. Monte a salada com as folhas, cuscuz e os demais ingredientes."},
-    {id: 218, name: "Salada de Macarrão Integral", calories: 481, protein: 49.1, carbs: 36.4, fat: 16.6, lactose: "sim", method: "fogao", ingredients: "Folhas (alface, rúcula, manjericão, hortelã)\n100g de macarrão integral cozido\n110g de frango desfiado\n100g de tomate\n58ml de molho de manjericão\n15g de queijo parmesão", instructions: "Cozinhe o macarrão. Monte a salada misturando todos os ingredientes."},
-    {id: 219, name: "Frango Creamy", calories: 601, protein: 44.7, carbs: 34.3, fat: 34.5, lactose: "sim", method: "semfogo", ingredients: "Folhas (agrião, espinafre)\n80g de quinoa cozida\n100g de frango desfiado\n90g de cream cheese\n30g de cebola roxa\n50g de pepino\n50g de tomate cereja\n1g de azeite", instructions: "Monte uma base de folhas e quinoa. Adicione o frango misturado com o cream cheese e os vegetais frescos."},
-    {id: 220, name: "Salada de Quinoa Simples", calories: 153, protein: 6.4, carbs: 20.7, fat: 5.9, lactose: "sim", method: "semfogo", ingredients: "148g de quinoa cozida\n100g de pepino\n100g de tomate\n8g de azeitona preta\n35g de ricota\n5ml de azeite\n40g de sumo de limão", instructions: "Cozinhe a quinoa. Misture com os vegetais picados, azeitona e ricota. Tempere com azeite e limão."},
-    {id: 221, name: "Bowl de Fusilli com Abóbora e Atum", calories: 408, protein: 33.4, carbs: 53.9, fat: 9.3, lactose: "nao", method: "fogao", ingredients: "100g de macarrão integral fusilli\n75g de espinafre\n60g de acelga\n90g de abóbora cabotian\n80g de atum em conserva\n48g de milho\n76g de brócolis\n10g de cebola\n30g de tomate cereja", instructions: "Cozinhe o macarrão. Misture com a abóbora amassada, atum, brócolis, tomate e as folhas."},
-    {id: 222, name: "Bolo de Laranja na Airfryer", calories: 431, protein: 26, carbs: 64, fat: 9.9, lactose: "sim", method: "airfryer", ingredients: "1 ovo\n40ml de suco de laranja\n2 col de sopa de adoçante\n4 col de sopa de farinha de aveia\n½ col de sopa de fermento\nCalda: ½ scoop de whey + água", instructions: "Misture os ingredientes da massa e asse na airfryer a 180°C por 25 min. Prepare a calda e despeje por cima."},
-    {id: 223, name: "Esfiha Saudável", calories: 316, protein: 26.8, carbs: 43.9, fat: 4.8, lactose: "sim", method: "airfryer", ingredients: "Massa: 200g de batata inglesa cozida, 10g de farinha de aveia, 5g de fubá, sal\nRecheio: 60g de frango desfiado, 15g de requeijão light", instructions: "Amasse a batata com a farinha e sal. Modele as esfihas, polvilhe fubá e asse na airfryer por 15 min a 200°C. Adicione o recheio e asse por mais 5 min."},
-    {id: 224, name: "Tomate Recheado com Ovo", calories: 247, protein: 16, carbs: 15.6, fat: 12.9, lactose: "nao", method: "airfryer", ingredients: "2 tomates grandes\n2 ovos\n½ xícara de espinafre picado\n5g de azeite\nOrégano, sal, pimenta", instructions: "Corte a tampa dos tomates e retire o miolo. Preencha com espinafre e quebre um ovo em cada. Tempere e asse na airfryer por 12 min a 180°C."},
-    {id: 225, name: "Bolinho de Quinoa com Legumes", calories: 345, protein: 15.7, carbs: 49.1, fat: 16.9, lactose: "nao", method: "airfryer", ingredients: "1 xícara de quinoa cozida\n30g de abobrinha ralada\n50g de cenoura ralada\n110g de cebola picada\n1 ovo\n25g de farelo de aveia\nSal, pimenta, ervas", instructions: "Misture todos os ingredientes, modele os bolinhos e asse na airfryer por 15 min a 200°C."},
-    {id: 226, name: "Cogumelos Recheados", calories: 261, protein: 10.1, carbs: 7.3, fat: 22.3, lactose: "sim", method: "airfryer", ingredients: "6 cogumelos grandes\n60g de ricota amassada\n15g de nozes picadas\n5g de azeite\nSalsinha, sal, pimenta", instructions: "Retire os cabinhos dos cogumelos. Recheie com a mistura de ricota, nozes e temperos. Leve à airfryer por 10 min a 180°C."},
-    {id: 227, name: "Mini Hambúrguer de Lentilha", calories: 274, protein: 11, carbs: 37.8, fat: 11.5, lactose: "nao", method: "airfryer", ingredients: "85g de lentilha cozida\n50g de farelo de aveia\n1 cebola picada\n1 col de sopa de azeite\nSal, alho, cominho", instructions: "Amasse a lentilha e misture com os demais ingredientes. Modele os hambúrgueres e asse na airfryer por 12 min a 200°C, virando na metade."},
-    {id: 228, name: "Quibe de Abóbora com Hortelã", calories: 314, protein: 9.9, carbs: 61.4, fat: 5.45, lactose: "nao", method: "airfryer", ingredients: "180g de abóbora cozida e amassada\n135g de trigo para quibe hidratado\n10g de cebola ralada\n2 col de café de hortelã picada\nSal, pimenta síria\n1 col de sopa de azeite", instructions: "Misture todos os ingredientes, molde os quibes e asse na airfryer a 200°C por 15 minutos."},
-    {id: 229, name: "Mini Tortinha de Batata com Frango", calories: 277, protein: 33.9, carbs: 23.9, fat: 6.2, lactose: "sim", method: "airfryer", ingredients: "100g de batata inglesa ralada crua\n80g de frango desfiado\n50g de queijo cottage\nNoz-moscada, orégano, sal", instructions: "Misture todos os ingredientes, coloque em forminhas e asse na airfryer a 200°C por 15 minutos."},
-    {id: 230, name: "Couve-flor com Páprica", calories: 134, protein: 4.1, carbs: 12.2, fat: 9, lactose: "nao", method: "airfryer", ingredients: "2 xícaras de couve-flor em buquês\n1 col de sopa de azeite\n1 col de café de páprica doce\n1 dente de alho picado\nSal", instructions: "Tempere a couve-flor com os ingredientes e asse na airfryer por 15 min a 200°C."}
+            {id: 171, name: "Frappucino", calories: 205, protein: 32, carbs: 13, fat: 3, lactose: "sim", method: "semfogo", type: "doce",
+                ingredients: "200ml de leite desnatado\n10 cubinhos de café congelado ou 1 col de chá de café solúvel\n1 scoop de whey de chocolate (aprox. 30g)\nChocolate 70% para polvilhar",
+                instructions: "Bata tudo no liquidificador e aproveite seu frappucino super cremoso." },
+            {id: 172, name: "Mousse de Chocolate", calories: 325, protein: 36, carbs: 27, fat: 13, lactose: "sim", method: "semfogo", type: "doce",
+                ingredients: "1 iogurte desnatado (aprox. 170g)\n1 barra de chocolate 70% (25g)\n1 scoop de whey (chocolate ou baunilha, aprox. 30g)",
+                instructions: "Derreta a barra de chocolate no micro-ondas. Misture o iogurte com o chocolate derretido e o whey. Em seguida, coloque no congelador por umas 2h até adquirir a consistência de mousse." },
+            {id: 173, name: "Sorvete Proteico", calories: 210, protein: 28, carbs: 18, fat: 2, lactose: "sim", method: "semfogo", type: "doce",
+                ingredients: "Morango ou fruta da sua preferência congelada (aprox. 150g)\n1 scoop de whey de baunilha (aprox. 30g)\n100 ml de leite desnatado",
+                instructions: "Bata tudo no mixer. Se necessário, leve ao congelador para chegar na consistência desejada." },
+            {id: 174, name: "Pastel de Frango (Airfryer)", calories: 374, protein: 26.2, carbs: 48.8, fat: 8, lactose: "sim", method: "airfryer", type: "salgado",
+                ingredients: "Massa de Pastel - Massa Leve (3 unidades - 90g)\nFrango Desfiado (80g)\nRequeijão Cremoso Light (15g)",
+                instructions: "Recheie os discos de pastel com o frango e o requeijão. Feche bem as bordas. Leve à airfryer pré-aquecida a 180°C por cerca de 10-15 minutos, ou até dourar." },
+            {id: 175, name: "Milkshake Proteico", calories: 355, protein: 28.8, carbs: 38.8, fat: 10.2, lactose: "sim", method: "semfogo", type: "doce",
+                ingredients: "Aveia em flocos finos - Quaker® (15g)\nFresh Whey Chocolate e Avelã - DUX (30g)\nDoce de Leite Aviação (15g)\nLeite de vaca desnatado (100ml)\nChicabom Zero Açúcar (80g)",
+                instructions: "Bata todos os ingredientes no liquidificador com algumas pedras de gelo até obter uma mistura cremosa e homogênea." },
+            {id: 176, name: "Poke", calories: 348, protein: 29.6, carbs: 26, fat: 13.2, lactose: "sim", method: "semfogo", type: "salgado",
+                ingredients: "Arroz branco cozido (80g)\nCream cheese light - Danúbio® (20g)\nSalmão cozido (100g)\nCouve (10g)\nManga (30g)",
+                instructions: "Em uma tigela, monte uma base com o arroz. Adicione o salmão, a couve fatiada e a manga em cubos. Finalize com o cream cheese." },
+            {id: 177, name: "Salgado de Frango", calories: 290, protein: 25.1, carbs: 19.9, fat: 11.7, lactose: "sim", method: "forno", type: "salgado", ingredients: "Ovo de galinha (1 unidade - 45g)\nRequeijão Cremoso Light (20g)\nFrango Desfiado (60g)\nAveia em flocos finos - Quaker® (30g)", instructions: "Misture todos os ingredientes até formar uma massa modelável. Faça bolinhos e asse no forno ou airfryer a 180°C por cerca de 20 minutos, ou até dourar."},
+            {id: 178, name: "Pudim Proteico", calories: 161, protein: 18.3, carbs: 16.9, fat: 2, lactose: "sim", method: "semfogo", type: "doce",
+                ingredients: "500ml de leite desnatado\n2 scoops de whey de chocolate branco (aprox. 60g)\n12g de gelatina incolor\n60g de doce de leite\nÁgua morna",
+                instructions: "1. Calda: Misture o doce de leite com um pouco de água morna, coloque nos copinhos e leve ao congelador. 2. Pudim: Misture o leite, o whey e a gelatina incolor já hidratada. 3. Despeje sobre a calda congelada e leve à geladeira até firmar." },
+            {id: 179, name: "Petit Gateau de Doce de Leite", calories: 75, protein: 6.1, carbs: 7.5, fat: 2.8, lactose: "sim", method: "airfryer", type: "doce",
+                ingredients: "1 ovo\n15g de farinha de aveia\n10g de whey de doce de leite\n40g de doce de leite zero açúcar",
+                instructions: "Bata o ovo, adicione a farinha e o whey. Incorpore 15g do doce de leite. Coloque em forminhas, adicione mais 5g de doce de leite no centro de cada um e asse na airfryer por 5 min a 180°C." },
+            {id: 180, name: "Torta de Frango (Airfryer)", calories: 497, protein: 38, carbs: 52, fat: 17, lactose: "sim", method: "airfryer", type: "salgado",
+                ingredients: "2 ovos\n4 col. sopa de farinha de aveia\nSal a gosto\n½ col. chá de Psyllium\nFrango desfiado, cozido e temperado\n1 col. sopa de requeijão light ou ricota\nQueijo mussarela e parmesão ralado",
+                instructions: "Bata os ovos, farinha, sal e psyllium. Adicione fermento. Em uma forma, coloque metade da massa, o recheio (frango com requeijão) e o resto da massa. Finalize com queijo e asse na airfryer por 25min a 180°C." },
+            {id: 181, name: "Magic Toast com Doce de Leite", calories: 78, protein: 1.6, carbs: 13, fat: 2.5, lactose: "sim", method: "semfogo", type: "doce",
+                ingredients: "1 pacotinho de Magic Toast Cacau\n30g de doce de leite\n15g de chocolate amargo",
+                instructions: "Coloque 10g de doce de leite em cada Magic Toast, passe chocolate derretido por cima e leve à geladeira para endurecer. A receita rende 3 bolachas." },
+            {id: 182,name: "Doce de Coco Proteico",calories: 66,protein: 6,carbs: 5,fat: 3,lactose: "sim",method: "fogao", type: "doce", ingredients: "1 xícara de leite de coco light\n30g de whey (sabor leite em pó)\n3 colheres de sopa de leite em pó desnatado\n½ xícara de coco ralado sem açúcar",instructions: "Em uma panela coloque leite de coco, whey protein, leite em pó desnatado e coco ralado, em fogo baixo mexa até chegar em ponto de brigadeiro, em um prato com plastico filme por cima coloque porções e leve para a geladeira por no minimo 2 horas e ta pronto. Rende 7 porções" },
+            {id: 183,name: "Tabule",calories: 103,protein: 2.6,carbs: 10.4,fat: 7.1,lactose: "nao",method: "semfogo", type: "salgado", ingredients: "¼ xícara de chá de trigo fino\n1 tomate em cubos\n2 colheres de sopa de cebola em cubos\n½ pepino em cubos\n3 colheres de sopa de folhas de salsinha\n2 colheres de sopa de hortelã fresca\nSuco de 1 limão\n4 colheres de sopa de azeite de oliva\nSal e pimenta a gosto",instructions: "Lave o trigo e cubra com água por 15 minutos. Escorra e esprema o excesso. Misture o trigo com os vegetais e ervas. Tempere com limão, azeite, sal e pimenta." },
+            {id: 184, name: "Molho de Iogurte", calories: 45, protein: 2, carbs: 2, fat: 3, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "1 pote de iogurte natural\n1 col de sopa de cebola picada\n1 dente de alho picado\n1 col de sopa de salsinha picada\n1 col de sopa de azeite\nPimenta-do-reino e sal a gosto", instructions: "Misture todos os ingredientes."},
+            {id: 185, name: "Molho Mostarda e Mel", calories: 80, protein: 0.5, carbs: 12, fat: 4, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "2 col de sopa de mostarda\n2 col de sopa de mel\n1 col de sopa de azeite\n½ unidade de limão espremido", instructions: "Misture todos os ingredientes."},
+            {id: 186, name: "Molho Balsâmico", calories: 90, protein: 0.1, carbs: 2, fat: 9, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "2 col de sopa de azeite\n2 col de sopa de vinagre balsâmico\n2 col de sopa de água\nTemperos e sal a gosto", instructions: "Misture todos os ingredientes."},
+            {id: 187, name: "Molho Caesar", calories: 55, protein: 3, carbs: 2, fat: 4, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "2 potes de iogurte natural\n2 col de sopa de azeite\n1 col de sopa de mostarda\n1 limão espremido\n3 col de sopa de queijo ralado\n1 col de sopa de sal, cebola e alho desidratado\n1 col de chá de Xylitol", instructions: "Bata todos os ingredientes no liquidificador."},
+            {id: 188, name: "Molho de Maracujá", calories: 60, protein: 0.5, carbs: 5, fat: 4.5, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "Polpa de 3 maracujás\n2 col de sopa de azeite\n1 col de sopa de mel\n½ limão espremido\nSal e pimenta-do-reino a gosto", instructions: "Misture todos os ingredientes."},
+            {id: 189, name: "Molho de Laranja", calories: 95, protein: 0.3, carbs: 6, fat: 8, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "4 col de sopa de suco de laranja\n2 col de sopa de azeite\n1 col de chá de mostarda Dijon\n2 col de chá de mel\nSal e pimenta-do-reino a gosto", instructions: "Misture todos os ingredientes."},
+            {id: 190, name: "Molho Pesto", calories: 150, protein: 4, carbs: 1, fat: 15, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "1 xíc de chá de folhas de manjericão\n3 col de sopa de castanhas trituradas\n100g de queijo ralado\n4 dentes de alho\n½ xíc de chá de azeite\nSal e pimenta-do-reino a gosto", instructions: "Bata todos os ingredientes no processador."},
+            {id: 191, name: "Molho de Cottage", calories: 100, protein: 4, carbs: 1, fat: 9, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "4 col de sopa de queijo Cottage\n½ limão espremido\n2 col de sopa de azeite\n2 col de sopa de manjericão fresco\nSal e pimenta-do-reino a gosto", instructions: "Bata todos os ingredientes no liquidificador."},
+            {id: 192, name: "Molho de Ervas Secas", calories: 125, protein: 0.2, carbs: 1, fat: 14, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "4 col de azeite\n½ col de sopa de alecrim, orégano e manjericão secos (de cada)\n½ limão espremido\nSal a gosto", instructions: "Misture todos os ingredientes."},
+            {id: 193, name: "Molho Rosé", calories: 35, protein: 1.5, carbs: 4, fat: 1.5, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "4 col de sopa de extrato de tomate\n2 col de sopa de mostarda\n1 limão espremido\n6 col de sopa de creme de ricota light\n3 col de café de molho Shoyu de Coco\nSal a gosto", instructions: "Misture todos os ingredientes."},
+            {id: 194, name: "Barra de Cereal Caseira", calories: 225, protein: 4.4, carbs: 38.7, fat: 6.8, lactose: "nao", method: "semfogo", type: "doce", ingredients: "1 xícara de aveia em flocos\n½ xícara de mel\n½ xícara de frutas secas\n½ xícara de sementes\n¼ xícara de amêndoas ou castanhas\n¼ xícara de pasta de amendoim\nPitada de sal", instructions: "Misture os secos. Aqueça o mel, pasta de amendoim e sal. Junte tudo, pressione em uma forma e refrigere por 2h."},
+            {id: 195, name: "Chips de Maçã com Canela", calories: 59, protein: 0.3, carbs: 14.7, fat: 0.4, lactose: "nao", method: "forno", type: "doce", ingredients: "2 maçãs\n1 colher de chá de canela", instructions: "Fatie as maçãs, misture com canela e asse a 100°C por 1-2 horas, virando na metade do tempo."},
+            {id: 196, name: "Bolo de Abacaxi Saudável", calories: 54, protein: 2.3, carbs: 5, fat: 2.9, lactose: "sim", method: "forno", type: "doce", ingredients: "200g de abacaxi picado\n2 ovos\n90g de iogurte desnatado\n25g de coco sem açúcar\n1 colher de chá de fermento", instructions: "Ferva o abacaxi por 5 min. Bata ovos e iogurte. Misture com os outros ingredientes. Asse a 200°C por 30 min."},
+            {id: 197, name: "Bolo Pão de Mel", calories: 219, protein: 19.05, carbs: 24.9, fat: 6, lactose: "sim", method: "microondas", type: "doce", ingredients: "1 ovo\n2 col de sopa de farinha de aveia\n1 col de sopa de cacau em pó\n1 dosador de whey de chocolate\n1 col de chá de mel\n1 col de café de canela\n45ml de leite desnatado\n1 tablete de fermento\nCobertura: 1 dosador de whey de doce de leite, 10g de doce de leite zero, água", instructions: "Misture os ingredientes da massa e leve ao micro-ondas por 1:30-2:00 min. Faça a calda e despeje por cima."},
+            {id: 198, name: "Biscoito de Queijo", calories: 268, protein: 20.6, carbs: 10.9, fat: 15.6, lactose: "sim", method: "forno", type: "salgado", ingredients: "60g de queijo mussarela\n45g de queijo parmesão ralado\n40g de ricota\n20g de polvilho azedo\n1 clara de ovo", instructions: "Misture todos os ingredientes, modele e asse a 180°C por 20-25 minutos."},
+            {id: 199, name: "Bolo de Maçã na Frigideira", calories: 273, protein: 7.8, carbs: 47.3, fat: 7.6, lactose: "nao", method: "fogao", type: "doce", ingredients: "1 ovo\n1 maçã grande\n8g de adoçante em pó\n5ml de óleo de coco\n72g de farinha de aveia\n3g de fermento\n2g de mel", instructions: "Bata o ovo com adoçante e óleo. Adicione a farinha e o fermento. Incorpore a maçã em cubos. Cozinhe na frigideira em fogo baixo, tampado, por 8-10 min, virando para dourar."},
+            {id: 200, name: "Bolinho de Batata (Airfryer)", calories: 247, protein: 5.4, carbs: 54, fat: 1.6, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "200g de batata inglesa cozida e amassada\n20g de amido\n15g de aveia em flocos\n20g de psyllium\n4g de orégano\nSal a gosto", instructions: "Misture todos os ingredientes, modele os bolinhos e asse na airfryer a 200°C por 20-25 minutos."},
+            {id: 201, name: "Focaccia na Airfryer", calories: 248, protein: 14.8, carbs: 21.6, fat: 12, lactose: "sim", method: "airfryer", type: "salgado", ingredients: "2 ovos\n54g de farinha de aveia\n15g de fermento\n60g de tomate cereja\n3g de manjericão\n15g de parmesão ralado\n4g de páprica\n5g de azeite\nSal", instructions: "Bata os ovos com sal e páprica. Adicione a farinha e o fermento. Despeje em uma forma, cubra com tomate, manjericão e queijo. Regue com azeite e asse a 180°C por 10-15 min."},
+            {id: 202, name: "Bolo de Maçã com Canela", calories: 287, protein: 18.8, carbs: 35.1, fat: 9, lactose: "sim", method: "forno", type: "doce", ingredients: "2 maçãs\n2 ovos\n4 scoops de whey de baunilha\n120g de aveia em flocos\n8ml de óleo de coco\n240ml de bebida de amêndoas\n10g de fermento\n4g de canela", instructions: "Pique as maçãs. Bata os ovos, bebida vegetal e óleo. Adicione whey, aveia e canela. Incorpore o fermento e a maçã. Asse a 180°C por 30-40 min."},
+            {id: 203, name: "Salada de Quinoa com Legumes", calories: 360, protein: 12.7, carbs: 58.2, fat: 10.2, lactose: "nao", method: "fogao", type: "salgado", ingredients: "1 xícara de quinoa crua\n2 xícaras de água\n1 cebola\n2 dentes de alho\n2 colheres de sopa de azeite\nSuco de 1 limão\n1 berinjela\n1 abobrinha", instructions: "Cozinhe a quinoa. Refogue a cebola, alho, berinjela e abobrinha no azeite. Misture tudo com a quinoa cozida e tempere com limão e sal."},
+            {id: 204, name: "Salada de Grão de Bico Completa", calories: 267, protein: 12.6, carbs: 37.2, fat: 9.8, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "345g de grão-de-bico cru\n3 dentes de alho\n1 cebola\n1 pimentão amarelo\n1 tomate\nFolhas de hortelã\nSuco de 1 limão\n5 colheres de sopa de azeite\nSal", instructions: "Deixe o grão-de-bico de molho e cozinhe. Pique os vegetais e a hortelã. Misture tudo com o grão-de-bico cozido e tempere com limão, azeite e sal."},
+            {id: 205, name: "Salada de Frango com Manga", calories: 352, protein: 39.8, carbs: 35.6, fat: 7.8, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "100g de frango desfiado\n1 xícara de manga fatiada\n1 cenoura ralada\n2 folhas de alface\n10 folhas de rúcula\n1 pote de iogurte natural\nAgrião, sal e pimenta", instructions: "Monte a salada com as folhas, frango, manga e cenoura. Finalize com o iogurte temperado."},
+            {id: 206, name: "Salada de Lentilha com Tomate", calories: 184, protein: 7.3, carbs: 23.2, fat: 8.8, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "85g de lentilha cozida\n10 tomates cereja\n4g de hortelã picada\n8g de azeite\n30g de suco de limão\nSal", instructions: "Misture a lentilha cozida com os tomates e a hortelã. Tempere com limão, azeite e sal."},
+            {id: 207, name: "Salada de Feijão Fradinho", calories: 228, protein: 14, carbs: 42.3, fat: 5.3, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "240g de feijão fradinho cozido\n100g de tomate cereja\n52g de pimentões (verde/vermelho/amarelo)\n21g de azeitona preta\n10g de salsinha\n1g de azeite", instructions: "Misture o feijão cozido com os vegetais picados, azeitonas e salsinha. Tempere com azeite e sal."},
+            {id: 208, name: "Salada de Pepino, Tomate e Iogurte", calories: 135, protein: 8.4, carbs: 17.2, fat: 4.5, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "100g de pepino em rodelas\n100g de tomate cereja\n165ml de iogurte natural\n4g de hortelã\n30g de suco de limão\nSal e pimenta", instructions: "Corte os vegetais. Misture o iogurte com limão, hortelã e temperos para fazer o molho. Incorpore os vegetais ao molho."},
+            {id: 209, name: "Bowl Premium de Salmão", calories: 478, protein: 23.2, carbs: 76.7, fat: 9.5, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "60g de arroz cozido\n80g de salmão cru em cubos\n70g de manga\n29g de pepino\n40g de tomate-cereja\nFolhas (alface, rúcula, agrião)\n10g de cebola\n60g de chips de batata-doce", instructions: "Monte uma base de arroz no bowl. Adicione o salmão, as folhas, frutas e vegetais. Finalize com os chips de batata-doce."},
+            {id: 210, name: "Salada de Abobrinha com Ovo", calories: 171, protein: 12.3, carbs: 10, fat: 9.6, lactose: "nao", method: "fogao", type: "salgado", ingredients: "100g de abobrinha em lâminas\n40g de suco de limão\n4g de hortelã\n1g de azeite\n32g de tomate\n6g de rúcula\n2 ovos cozidos\nSal", instructions: "Cozinhe e fatie os ovos. Marine a abobrinha no limão, hortelã, azeite e sal por 10-15 minutos. Monte a salada com todos os ingredientes."},
+            {id: 211, name: "Salada de Rúcula com Morango e Castanhas", calories: 175, protein: 4.5, carbs: 7.8, fat: 15.5, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "48g de rúcula\n60g de morangos fatiados\n20g de castanha de caju picadas\n2ml de azeite\nBalsâmico e sal a gosto", instructions: "Monte uma base com a rúcula. Adicione os morangos e as castanhas. Tempere com azeite, balsâmico e sal."},
+            {id: 212, name: "Salada Tropical", calories: 265, protein: 33.4, carbs: 18.9, fat: 7, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "45g de alface\n10g de agrião\n33g de repolho roxo\n100g de filé de frango grelhado\n40g de brócolis cozido\n50g de cenoura ralada\n50g de tomate cereja\n20g de chips de banana\n36g de pepino\n75g de abacaxi", instructions: "Monte uma base com as folhas. Distribua os demais ingredientes por cima e sirva."},
+            {id: 213, name: "Salada de Alface com Ovo e Grão-de-Bico Crocante", calories: 296, protein: 15.8, carbs: 28.7, fat: 15.4, lactose: "nao", method: "forno", type: "salgado", ingredients: "72g de alface americana\n1 ovo cozido\n120g de grão-de-bico cozido\n1.7g de páprica\n8ml de azeite\n30g de suco de limão\nSal", instructions: "Cozinhe e fatie o ovo. Tempere o grão-de-bico com azeite, páprica, sal e limão e asse a 200°C por 30-40 min. Monte a salada."},
+            {id: 214, name: "Salada de Couve Kale com Laranja", calories: 190, protein: 4.3, carbs: 34, fat: 5.1, lactose: "nao", method: "semfogo", type: "salgado", ingredients: "60g de couve kale picada\n216g de laranja em cubos\n10g de amêndoas picadas\n2g de azeite\n40g de suco de limão\nSal", instructions: "Massageie a couve com sal e suco de limão. Adicione a laranja, amêndoas e azeite."},
+            {id: 215, name: "Salada de Beterraba com Tahine", calories: 335, protein: 11.7, carbs: 26.6, fat: 22, lactose: "nao", method: "forno", type: "salgado", ingredients: "140g de beterraba\n60g de tahini\n40g de rúcula\n35g de agrião\n40g de suco de limão\n6g de salsinha\nSal", instructions: "Asse a beterraba. Prepare um molho com tahine, limão e temperos. Fatie a beterraba assada e misture com o molho e as folhas."},
+            {id: 216, name: "Bowl Tropical com Salmão e Quinoa", calories: 460, protein: 32.6, carbs: 39.1, fat: 20.8, lactose: "nao", method: "fogao", type: "salgado", ingredients: "100g de filé de salmão grelhado\n6g de quinoa cozida\nFolhas (alface, acelga)\n60g de manga\n75g de abacaxi\n36g de pepino\nGergelim, limão, azeite, pimenta", instructions: "Grelhe o salmão e cozinhe a quinoa. Monte um bowl com as folhas, quinoa, salmão e frutas. Tempere e sirva."},
+            {id: 217, name: "Salada Mediterrânea", calories: 454, protein: 27.1, carbs: 33.3, fat: 24.7, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "100g de cuscuz marroquino\n165ml de água fervente\nFolhas (rúcula, agrião)\n5 ovos de codorna cozidos\n40g de tomate cereja\n20g de crouton integral\n20g de palmito\n30g de queijo parmesão\n40g de cenoura ralada", instructions: "Hidrate o cuscuz na água fervente. Monte a salada com as folhas, cuscuz e os demais ingredientes."},
+            {id: 218, name: "Salada de Macarrão Integral", calories: 481, protein: 49.1, carbs: 36.4, fat: 16.6, lactose: "sim", method: "fogao", type: "salgado", ingredients: "Folhas (alface, rúcula, manjericão, hortelã)\n100g de macarrão integral cozido\n110g de frango desfiado\n100g de tomate\n58ml de molho de manjericão\n15g de queijo parmesão", instructions: "Cozinhe o macarrão. Monte a salada misturando todos os ingredientes."},
+            {id: 219, name: "Frango Creamy", calories: 601, protein: 44.7, carbs: 34.3, fat: 34.5, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "Folhas (agrião, espinafre)\n80g de quinoa cozida\n100g de frango desfiado\n90g de cream cheese\n30g de cebola roxa\n50g de pepino\n50g de tomate cereja\n1g de azeite", instructions: "Monte uma base de folhas e quinoa. Adicione o frango misturado com o cream cheese e os vegetais frescos."},
+            {id: 220, name: "Salada de Quinoa Simples", calories: 153, protein: 6.4, carbs: 20.7, fat: 5.9, lactose: "sim", method: "semfogo", type: "salgado", ingredients: "148g de quinoa cozida\n100g de pepino\n100g de tomate\n8g de azeitona preta\n35g de ricota\n5ml de azeite\n40g de sumo de limão", instructions: "Cozinhe a quinoa. Misture com os vegetais picados, azeitona e ricota. Tempere com azeite e limão."},
+            {id: 221, name: "Bowl de Fusilli com Abóbora e Atum", calories: 408, protein: 33.4, carbs: 53.9, fat: 9.3, lactose: "nao", method: "fogao", type: "salgado", ingredients: "100g de macarrão integral fusilli\n75g de espinafre\n60g de acelga\n90g de abóbora cabotian\n80g de atum em conserva\n48g de milho\n76g de brócolis\n10g de cebola\n30g de tomate cereja", instructions: "Cozinhe o macarrão. Misture com a abóbora amassada, atum, brócolis, tomate e as folhas."},
+            {id: 222, name: "Bolo de Laranja na Airfryer", calories: 431, protein: 26, carbs: 64, fat: 9.9, lactose: "sim", method: "airfryer", type: "doce", ingredients: "1 ovo\n40ml de suco de laranja\n2 col de sopa de adoçante\n4 col de sopa de farinha de aveia\n½ col de sopa de fermento\nCalda: ½ scoop de whey + água", instructions: "Misture os ingredientes da massa e asse na airfryer a 180°C por 25 min. Prepare a calda e despeje por cima."},
+            {id: 223, name: "Esfiha Saudável", calories: 316, protein: 26.8, carbs: 43.9, fat: 4.8, lactose: "sim", method: "airfryer", type: "salgado", ingredients: "Massa: 200g de batata inglesa cozida, 10g de farinha de aveia, 5g de fubá, sal\nRecheio: 60g de frango desfiado, 15g de requeijão light", instructions: "Amasse a batata com a farinha e sal. Modele as esfihas, polvilhe fubá e asse na airfryer por 15 min a 200°C. Adicione o recheio e asse por mais 5 min."},
+            {id: 224, name: "Tomate Recheado com Ovo", calories: 247, protein: 16, carbs: 15.6, fat: 12.9, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "2 tomates grandes\n2 ovos\n½ xícara de espinafre picado\n5g de azeite\nOrégano, sal, pimenta", instructions: "Corte a tampa dos tomates e retire o miolo. Preencha com espinafre e quebre um ovo em cada. Tempere e asse na airfryer por 12 min a 180°C."},
+            {id: 225, name: "Bolinho de Quinoa com Legumes", calories: 345, protein: 15.7, carbs: 49.1, fat: 16.9, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "1 xícara de quinoa cozida\n30g de abobrinha ralada\n50g de cenoura ralada\n110g de cebola picada\n1 ovo\n25g de farelo de aveia\nSal, pimenta, ervas", instructions: "Misture todos os ingredientes, modele os bolinhos e asse na airfryer por 15 min a 200°C."},
+            {id: 226, name: "Cogumelos Recheados", calories: 261, protein: 10.1, carbs: 7.3, fat: 22.3, lactose: "sim", method: "airfryer", type: "salgado", ingredients: "6 cogumelos grandes\n60g de ricota amassada\n15g de nozes picadas\n5g de azeite\nSalsinha, sal, pimenta", instructions: "Retire os cabinhos dos cogumelos. Recheie com a mistura de ricota, nozes e temperos. Leve à airfryer por 10 min a 180°C."},
+            {id: 227, name: "Mini Hambúrguer de Lentilha", calories: 274, protein: 11, carbs: 37.8, fat: 11.5, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "85g de lentilha cozida\n50g de farelo de aveia\n1 cebola picada\n1 col de sopa de azeite\nSal, alho, cominho", instructions: "Amasse a lentilha e misture com os demais ingredientes. Modele os hambúrgueres e asse na airfryer por 12 min a 200°C, virando na metade."},
+            {id: 228, name: "Quibe de Abóbora com Hortelã", calories: 314, protein: 9.9, carbs: 61.4, fat: 5.45, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "180g de abóbora cozida e amassada\n135g de trigo para quibe hidratado\n10g de cebola ralada\n2 col de café de hortelã picada\nSal, pimenta síria\n1 col de sopa de azeite", instructions: "Misture todos os ingredientes, molde os quibes e asse na airfryer a 200°C por 15 minutos."},
+            {id: 229, name: "Mini Tortinha de Batata com Frango", calories: 277, protein: 33.9, carbs: 23.9, fat: 6.2, lactose: "sim", method: "airfryer", type: "salgado", ingredients: "100g de batata inglesa ralada crua\n80g de frango desfiado\n50g de queijo cottage\nNoz-moscada, orégano, sal", instructions: "Misture todos os ingredientes, coloque em forminhas e asse na airfryer a 200°C por 15 minutos."},
+            {id: 230, name: "Couve-flor com Páprica", calories: 134, protein: 4.1, carbs: 12.2, fat: 9, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "2 xícaras de couve-flor em buquês\n1 col de sopa de azeite\n1 col de café de páprica doce\n1 dente de alho picado\nSal", instructions: "Tempere a couve-flor com os ingredientes e asse na airfryer por 15 min a 200°C."}
         ];
         recipes = [...defaultRecipes];
         
@@ -857,74 +1044,61 @@
             
             document.getElementById('viewRecipeTitle').textContent = recipe.name;
             
+            let instructionsHtml = '';
+            if (recipe.instructions) {
+                const instructionsList = recipe.instructions.split('\n').filter(line => line.trim() !== '');
+                instructionsHtml = `
+                <div>
+                    <h3 style="font-family: 'Montserrat', sans-serif; color: var(--primary-color); font-size: 1.3em; margin-bottom: 15px; border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px;">
+                        👨‍🍳 Modo de Preparo
+                    </h3>
+                    <div style="background: var(--background-light); padding: 25px; border-radius: 10px;">
+                        <ol class="instructions-list">
+                            ${instructionsList.map(item => `<li>${item.replace(/^\d+\.\s*/, '')}</li>`).join('')}
+                        </ol>
+                    </div>
+                </div>`;
+            }
+
             const content = `
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #2C5F6F; font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #8FA383; padding-bottom: 8px;">
+                <div style="margin-bottom: 25px;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; color: var(--primary-color); font-size: 1.3em; margin-bottom: 15px; border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px;">
                         📊 Informações Nutricionais
                     </h3>
-                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 10px; border-left: 4px solid #8FA383;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                            <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <p style="margin: 0; color: #666; font-size: 0.9em;">🔥 Calorias</p>
-                                <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #DE8744;">${recipe.calories} kcal</p>
+                    <div style="background: var(--background-light); padding: 20px; border-radius: 10px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center;">
+                                <p style="margin: 0; color: var(--text-light); font-size: 0.9em;">Calorias</p>
+                                <p style="margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; color: var(--accent-color);">${recipe.calories} kcal</p>
                             </div>
-                            <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <p style="margin: 0; color: #666; font-size: 0.9em;">💪 Proteínas</p>
-                                <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #8FA383;">${recipe.protein}g</p>
+                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center;">
+                                <p style="margin: 0; color: var(--text-light); font-size: 0.9em;">Proteínas</p>
+                                <p style="margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; color: var(--secondary-color);">${recipe.protein}g</p>
                             </div>
-                            <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <p style="margin: 0; color: #666; font-size: 0.9em;">🍚 Carboidratos</p>
-                                <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #2C5F6F;">${recipe.carbs}g</p>
+                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center;">
+                                <p style="margin: 0; color: var(--text-light); font-size: 0.9em;">Carboidratos</p>
+                                <p style="margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; color: var(--primary-color);">${recipe.carbs}g</p>
                             </div>
-                            <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <p style="margin: 0; color: #666; font-size: 0.9em;">🥑 Gorduras</p>
-                                <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #DE8744;">${recipe.fat}g</p>
+                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center;">
+                                <p style="margin: 0; color: var(--text-light); font-size: 0.9em;">Gorduras</p>
+                                <p style="margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; color: var(--accent-color);">${recipe.fat}g</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #2C5F6F; font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #8FA383; padding-bottom: 8px;">
-                       ℹ️ Características
-                    </h3>
-                    <div style="background: #f0f4f0; padding: 20px; border-radius: 10px; border-left: 4px solid #8FA383;">
-                        <div style="margin-bottom: 12px;">
-                            <strong style="color: #2C5F6F;">🥛 Lactose:</strong> 
-                            <span class="tag ${recipe.lactose === 'sim' ? 'tag-lactose' : 'tag-no-lactose'}" style="margin-left: 8px;">
-                                ${recipe.lactose === 'sim' ? 'Com lactose' : 'Sem lactose'}
-                            </span>
-                        </div>
-                        <div>
-                            <strong style="color: #2C5F6F;">🔥 Método de Preparo:</strong> 
-                            <span style="background: white; padding: 6px 12px; border-radius: 6px; display: inline-block; margin-left: 8px; font-weight: 500;">
-                                ${methodLabels[recipe.method]}
-                            </span>
                         </div>
                     </div>
                 </div>
                 
                 ${recipe.ingredients ? `
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #2C5F6F; font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #8FA383; padding-bottom: 8px;">
+                <div style="margin-bottom: 25px;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; color: var(--primary-color); font-size: 1.3em; margin-bottom: 15px; border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px;">
                         🛒 Ingredientes
                     </h3>
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #DE8744;">
-                        <p style="white-space: pre-line; line-height: 1.8; margin: 0; color: #333;">${recipe.ingredients}</p>
+                    <div style="background: var(--background-light); padding: 25px; border-radius: 10px;">
+                        <p style="white-space: pre-line; margin: 0; color: var(--text-dark); line-height: 1.8;">${recipe.ingredients}</p>
                     </div>
                 </div>
                 ` : ''}
                 
-                ${recipe.instructions ? `
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #2C5F6F; font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #8FA383; padding-bottom: 8px;">
-                        👨‍🍳 Modo de Preparo
-                    </h3>
-                    <div style="background: #f0f4f0; padding: 20px; border-radius: 10px; border-left: 4px solid #8FA383;">
-                        <p style="white-space: pre-line; line-height: 1.8; margin: 0; color: #333;">${recipe.instructions}</p>
-                    </div>
-                </div>
-                ` : ''}
+                ${instructionsHtml}
             `;
             
             document.getElementById('viewRecipeContent').innerHTML = content;
@@ -944,6 +1118,8 @@
             const fatMax = parseFloat(document.getElementById('fatMax').value) || Infinity;
             const withLactose = document.getElementById('filterWithLactose').checked;
             const withoutLactose = document.getElementById('filterWithoutLactose').checked;
+            const showDoce = document.getElementById('filterDoce').checked;
+            const showSalgado = document.getElementById('filterSalgado').checked;
             const methods = [];
             if (document.getElementById('filterStove').checked) methods.push('fogao');
             if (document.getElementById('filterOven').checked) methods.push('forno');
@@ -958,6 +1134,7 @@
                        r.calories >= caloriesMin && r.calories <= caloriesMax &&
                        r.protein >= proteinMin && r.carbs <= carbsMax && r.fat <= fatMax &&
                        ((withLactose && r.lactose === 'sim') || (withoutLactose && r.lactose === 'nao')) &&
+                       ((showDoce && r.type === 'doce') || (showSalgado && r.type === 'salgado')) &&
                        methods.includes(r.method);
             });
             renderTable();
@@ -969,7 +1146,7 @@
             document.getElementById('resultsCount').textContent = filteredRecipes.length;
             
             if (filteredRecipes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #999;">Nenhuma receita encontrada</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #999;">Nenhuma receita encontrada. Tente ajustar seus filtros.</td></tr>';
                 return;
             }
             
@@ -980,7 +1157,7 @@
                     <td>${r.calories} kcal</td>
                     <td><span class="tag ${r.lactose === 'sim' ? 'tag-lactose' : 'tag-no-lactose'}">${r.lactose === 'sim' ? 'Com lactose' : 'Sem lactose'}</span></td>
                     <td>${methodLabels[r.method]}</td>
-                    <td><button class="btn btn-primary" onclick="viewRecipe(${r.id})">Mais informações</button></td>
+                    <td><button class="btn btn-primary" onclick="viewRecipe(${r.id})">Ver Detalhes</button></td>
                 `;
                 tbody.appendChild(row);
             });
@@ -994,21 +1171,31 @@
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            
+            doc.setFont('Montserrat', 'bold');
+            doc.setFontSize(18);
+            doc.setTextColor(44, 95, 111);
+            doc.text("Relatório de Receitas Saudáveis", 14, 15);
+            
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Gerado em: ${new Date().toLocaleDateString()}`, 14, 22);
 
             doc.autoTable({
                 html: '#recipesTable',
-                startY: 20,
+                startY: 30,
                 headStyles: {
-                    fillColor: [44, 95, 111]
+                    fillColor: [44, 95, 111],
+                    font: 'Montserrat',
+                    fontStyle: 'bold'
                 },
-                didDrawPage: function (data) {
-                    doc.setFontSize(18);
-                    doc.setTextColor(40);
-                    doc.text("Relatório de Receitas", data.settings.margin.left, 15);
+                bodyStyles: {
+                    font: 'Roboto'
                 }
             });
 
-            doc.save('receitas_filtradas.pdf');
+            doc.save('receitas_filtradas_demetriofilonutri.pdf');
         }
         
         document.addEventListener("DOMContentLoaded", () => {
@@ -1023,7 +1210,6 @@
             var senhaInserida = document.getElementById("senhaInput").value;
             var mensagemErro = document.getElementById("mensagem-erro");
 
-            // ####### MUDE A SENHA AQUI DENTRO DAS ASPAS #######
             if (senhaInserida === "demetrionutri") {
                 document.getElementById("tela-de-senha").style.display = "none";
                 document.getElementById("conteudo-protegido").style.display = "block";
