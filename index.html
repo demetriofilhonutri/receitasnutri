@@ -1163,39 +1163,162 @@ align-items: end;
             });
         }
         
-        function exportToPdf() {
+     function exportToPdf() {
             if (filteredRecipes.length === 0) {
                 alert('Nenhuma receita para exportar. Aplique filtros diferentes.');
                 return;
             }
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            doc.setFont('Montserrat', 'bold');
+            // Explicitly get jsPDF constructor
+             const jsPDF = window.jspdf.jsPDF;
+             if (!jsPDF) {
+                 alert("Erro: A biblioteca jsPDF não foi carregada corretamente.");
+                 return;
+             }
+             const doc = new jsPDF();
+
+
+            // --- Configurações Iniciais ---
+            const pageHeight = doc.internal.pageSize.height;
+            const pageWidth = doc.internal.pageSize.width;
+            const margin = 15;
+            const maxLineWidth = pageWidth - margin * 2;
+            let finalY = 0;
+            let startY = 30;
+
+            // --- Título Principal e Data ---
+            doc.setFont(undefined, 'bold');
             doc.setFontSize(18);
-            doc.setTextColor(44, 95, 111);
-            doc.text("Relatório de Receitas Saudáveis", 14, 15);
-            
-            doc.setFont('Roboto', 'normal');
+            doc.setTextColor("#2C5F6F"); // <-- CORRIGIDO para Hex String
+            doc.text("Relatório de Receitas Saudáveis", margin, 15);
+
+            doc.setFont(undefined, 'normal');
             doc.setFontSize(10);
-            doc.setTextColor(100);
-            doc.text(`Gerado em: ${new Date().toLocaleDateString()}`, 14, 22);
+            doc.setTextColor("#646464"); // <-- CORRIGIDO para Hex String (cinza)
+            doc.text(`Gerado em: ${new Date().toLocaleDateString()}`, margin, 22);
 
-            doc.autoTable({
-                html: '#recipesTable',
-                startY: 30,
-                headStyles: {
-                    fillColor: [44, 95, 111],
-                    font: 'Montserrat',
-                    fontStyle: 'bold'
-                },
-                bodyStyles: {
-                    font: 'Roboto'
+            // --- Tabela Resumo ---
+            try {
+                doc.autoTable({
+                    html: '#recipesTable',
+                    startY: startY,
+                    headStyles: {
+                        fillColor: "#2C5F6F", // <-- CORRIGIDO para Hex String
+                        fontStyle: 'bold'
+                    },
+                    bodyStyles: {},
+                    didDrawPage: function (data) {
+                        if (data.pageNumber > 1) {}
+                    }
+                });
+                // Ensure finalY is a number, default to startY if table fails unexpectedly
+                finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : startY;
+            } catch (e) {
+                console.error("Erro ao gerar autoTable:", e);
+                alert("Ocorreu um erro ao gerar a tabela resumo do PDF. Verifique o console para detalhes.");
+                finalY = startY; // Define a fallback Y position
+                // return; // Decide if you want to abort or continue without the table
+            }
+
+            let currentY = finalY + 15;
+
+            // --- Função auxiliar para adicionar texto e gerenciar página ---
+            function addText(text, options, isTitle = false) {
+                 const safeText = String(text || '');
+
+                // Estimate text height *before* potentially adding a page
+                let textHeight = 0;
+                try {
+                     textHeight = doc.getTextDimensions(safeText, { maxWidth: maxLineWidth, fontSize: options.fontSize || 10 }).h;
+                } catch(e) {
+                     console.warn("Could not calculate text dimensions, using estimate:", safeText, e);
+                     textHeight = (options.fontSize || 10) * 0.5; // Basic estimate
                 }
-            });
 
-            doc.save('receitas_filtradas_demetriofilonutri.pdf');
+                // Check page break more accurately
+                if (currentY + textHeight + (options.spacing || (isTitle ? 5 : 3)) > pageHeight - margin) {
+                    doc.addPage();
+                    currentY = margin + 5;
+                }
+
+                doc.setFontSize(options.fontSize || 10);
+                doc.setFont(undefined, options.fontStyle || 'normal');
+                // CORREÇÃO AQUI: Use Hex String, with default
+                doc.setTextColor(options.color || "#333333");
+
+                doc.text(safeText, margin, currentY, { maxWidth: maxLineWidth });
+
+                currentY += textHeight + (options.spacing || (isTitle ? 5 : 3));
+
+            }
+
+            // --- Adiciona Detalhes de Cada Receita Filtrada ---
+            try {
+                filteredRecipes.forEach((recipe, index) => {
+
+                    if (index > 0) {
+                       // Check page break before adding space
+                        if (currentY + 10 > pageHeight - margin) {
+                            doc.addPage();
+                            currentY = margin + 5;
+                        } else {
+                            currentY += 10;
+                        }
+                    }
+
+                    // Nome da Receita
+                    addText(recipe.name, { fontSize: 14, fontStyle: 'bold', color: "#2C5F6F", spacing: 6 }, true);
+
+                    // Informações Nutricionais
+                    addText("Informações Nutricionais:", { fontSize: 11, fontStyle: 'bold', color: "#2C5F6F", spacing: 4 }, true);
+                    addText(
+                        `Calorias: ${recipe.calories} kcal | Proteínas: ${recipe.protein}g | Carboidratos: ${recipe.carbs}g | Gorduras: ${recipe.fat}g`,
+                        { fontSize: 10, spacing: 5 }
+                    );
+                    addText(
+                        `Lactose: ${recipe.lactose === 'sim' ? 'Com lactose' : 'Sem lactose'} | Preparo: ${methodLabels[recipe.method]} | Tipo: ${recipe.type === 'doce' ? 'Doce' : 'Salgado'}`,
+                        { fontSize: 10, spacing: 8 }
+                    );
+
+
+                    // Ingredientes
+                    if (recipe.ingredients) {
+                        addText("Ingredientes:", { fontSize: 11, fontStyle: 'bold', color: "#2C5F6F", spacing: 4 }, true);
+                        const ingredientsList = recipe.ingredients.split('\n');
+                        ingredientsList.forEach(item => {
+                            if(item.trim() !== "") {
+                                addText(`• ${item.trim()}`, { fontSize: 10, spacing: 2 });
+                            }
+                        });
+                         // Check page break before adding space
+                         if (currentY + 5 > pageHeight - margin) { doc.addPage(); currentY = margin + 5;} else { currentY += 5; }
+                    }
+
+                    // Modo de Preparo
+                    if (recipe.instructions) {
+                        addText("Modo de Preparo:", { fontSize: 11, fontStyle: 'bold', color: "#2C5F6F", spacing: 4 }, true);
+                        const instructionsList = recipe.instructions.split('\n').filter(line => line.trim() !== '');
+                        instructionsList.forEach((step, stepIndex) => {
+                            let stepText = `${stepIndex + 1}. ${step.replace(/^\d+\.\s*/, '').trim()}`;
+                            addText(stepText, { fontSize: 10, spacing: 3 });
+                        });
+                         // Check page break before adding space
+                         if (currentY + 5 > pageHeight - margin) { doc.addPage(); currentY = margin + 5;} else { currentY += 5; }
+                    }
+                });
+            } catch (e) {
+                 console.error("Erro ao adicionar detalhes da receita ao PDF:", e);
+                 alert("Ocorreu um erro ao processar os detalhes das receitas para o PDF. Verifique o console para detalhes.");
+                 return;
+            }
+
+            // --- Salva o PDF ---
+            try {
+                doc.save('receitas_detalhadas_demetriofilonutri.pdf');
+            } catch (e) {
+                 console.error("Erro ao salvar o PDF:", e);
+                 alert("Ocorreu um erro ao salvar o arquivo PDF. Verifique o console para detalhes.");
+            }
         }
         
         document.addEventListener("DOMContentLoaded", () => {
