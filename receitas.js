@@ -296,9 +296,9 @@ const defaultRecipes = [
             {id: 99, name: "Saladona de Frango e Ovo", calories: 295, protein: 34, carbs: 22, fat: 9, lactose: "sim", method: "semfogo", type: "salgado",
                 ingredients: "Folhas, cenoura e beterraba ralada, tomate cereja\n1 col (sopa) de requeijão light\n60g de frango desfiado\n4 ovos de codorna",
                 instructions: "Misture todos os ingredientes e sirva."},
-            {id: 100, name: "Arroz de Couve-flor com Carne do Sol", calories: 244, protein: 19, carbs: 7, fat: 16, lactose: "nao", method: "fogao", type: "salgado",
-                ingredients: "150g de couve-flor\n60g de carne de sol desfiada\nAzeite e temperos a gosto",
-                instructions: "1. Triture a couve-flor e refogue com temperos.\n2. Misture com a carne de sol e sirva."},
+            {id: 100, name: "Salgado de Frango com Couve-Flor", calories: 260, protein: 30, carbs: 5, fat: 11, lactose: "sim", method: "airfryer", type: "salgado",
+                ingredients: "120g de frango moído\n80g de couve-flor cozida e amassada\nSal a gosto\n⅛ col chá de páprica picante\n⅛ col chá de lemon pepper\n15g de queijo muçarela\n15g de farinha panko\n½ ovo batido",
+                instructions: "Amasse a couve-flor cozida. Misture o frango moído, o sal, a páprica e o lemon pepper até formar massa homogênea. Abra uma porção na mão, coloque o queijo no centro e feche com o restante da massa. Passe o bolinho na panko temperada, depois no ovo batido, e novamente na panko. Asse na airfryer a 180°C por 20 min."},
             {id: 101, name: "Snack de Grão de Bico", calories: 66, protein: 2, carbs: 5, fat: 5, lactose: "nao", method: "forno", type: "salgado",
                 ingredients: "2 xícaras de grão de bico cozido\n5 col (sopa) de azeite\nPáprica, orégano, pimenta e sal a gosto",
                 instructions: "1. Tempere o grão de bico cozido com o azeite e os temperos.\n2. Leve ao forno a 210°C por cerca de 40 minutos, mexendo a cada 15 minutos, até ficarem crocantes."},
@@ -589,4 +589,5 @@ const defaultRecipes = [
             {id: 228, name: "Quibe de Abóbora com Hortelã", calories: 314, protein: 9.9, carbs: 61.4, fat: 5.45, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "180g de abóbora cozida e amassada\n135g de trigo para quibe hidratado\n10g de cebola ralada\n2 col de café de hortelã picada\nSal, pimenta síria\n1 col de sopa de azeite", instructions: "Misture todos os ingredientes, molde os quibes e asse na airfryer a 200°C por 15 minutos."},
             {id: 229, name: "Mini Tortinha de Batata com Frango", calories: 277, protein: 33.9, carbs: 23.9, fat: 6.2, lactose: "sim", method: "airfryer", type: "salgado", ingredients: "100g de batata inglesa ralada crua\n80g de frango desfiado\n50g de queijo cottage\nNoz-moscada, orégano, sal", instructions: "Misture todos os ingredientes, coloque em forminhas e asse na airfryer a 200°C por 15 minutos."},
             {id: 230, name: "Couve-flor com Páprica", calories: 134, protein: 4.1, carbs: 12.2, fat: 9, lactose: "nao", method: "airfryer", type: "salgado", ingredients: "2 xícaras de couve-flor em buquês\n1 col de sopa de azeite\n1 col de café de páprica doce\n1 dente de alho picado\nSal", instructions: "Tempere a couve-flor com os ingredientes e asse na airfryer por 15 min a 200°C."}
+
         ];
