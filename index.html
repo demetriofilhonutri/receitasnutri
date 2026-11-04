@@ -5,333 +5,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filtro de Receitas - Demétrio Filho Nutri</title>
+<link rel="icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --primary-color: #2C5F6F;
-            --secondary-color: #8FA383;
-            --accent-color: #DE8744;
-            --text-dark: #333333;
-            --text-light: #666;
-            --background-light: #f8f9fa;
-            --border-color: #dee2e6;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Roboto', sans-serif; 
-            background-color: #f4f7f6;
-            padding: 20px; 
-            min-height: 100vh;
-            color: var(--text-dark);
-        }
-        
-        .container { 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            background: white; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
-            overflow: hidden; 
-        }
-        
-        .header { 
-            background: var(--primary-color);
-            color: white; 
-            padding: 40px 30px; 
-            text-align: center; 
-        }
-        
-        .logo-img { 
-            width: 120px; 
-            height: 120px;
-            margin: 0 auto 20px;
-            object-fit: contain;
-        }
-        
-        .header h1 { 
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5em; 
-            margin-bottom: 8px; 
-            font-weight: 700;
-        }
-        
-        .header .subtitle { 
-            font-size: 1.2em; 
-            opacity: 0.9; 
-            margin-bottom: 20px; 
-        }
-        
-        .header .instagram { 
-            display: inline-block;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 1.1em; 
-            opacity: 0.95;
-            font-weight: 500;
-            transition: background-color 0.3s;
-        }
-
-        .header .instagram:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        .content { 
-            padding: 40px; 
-        }
-        
-        .info-box { 
-            background: #f0f4f0; 
-            border-left: 5px solid var(--secondary-color); 
-            padding: 25px; 
-            border-radius: 8px; 
-            margin-bottom: 30px; 
-        }
-        
-        .info-box h3 { 
-            color: var(--primary-color); 
-            margin-bottom: 10px;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .info-box p {
-            line-height: 1.6;
-        }
-        
-        .filters { 
-            background: var(--background-light); 
-            padding: 30px; 
-            border-radius: 10px; 
-            margin-bottom: 30px; 
-            border: 1px solid var(--border-color);
-        }
-        
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-align-items: end;
-        }
-
-        .filter-section h3 { 
-            color: var(--primary-color); 
-            margin-bottom: 15px; 
-            font-size: 1.1em;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-        }
-        
-        .filter-group { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 8px; 
-        }
-        
-        .filter-group label { 
-            font-size: 0.9em; 
-            color: var(--text-light); 
-            font-weight: 500; 
-        }
-        
-        .filter-group input, .filter-group select { 
-            padding: 12px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
-            font-size: 1em; 
-            width: 100%; 
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .filter-group input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(143, 163, 131, 0.2);
-        }
-        
-        .checkbox-group { 
-            display: flex; 
-            gap: 20px; 
-            flex-wrap: wrap; 
-        }
-        
-        .checkbox-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-        }
-        
-        .checkbox-item input[type="checkbox"] { 
-            width: 18px; 
-            height: 18px; 
-            cursor: pointer; 
-            accent-color: var(--secondary-color); 
-        }
-        
-        .btn { 
-            padding: 12px 25px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 1em; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            font-weight: 500;
-            font-family: 'Roboto', sans-serif;
-        }
-        
-        .btn-primary { 
-            background: var(--primary-color); 
-            color: white; 
-        }
-        .btn-primary:hover {
-            background: #224a57;
-        }
-
-        .actions { 
-            display: flex; 
-            gap: 15px; 
-            margin-bottom: 20px; 
-            flex-wrap: wrap; 
-        }
-        
-        .results-info { 
-            background: #e9f1ff; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-bottom: 20px; 
-            border-left: 5px solid var(--primary-color); 
-        }
-        
-        .table-container { 
-            overflow-x: auto; 
-            border-radius: 10px; 
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            background: white; 
-        }
-        
-        thead { 
-            background: var(--primary-color); 
-            color: white; 
-        }
-        
-        th { 
-            padding: 18px 20px; 
-            text-align: left; 
-            font-weight: 600; 
-            font-size: 0.95em;
-            font-family: 'Montserrat', sans-serif; 
-        }
-        
-        td { 
-            padding: 18px 20px; 
-            border-bottom: 1px solid var(--border-color); 
-        }
-
-        td strong {
-            font-weight: 500;
-        }
-        
-        tbody tr {
-            transition: background-color 0.2s;
-        }
-        tbody tr:hover { 
-            background: #f1f5f9; 
-        }
-        
-        .tag { 
-            display: inline-block; 
-            padding: 5px 12px; 
-            border-radius: 20px; 
-            font-size: 0.85em; 
-            font-weight: 500; 
-        }
-        
-        .tag-lactose { 
-            background: #fff3cd; 
-            color: #856404; 
-        }
-        
-        .tag-no-lactose { 
-            background: #d4edda; 
-            color: #155724; 
-        }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
-        
-        .modal-content { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 15px; 
-            max-width: 650px; 
-            width: 90%; 
-            max-height: 90vh; 
-            overflow-y: auto; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .modal-header h2 {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--primary-color);
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-
-        .modal-actions { 
-            display: flex; 
-            gap: 10px; 
-            justify-content: flex-end; 
-            margin-top: 30px; 
-        }
-
-        .instructions-list {
-            list-style-type: none;
-            counter-reset: step-counter;
-            padding-left: 0;
-            margin: 0;
-            color: var(--text-dark);
-        }
-        .instructions-list li {
-            counter-increment: step-counter;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: flex-start;
-            line-height: 1.6;
-        }
-        .instructions-list li:last-child {
-            margin-bottom: 0;
-        }
-        .instructions-list li::before {
-            content: counter(step-counter);
-            margin-right: 15px;
-            background-color: var(--secondary-color);
-            color: white;
-            font-weight: bold;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-family: 'Montserrat', sans-serif;
-        }
-    </style>
+:root{--orange:#E84321;--navy:#072E44;--cream:#F0EEDF;--ink:#20221F;--line:rgba(7,46,68,.14)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter Tight','Roboto',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+h1,h2,h3,th,.btn{font-family:'Archivo','Montserrat',sans-serif}
+.container{max-width:1320px;margin:0 auto}
+.header{background:var(--navy);color:var(--cream);padding:56px 40px 64px;position:relative;overflow:hidden;text-align:left}
+.header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:var(--orange)}
+.header::before{content:"";position:absolute;right:-120px;top:-60px;width:520px;height:120%;background:var(--orange);transform:skewX(-28deg);opacity:.95}
+.header>*{position:relative;z-index:1}
+.header img{height:72px;width:auto;display:block;margin-bottom:36px}
+.header h1{font-size:clamp(2rem,5vw,3.6rem);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:1;max-width:14ch}
+.header h1{font-size:0;height:0;margin:0}
+.header .subtitle{font-family:'Archivo',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2rem,5vw,3.8rem);line-height:.95;max-width:12ch;margin-bottom:22px}
+.header .instagram{display:inline-block;border:1.5px solid var(--cream);padding:8px 16px;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.content{padding:48px 40px 80px}
+.info-box{background:transparent;border-left:6px solid var(--orange);padding:4px 0 4px 22px;margin-bottom:40px;max-width:760px}
+.info-box h3{color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.info-box p{line-height:1.65;color:rgba(32,34,31,.8)}
+.filters{background:#fff;padding:32px;margin-bottom:28px;border:1.5px solid var(--navy);box-shadow:8px 8px 0 var(--navy)}
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;align-items:start}
+.filter-section h3{color:var(--navy);margin-bottom:14px;font-size:.85rem;text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.filter-section h3::before{content:"";display:inline-block;width:14px;height:4px;background:var(--orange);margin-right:8px;vertical-align:middle;transform:skewX(-30deg)}
+.filter-group{display:flex;flex-direction:column;gap:6px}
+.filter-group label{font-size:.75rem;color:rgba(32,34,31,.65);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.filter-group input,.filter-group select{padding:12px;border:1.5px solid var(--line);border-radius:0;font-size:1rem;width:100%;background:var(--cream);color:var(--ink);transition:border-color .2s}
+.filter-group input:focus{outline:none;border-color:var(--orange)}
+.checkbox-group{display:flex;gap:10px 18px;flex-wrap:wrap}
+.checkbox-item{display:flex;align-items:center;gap:8px;font-weight:500}
+.checkbox-item input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--orange)}
+.btn{padding:13px 26px;border:none;border-radius:0;font-size:.85rem;cursor:pointer;transition:all .2s;font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.btn-primary{background:var(--orange);color:var(--cream)}
+.btn-primary:hover{background:var(--navy)}
+.actions{display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap}
+.results-info{background:var(--navy);color:var(--cream);padding:14px 20px;margin-bottom:20px;display:inline-block;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem}
+.results-info strong{color:var(--orange);font-size:1.2rem}
+.table-container{overflow-x:auto;border:1.5px solid var(--navy);background:#fff}
+table{width:100%;border-collapse:collapse;background:#fff}
+thead{background:var(--navy);color:var(--cream)}
+th{padding:16px 20px;text-align:left;font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.12em}
+td{padding:16px 20px;border-bottom:1px solid var(--line)}
+td strong{font-weight:600;color:var(--navy)}
+tbody tr{transition:background-color .15s}
+tbody tr:hover{background:var(--cream)}
+td .btn{padding:9px 16px;font-size:.72rem}
+.tag{display:inline-block;padding:4px 10px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag-lactose{background:var(--orange);color:var(--cream)}
+.tag-no-lactose{background:var(--navy);color:var(--cream)}
+.modal{display:none;position:fixed;inset:0;background:rgba(7,46,68,.75);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:var(--cream);padding:40px;max-width:680px;width:90%;max-height:90vh;overflow-y:auto;border-top:8px solid var(--orange)}
+.modal-header h2{color:var(--navy);margin-bottom:24px;font-size:1.9rem;text-transform:uppercase;font-weight:800;line-height:1.05}
+.modal-content h3,.modal-content h4{color:var(--navy);text-transform:uppercase;letter-spacing:.08em}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:30px}
+.instructions-list{list-style:none;counter-reset:s;padding-left:0;margin:0}
+.instructions-list li{counter-increment:s;margin-bottom:16px;display:flex;align-items:flex-start;line-height:1.6}
+.instructions-list li::before{content:counter(s);margin-right:14px;background:var(--orange);color:var(--cream);font-weight:800;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Archivo',sans-serif}
+@media(max-width:700px){.header,.content{padding-left:20px;padding-right:20px}.header::before{width:220px;right:-140px}}
+</style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://i.ibb.co/FLSGH3rr/logo-FUNDO-TRANSPARENTE-18.png" alt="logo-FUNDO-TRANSPARENTE-18" border="0"></a>
+            <img src="logo.png" alt="Demétrio Filho Nutricionista">
             <h1>Demétrio Filho Nutri</h1>
             <p class="subtitle">Filtro de Receitas Saudáveis</p>
             <p class="instagram">📱 @demetriofilhonutri</p>
@@ -364,21 +106,20 @@ align-items: end;
                             <div class="filter-group"><label>Gord. Máx</label><input type="number" id="fatMax" placeholder="50" onkeyup="applyFilters()"></div>
                         </div>
                     </div>
- </div>
-                    </div>
                      <div class="filter-section">
                         <h3>🍰 Preferências</h3>
-                         <div class="checkbox-group" style="margin-bottom: 30px; justify-content: center;">
+                         <div class="checkbox-group" style="margin-bottom:14px">
                             <div class="checkbox-item"><input type="checkbox" id="filterDoce" checked onchange="applyFilters()"><label>Doce</label></div>
                             <div class="checkbox-item"><input type="checkbox" id="filterSalgado" checked onchange="applyFilters()"><label>Salgado</label></div>
-                         <div class="checkbox-group">
+                         </div>
+                         <div class="checkbox-group" >
                             <div class="checkbox-item"><input type="checkbox" id="filterWithLactose" checked onchange="applyFilters()"><label>Com lactose</label></div>
                             <div class="checkbox-item"><input type="checkbox" id="filterWithoutLactose" checked onchange="applyFilters()"><label>Sem lactose</label></div>
                         </div>
                     </div>
                     <div class="filter-section">
                         <h3>🍳 Método de Preparo</h3>
-                        <div class="checkbox-group" style="margin-bottom: 30px; justify-content: center;">
+                        <div class="checkbox-group" style="margin-bottom:14px">
                             <div class="checkbox-item"><input type="checkbox" id="filterStove" checked onchange="applyFilters()"><label>Fogão</label></div>
                             <div class="checkbox-item"><input type="checkbox" id="filterOven" checked onchange="applyFilters()"><label>Forno</label></div>
                             <div class="checkbox-item"><input type="checkbox" id="filterMicrowave" checked onchange="applyFilters()"><label>Micro-ondas</label></div>
