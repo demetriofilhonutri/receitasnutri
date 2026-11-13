@@ -233,8 +233,12 @@ dialog::backdrop{background:rgba(32,34,31,.5)}
   </div>
 
   <div class="step">
-   <p class="step-title"><span class="n">4</span>Alguma restrição?</p>
-   <button type="button" class="switch" role="switch" aria-checked="false" id="lactoseSwitch"><span><b>Sem lactose</b><span class="d">Mostrar só receitas sem lactose</span></span><span class="track" aria-hidden="true"></span></button>
+   <p class="step-title"><span class="n">4</span>Com ou sem lactose?</p>
+   <div class="options" role="group" aria-label="Lactose" data-key="lactose">
+    <button type="button" class="opt" data-v="nao"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2h8M9 2v3l-2 4v11a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9l-2-4V2M4 4l16 16"/></svg>Sem lactose</button>
+    <button type="button" class="opt" data-v="sim"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2h8M9 2v3l-2 4v11a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9l-2-4V2M7 12h10"/></svg>Com lactose</button>
+    <button type="button" class="opt" data-v="all"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>Tanto faz</button>
+   </div>
   </div>
 
   <div class="step">
@@ -301,7 +305,7 @@ const $=id=>document.getElementById(id);
 const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=n=>String(n).replace('.',',');
-const initial=()=>({q:'',type:'all',nolac:false,kmin:'',kmax:'',pmin:'',cmax:'',gmax:'',methods:[],fav:false,sort:'kcal-asc'});
+const initial=()=>({q:'',type:'all',lactose:'all',kmin:'',kmax:'',pmin:'',cmax:'',gmax:'',methods:[],fav:false,sort:'kcal-asc'});
 let state=initial(),shown=PAGE;
 let favs=new Set();try{favs=new Set(JSON.parse(localStorage.getItem('df-receitas-favoritas')||'[]'))}catch{}
 const saveFavs=()=>{try{localStorage.setItem('df-receitas-favoritas',JSON.stringify([...favs]))}catch{}};
@@ -322,7 +326,7 @@ function applyFilters(){
  filteredRecipes=recipes.filter(r=>{
   const hay=norm(r.name+' '+r.ingredients);
   return terms.every(t=>hay.includes(t))&&r.calories>=kmin&&r.calories<=kmax&&r.protein>=pmin&&r.carbs<=cmax&&r.fat<=gmax
-   &&(state.type==='all'||r.type===state.type)&&(!state.nolac||r.lactose==='nao')
+   &&(state.type==='all'||r.type===state.type)&&(state.lactose==='all'||r.lactose===state.lactose)
    &&(!state.methods.length||state.methods.includes(r.method))&&(!state.fav||favs.has(r.id));
  });
  const by={'kcal-asc':(a,b)=>a.calories-b.calories,'prot-desc':(a,b)=>b.protein-a.protein,'carb-asc':(a,b)=>a.carbs-b.carbs,'name':(a,b)=>a.name.localeCompare(b.name,'pt-BR')}[state.sort]||((a,b)=>a.calories-b.calories);
@@ -348,7 +352,7 @@ function summaryItems(){
  if(state.cmax&&state.cmax!=='15')a.push(['cmax',`Carbo ≤ ${state.cmax} g`]);
  if(state.gmax)a.push(['gmax',`Gordura ≤ ${state.gmax} g`]);
  if(state.methods.length)a.push(['methods',state.methods.map(m=>methodLabels[m]).join(' ou ')]);
- if(state.nolac)a.push(['nolac','Sem lactose']);
+ if(state.lactose!=='all')a.push(['lactose',state.lactose==='nao'?'Sem lactose':'Com lactose']);
  if(state.q.trim())a.push(['q',`“${state.q.trim()}”`]);
  if(state.fav)a.push(['fav','Favoritas']);
  return a;
@@ -367,10 +371,9 @@ function render(){
  syncControls();writeHash();updateJump();
 }
 function syncControls(){
- document.querySelectorAll('[data-key=type] .opt').forEach(b=>b.setAttribute('aria-pressed',String(state.type===b.dataset.v)));
+ document.querySelectorAll('[data-key] .opt').forEach(b=>b.setAttribute('aria-pressed',String(state[b.parentNode.dataset.key]===b.dataset.v)));
  document.querySelectorAll('#goals .goal').forEach(b=>{const g=goals.find(x=>x.id===b.dataset.goal);b.setAttribute('aria-pressed',String(state[g.key]===g.val))});
  document.querySelectorAll('#methods .chip').forEach(b=>b.setAttribute('aria-pressed',String(state.methods.includes(b.dataset.m))));
- $('lactoseSwitch').setAttribute('aria-checked',String(state.nolac));
  $('favOnly').setAttribute('aria-pressed',String(state.fav));
  [['caloriesMin','kmin'],['caloriesMax','kmax'],['proteinMin','pmin'],['carbsMax','cmax'],['fatMax','gmax']].forEach(([id,k])=>{const el=$(id);if(document.activeElement!==el)el.value=state[k]});
  $('sort').value=state.sort;
@@ -385,7 +388,7 @@ function writeHash(){
  const p=new URLSearchParams(),d=initial();
  HK.forEach(k=>{if(state[k]!==d[k])p.set(k,state[k])});
  if(state.methods.length)p.set('preparo',state.methods.join(','));
- if(state.nolac)p.set('semlactose','1');
+ if(state.lactose!=='all')p.set('lactose',state.lactose);
  if(state.fav)p.set('fav','1');
  const open=$('detail').open&&$('detail').dataset.id;if(open)p.set('receita',open);
  const h=p.toString();history.replaceState(null,'',h?'#'+h:location.pathname+location.search);
@@ -394,7 +397,8 @@ function readHash(){
  const p=new URLSearchParams(location.hash.slice(1)),s=initial();
  HK.forEach(k=>{if(p.has(k))s[k]=p.get(k)});
  if(p.has('preparo'))s.methods=p.get('preparo').split(',').filter(m=>methodLabels[m]);
- s.nolac=p.get('semlactose')==='1';s.fav=p.get('fav')==='1';
+ if(['sim','nao'].includes(p.get('lactose')))s.lactose=p.get('lactose');
+ s.fav=p.get('fav')==='1';
  return {s,open:Number(p.get('receita'))||null};
 }
 
@@ -602,7 +606,6 @@ $('clearSearch').addEventListener('click',()=>{update(s=>{s.q=''});$('searchName
 $('sort').addEventListener('change',e=>update(s=>{s.sort=e.target.value}));
 $('more').addEventListener('click',()=>{shown+=PAGE;render()});
 $('favOnly').addEventListener('click',()=>update(s=>{s.fav=!s.fav}));
-$('lactoseSwitch').addEventListener('click',()=>update(s=>{s.nolac=!s.nolac}));
 $('pdfBtn').addEventListener('click',()=>{if(!window.jspdf){toast('Carregando o gerador de PDF… tente de novo em instantes.');return}exportToPdf()});
 $('detail').addEventListener('close',()=>{delete $('detail').dataset.id;writeHash();updateJump()});
 document.addEventListener('click',e=>{
@@ -618,7 +621,7 @@ document.addEventListener('click',e=>{
  else if(ds.drop)update(s=>{s[ds.drop]=initial()[ds.drop]});
  else if(ds.goal){const g=goals.find(x=>x.id===ds.goal);update(s=>{s[g.key]=s[g.key]===g.val?'':g.val})}
  else if(ds.m)update(s=>{s.methods=s.methods.includes(ds.m)?s.methods.filter(m=>m!==ds.m):[...s.methods,ds.m]});
- else if(ds.v&&el.parentNode.dataset.key)update(s=>{s.type=ds.v});
+ else if(ds.v&&el.parentNode.dataset.key)update(s=>{s[el.parentNode.dataset.key]=ds.v});
 });
 const start=readHash();state=start.s;applyFilters();if(start.open)openRecipe(start.open);
 </script>
