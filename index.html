@@ -439,163 +439,112 @@ function toggleFav(id){
  applyFilters();
 }
 
-function exportToPdf() {
-            if (filteredRecipes.length === 0) {
-                toast('Nenhuma receita para exportar com esses filtros.');
-                return;
-            }
+// PDF das receitas filtradas, no visual da marca (A4, medidas em mm)
+let pdfLogo=null;
+async function loadPdfLogo(){
+ if(pdfLogo!==null)return pdfLogo;
+ try{
+  const img=new Image();img.src='logo.png';await img.decode();
+  const c=document.createElement('canvas');c.width=700;c.height=Math.round(700*img.naturalHeight/img.naturalWidth);
+  const x=c.getContext('2d');x.fillStyle='#072E44';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
+  pdfLogo={data:c.toDataURL('image/jpeg',0.92),ratio:c.height/c.width};
+ }catch{pdfLogo=false}
+ return pdfLogo;
+}
+async function exportToPdf(){
+ if(!filteredRecipes.length){toast('Nenhuma receita para exportar com esses filtros.');return}
+ const btn=$('pdfBtn');btn.disabled=true;toast('Gerando o PDF…');
+ try{
+  const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+  const NAVY='#072E44',ORANGE='#E84321',CREAM='#F0EEDF',SOFT='#F6F4EA',INK='#20221F',MUTED='#5E6158',LINE='#E4E0CC';
+  const W=210,H=297,M=16,CW=W-2*M,BOTTOM=H-18;
+  // As fontes padrão do PDF não têm alguns símbolos: troca por equivalentes
+  const clean=s=>String(s??'').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/[–—]/g,'-').replace(/…/g,'...').replace(/[^\x00-\xFF]/g,'');
+  const n1=v=>String(v).replace('.',',');
+  const logo=await loadPdfLogo();
+  const date=new Date().toLocaleDateString('pt-BR');
+  const filters=summaryItems().map(([,l])=>clean(l).replace(/"/g,''));
 
-            // Explicitly get jsPDF constructor
-             const jsPDF = window.jspdf.jsPDF;
-             if (!jsPDF) {
-                 alert("Erro: A biblioteca jsPDF não foi carregada corretamente.");
-                 return;
-             }
-             const doc = new jsPDF();
+  // Cabeçalho da primeira página
+  doc.setFillColor(NAVY);doc.rect(0,0,W,46,'F');
+  doc.setFillColor(ORANGE);doc.lines([[38,0],[0,46],[-62,0]],W-38,0,[1,1],'F',true);
+  if(logo){const lw=44;doc.addImage(logo.data,'JPEG',M,10,lw,lw*logo.ratio)}
+  doc.setTextColor(CREAM);doc.setFont('helvetica','bold');doc.setFontSize(22);doc.text('FILTRO DE RECEITAS',M,logo?31:22);
+  doc.setFont('helvetica','normal');doc.setFontSize(9.5);
+  const n=filteredRecipes.length;
+  doc.text(`${n} ${n===1?'receita':'receitas'} · gerado em ${date}`,M,38.5);
+  let y=56;
+  doc.setTextColor(MUTED);doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.text('FILTROS USADOS',M,y);
+  doc.setFont('helvetica','normal');doc.setTextColor(INK);doc.setFontSize(10);
+  const fl=doc.splitTextToSize(filters.length?filters.join('  ·  '):'Nenhum filtro: todas as receitas',CW);doc.text(fl,M,y+5.5);
+  y+=5.5+fl.length*4.6+4;
 
+  const pageHeader=()=>{doc.setFillColor(NAVY);doc.rect(0,0,W,11,'F');doc.setFillColor(ORANGE);doc.rect(0,11,W,0.8,'F');
+   doc.setTextColor(CREAM);doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.text('FILTRO DE RECEITAS',M,7.2);
+   doc.setFont('helvetica','normal');doc.text('Demétrio Filho · Nutricionista',W-M,7.2,{align:'right'})};
+  const newPage=()=>{doc.addPage();pageHeader();return 22};
 
-            // --- Configurações Iniciais ---
-            const pageHeight = doc.internal.pageSize.height;
-            const pageWidth = doc.internal.pageSize.width;
-            const margin = 15;
-            const maxLineWidth = pageWidth - margin * 2;
-            let finalY = 0;
-            let startY = 30;
+  // Índice
+  if(n>1){
+   doc.autoTable({startY:y,margin:{left:M,right:M,top:20,bottom:20},
+    head:[['#','Receita','Kcal','Prot.','Carb.','Gord.','Tipo','Preparo']],
+    body:filteredRecipes.map((r,i)=>[i+1,clean(r.name),r.calories,n1(r.protein)+' g',n1(r.carbs)+' g',n1(r.fat)+' g',r.type==='doce'?'Doce':'Salgado',clean(methodLabels[r.method])]),
+    styles:{font:'helvetica',fontSize:8.6,cellPadding:{top:2.1,bottom:2.1,left:2,right:2},textColor:INK,lineColor:LINE,lineWidth:0},
+    headStyles:{fillColor:NAVY,textColor:CREAM,fontStyle:'bold',fontSize:8.2},
+    alternateRowStyles:{fillColor:SOFT},
+    columnStyles:{0:{cellWidth:9,textColor:ORANGE,fontStyle:'bold'},2:{halign:'right',fontStyle:'bold'},3:{halign:'right'},4:{halign:'right'},5:{halign:'right'}},
+    didDrawPage:d=>{if(d.pageNumber>1)pageHeader()}});
+   y=newPage();
+  }
 
-            // --- Título Principal e Data ---
-            doc.setFont(undefined, 'bold');
-            doc.setFontSize(18);
-            doc.setTextColor("#2C5F6F"); // <-- CORRIGIDO para Hex String
-            doc.text("Relatório de Receitas Saudáveis", margin, 15);
+  // Receitas
+  const LW=66,GAP=8,RX=M+LW+GAP,RW=CW-LW-GAP;
+  filteredRecipes.forEach((r,i)=>{
+   doc.setFont('helvetica','bold');doc.setFontSize(13.5);
+   const title=doc.splitTextToSize(clean(r.name),CW-12);
+   doc.setFont('helvetica','normal');doc.setFontSize(9.3);
+   const ing=lines(r.ingredients).map(l=>doc.splitTextToSize(clean(l),LW-6));
+   const st=lines(r.instructions).map(l=>doc.splitTextToSize(clean(l.replace(/^\d+[.)]\s*/,'')),RW-8));
+   const LH=4.1;
+   const ingH=ing.reduce((a,t)=>a+t.length*LH+1.6,0),stH=st.reduce((a,t)=>a+t.length*LH+2.2,0);
+   const hgt=title.length*5.8+6+19+9+Math.max(ingH,stH)+6;
+   if(y+hgt>BOTTOM&&y>30)y=newPage();
+   // número e nome
+   doc.setFillColor(ORANGE);doc.circle(M+3.6,y-1.6,3.6,'F');
+   doc.setTextColor('#FFFFFF');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.text(String(i+1),M+3.6,y-0.2,{align:'center'});
+   doc.setTextColor(NAVY);doc.setFontSize(13.5);doc.text(title,M+10,y);y+=title.length*5.8;
+   doc.setFont('helvetica','normal');doc.setFontSize(8.8);doc.setTextColor(MUTED);
+   doc.text([r.type==='doce'?'Doce':'Salgado',methodLabels[r.method],r.lactose==='nao'?'Sem lactose':'Com lactose'].map(clean).join('  ·  '),M+10,y);y+=4.5;
+   // macros
+   const bw=(CW-3*3)/4,bh=14,boxes=[['Calorias',r.calories+' kcal'],['Proteína',n1(r.protein)+' g'],['Carboidrato',n1(r.carbs)+' g'],['Gordura',n1(r.fat)+' g']];
+   boxes.forEach(([l,v],k)=>{const x=M+k*(bw+3);doc.setFillColor(k?SOFT:NAVY);doc.roundedRect(x,y,bw,bh,2.2,2.2,'F');
+    doc.setTextColor(k?MUTED:CREAM);doc.setFont('helvetica','normal');doc.setFontSize(7.6);doc.text(l,x+3.4,y+5);
+    doc.setTextColor(k?INK:'#FFFFFF');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(v,x+3.4,y+11)});
+   y+=bh+8;
+   // colunas
+   doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(ORANGE);
+   doc.text('INGREDIENTES',M,y,{charSpace:0.4});doc.text('MODO DE PREPARO',RX,y,{charSpace:0.4});
+   let ly=y+5.5,ry=y+5.5;
+   doc.setFont('helvetica','normal');doc.setFontSize(9.3);doc.setTextColor(INK);doc.setDrawColor('#B9B5A0');doc.setLineWidth(0.3);
+   ing.forEach(t=>{doc.rect(M,ly-2.7,2.8,2.8);doc.text(t,M+5.5,ly,{lineHeightFactor:1.25});ly+=t.length*LH+1.6});
+   st.forEach((t,k)=>{doc.setFillColor(ORANGE);doc.circle(RX+2.3,ry-1.2,2.3,'F');doc.setTextColor('#FFFFFF');doc.setFont('helvetica','bold');doc.setFontSize(7);
+    doc.text(String(k+1),RX+2.3,ry-0.2,{align:'center'});doc.setTextColor(INK);doc.setFont('helvetica','normal');doc.setFontSize(9.3);
+    doc.text(t,RX+7,ry,{lineHeightFactor:1.25});ry+=t.length*LH+2.2});
+   y=Math.max(ly,ry)+2;
+   if(i<n-1){doc.setDrawColor(LINE);doc.setLineWidth(0.4);doc.line(M,y,W-M,y);y+=11}
+  });
 
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(10);
-            doc.setTextColor("#646464"); // <-- CORRIGIDO para Hex String (cinza)
-            doc.text(`Gerado em: ${new Date().toLocaleDateString()}`, margin, 22);
-
-            // --- Tabela Resumo ---
-            try {
-                doc.autoTable({
-                    html: '#recipesTable',
-                    startY: startY,
-                    headStyles: {
-                        fillColor: "#2C5F6F", // <-- CORRIGIDO para Hex String
-                        fontStyle: 'bold'
-                    },
-                    bodyStyles: {},
-                    didDrawPage: function (data) {
-                        if (data.pageNumber > 1) {}
-                    }
-                });
-                // Ensure finalY is a number, default to startY if table fails unexpectedly
-                finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : startY;
-            } catch (e) {
-                console.error("Erro ao gerar autoTable:", e);
-                alert("Ocorreu um erro ao gerar a tabela resumo do PDF. Verifique o console para detalhes.");
-                finalY = startY; // Define a fallback Y position
-                // return; // Decide if you want to abort or continue without the table
-            }
-
-            let currentY = finalY + 15;
-
-            // --- Função auxiliar para adicionar texto e gerenciar página ---
-            function addText(text, options, isTitle = false) {
-                 const safeText = String(text || '');
-
-                // Estimate text height *before* potentially adding a page
-                let textHeight = 0;
-                try {
-                     textHeight = doc.getTextDimensions(safeText, { maxWidth: maxLineWidth, fontSize: options.fontSize || 10 }).h;
-                } catch(e) {
-                     console.warn("Could not calculate text dimensions, using estimate:", safeText, e);
-                     textHeight = (options.fontSize || 10) * 0.5; // Basic estimate
-                }
-
-                // Check page break more accurately
-                if (currentY + textHeight + (options.spacing || (isTitle ? 5 : 3)) > pageHeight - margin) {
-                    doc.addPage();
-                    currentY = margin + 5;
-                }
-
-                doc.setFontSize(options.fontSize || 10);
-                doc.setFont(undefined, options.fontStyle || 'normal');
-                // CORREÇÃO AQUI: Use Hex String, with default
-                doc.setTextColor(options.color || "#333333");
-
-                doc.text(safeText, margin, currentY, { maxWidth: maxLineWidth });
-
-                currentY += textHeight + (options.spacing || (isTitle ? 5 : 3));
-
-            }
-
-            // --- Adiciona Detalhes de Cada Receita Filtrada ---
-            try {
-                filteredRecipes.forEach((recipe, index) => {
-
-                    if (index > 0) {
-                       // Check page break before adding space
-                        if (currentY + 10 > pageHeight - margin) {
-                            doc.addPage();
-                            currentY = margin + 5;
-                        } else {
-                            currentY += 10;
-                        }
-                    }
-
-                    // Nome da Receita
-                    addText(recipe.name, { fontSize: 14, fontStyle: 'bold', color: "#2C5F6F", spacing: 6 }, true);
-
-                    // Informações Nutricionais
-                    addText("Informações Nutricionais:", { fontSize: 11, fontStyle: 'bold', color: "#2C5F6F", spacing: 4 }, true);
-                    addText(
-                        `Calorias: ${recipe.calories} kcal | Proteínas: ${recipe.protein}g | Carboidratos: ${recipe.carbs}g | Gorduras: ${recipe.fat}g`,
-                        { fontSize: 10, spacing: 5 }
-                    );
-                    addText(
-                        `Lactose: ${recipe.lactose === 'sim' ? 'Com lactose' : 'Sem lactose'} | Preparo: ${methodLabels[recipe.method]} | Tipo: ${recipe.type === 'doce' ? 'Doce' : 'Salgado'}`,
-                        { fontSize: 10, spacing: 8 }
-                    );
-
-
-                    // Ingredientes
-                    if (recipe.ingredients) {
-                        addText("Ingredientes:", { fontSize: 11, fontStyle: 'bold', color: "#2C5F6F", spacing: 4 }, true);
-                        const ingredientsList = recipe.ingredients.split('\n');
-                        ingredientsList.forEach(item => {
-                            if(item.trim() !== "") {
-                                addText(`• ${item.trim()}`, { fontSize: 10, spacing: 2 });
-                            }
-                        });
-                         // Check page break before adding space
-                         if (currentY + 5 > pageHeight - margin) { doc.addPage(); currentY = margin + 5;} else { currentY += 5; }
-                    }
-
-                    // Modo de Preparo
-                    if (recipe.instructions) {
-                        addText("Modo de Preparo:", { fontSize: 11, fontStyle: 'bold', color: "#2C5F6F", spacing: 4 }, true);
-                        const instructionsList = recipe.instructions.split('\n').filter(line => line.trim() !== '');
-                        instructionsList.forEach((step, stepIndex) => {
-                            let stepText = `${stepIndex + 1}. ${step.replace(/^\d+\.\s*/, '').trim()}`;
-                            addText(stepText, { fontSize: 10, spacing: 3 });
-                        });
-                         // Check page break before adding space
-                         if (currentY + 5 > pageHeight - margin) { doc.addPage(); currentY = margin + 5;} else { currentY += 5; }
-                    }
-                });
-            } catch (e) {
-                 console.error("Erro ao adicionar detalhes da receita ao PDF:", e);
-                 alert("Ocorreu um erro ao processar os detalhes das receitas para o PDF. Verifique o console para detalhes.");
-                 return;
-            }
-
-            // --- Salva o PDF ---
-            try {
-                doc.save('receitas_detalhadas_demetriofilonutri.pdf');
-            } catch (e) {
-                 console.error("Erro ao salvar o PDF:", e);
-                 alert("Ocorreu um erro ao salvar o arquivo PDF. Verifique o console para detalhes.");
-            }
-        }
+  // Rodapé em todas as páginas
+  const total=doc.getNumberOfPages();
+  for(let p=1;p<=total;p++){doc.setPage(p);
+   doc.setDrawColor(ORANGE);doc.setLineWidth(0.5);doc.line(M,H-12,W-M,H-12);
+   doc.setFont('helvetica','normal');doc.setFontSize(7.8);doc.setTextColor(MUTED);
+   doc.text('Valores estimados por porção. Ajuste as quantidades com o seu nutricionista.  ·  @demetriofilhonutri',M,H-7.5);
+   doc.text(`${p} / ${total}`,W-M,H-7.5,{align:'right'})}
+  doc.save('receitas-demetrio-filho-nutri.pdf');
+ }catch(e){console.error(e);toast('Não foi possível gerar o PDF. Tente de novo.')}
+ finally{btn.disabled=false}
+}
 
 // Montagem
 $('goals').innerHTML=goals.map(g=>`<button type="button" class="goal" data-goal="${g.id}" aria-pressed="false"><span class="box">${check}</span><span><b>${g.title}</b><span class="d">${g.desc}</span></span></button>`).join('');
