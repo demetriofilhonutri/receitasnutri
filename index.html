@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Filtro de Receitas Saudáveis · Demétrio Filho Nutri</title>
-<meta name="description" content="233 receitas saudáveis com calorias e macronutrientes. Filtre por proteína, carboidrato, lactose, doce ou salgado e modo de preparo.">
+<meta name="description" content="233 receitas saudáveis com calorias e macronutrientes. Escolha doce ou salgado, seu objetivo e como vai preparar.">
 <meta name="theme-color" content="#072E44">
 <meta property="og:title" content="Filtro de Receitas Saudáveis · Demétrio Filho Nutri">
 <meta property="og:description" content="233 receitas com calorias e macros. Encontre a que cabe no seu plano.">
@@ -15,120 +15,146 @@
 @font-face{font-family:"Downey";src:url("fonts/Downey-Bold.otf") format("opentype");font-weight:700;font-display:swap}
 @font-face{font-family:"Milory TR";src:url("fonts/milorytr-regular.otf") format("opentype");font-weight:400;font-display:swap}
 @font-face{font-family:"Milory TR";src:url("fonts/milorytr-bold.otf") format("opentype");font-weight:700;font-display:swap}
-:root{--orange:#E84321;--orange-ink:#B8331A;--navy:#072E44;--cream:#F0EEDF;--ink:#20221F;--muted:#4F524C;--line:#E4E0CC;--card:#FFFFFF;--soft:#F6F4EA;--display:"Downey","Arial Narrow",Impact,sans-serif;--body:"Milory TR",Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+:root{--orange:#E84321;--orange-soft:#FBE0D8;--orange-ink:#B8331A;--navy:#072E44;--navy-soft:#E3EEF4;--cream:#F0EEDF;--ink:#20221F;--muted:#4F524C;--line:#E4E0CC;--soft:#F6F4EA;--display:"Downey","Arial Narrow",Impact,sans-serif;--body:"Milory TR",Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
-html{scroll-padding-top:150px}
 body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+[hidden]{display:none!important}
+input[type=search]::-webkit-search-cancel-button{display:none}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 a{color:var(--orange-ink)}
 
-/* Cabeçalho */
-.hero{position:relative;overflow:hidden;background:var(--navy);color:var(--cream);padding:calc(28px + env(safe-area-inset-top)) 20px 30px}
-.hero::after{content:"";position:absolute;right:-160px;top:-40px;width:360px;height:140%;background:var(--orange);transform:skewX(-28deg)}
-.hero-inner{position:relative;z-index:1;max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px}
-.hero img{display:block;height:auto;width:min(220px,58vw);margin-bottom:18px}
-.hero h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,58px);line-height:.95;letter-spacing:.01em;text-transform:uppercase}
-.hero p{margin:8px 0 0;max-width:46ch;color:rgba(240,238,223,.85)}
-.insta{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid rgba(240,238,223,.6);border-radius:999px;color:var(--cream);text-decoration:none;font-weight:700;font-size:14px;background:rgba(7,46,68,.4)}
+/* Cabeçalho compacto */
+.hero{position:relative;overflow:hidden;background:var(--navy);color:var(--cream);padding:calc(16px + env(safe-area-inset-top)) 20px 18px}
+.hero::after{content:"";position:absolute;right:-120px;top:0;width:240px;height:100%;background:var(--orange);transform:skewX(-28deg)}
+.hero-inner{position:relative;z-index:1;max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:16px;min-width:0}
+.brand img{display:block;width:150px;height:auto}
+.brand h1{margin:0;padding-left:16px;border-left:1px solid rgba(240,238,223,.3);font-family:var(--display);font-weight:700;font-size:26px;line-height:1;letter-spacing:.03em;text-transform:uppercase}
+.insta{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;color:var(--cream);text-decoration:none;font-weight:700;font-size:14px;background:rgba(7,46,68,.55);border:1.5px solid rgba(240,238,223,.5)}
 .insta:hover{background:var(--cream);color:var(--navy)}
 
-/* Barra de busca fixa */
-.toolbar{position:sticky;top:0;z-index:20;background:rgba(240,238,223,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.toolbar-inner{max-width:1240px;margin:0 auto;padding:12px 20px;display:flex;flex-direction:column;gap:10px}
-.search-row{display:flex;gap:8px;align-items:center}
-.search{position:relative;flex:1;min-width:0}
+.page{max-width:1180px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:28px;align-items:start}
+
+/* Filtros: a parte principal da página */
+.finder{background:#fff;border-radius:24px;border:1px solid var(--line);padding:22px 22px 18px;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 12px 30px rgba(7,46,68,.06)}
+.finder-head{margin-bottom:6px}
+.finder-head h2{margin:0;font-family:var(--display);font-size:30px;line-height:1;letter-spacing:.02em;color:var(--navy);text-transform:uppercase}
+.finder-head p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.step{padding:18px 0;border-top:1px solid var(--line)}
+.step:first-of-type{border-top:0}
+.step-title{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:16px;font-weight:700;color:var(--navy)}
+.step-title .n{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:var(--navy);color:var(--cream);font-size:13px;display:grid;place-items:center}
+.step-title{flex-wrap:wrap;row-gap:0}
+.step-title small{flex-basis:100%;margin-left:36px;font-weight:400;color:var(--muted);font-size:13px}
+.search{position:relative}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.search input{width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:0 40px 0 44px;font-size:16px}
-.search input:focus{border-color:var(--navy);outline:none}
-.search .clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;border-radius:10px;background:transparent;color:var(--muted);display:none;place-items:center}
+.search input{width:100%;min-height:50px;border:1.5px solid var(--line);border-radius:14px;background:var(--soft);padding:0 44px 0 44px;font-size:16px}
+.search input:focus{outline:none;border-color:var(--navy);background:#fff}
+.search .clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:10px;background:transparent;color:var(--muted);display:none;place-items:center}
 .search.has-value .clear{display:grid}
-.btn{min-height:48px;padding:0 16px;border-radius:14px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;text-decoration:none}
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.opt{min-height:64px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:700;font-size:15px;color:var(--navy);text-align:center;line-height:1.15;transition:border-color .15s,background .15s}
+.opt svg{color:var(--orange)}
+.opt small{font-weight:400;font-size:12px;color:var(--muted)}
+.opt:hover{border-color:#C9C6B4}
+.opt[aria-pressed=true]{border-color:var(--navy);background:var(--navy);color:var(--cream)}
+.opt[aria-pressed=true] svg{color:var(--orange)}
+.opt[aria-pressed=true] small{color:rgba(240,238,223,.8)}
+.goals{display:flex;flex-direction:column;gap:8px}
+.goal{min-height:56px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:8px 14px;display:flex;align-items:center;gap:12px;text-align:left;transition:border-color .15s,background .15s}
+.goal .box{width:24px;height:24px;flex-shrink:0;border-radius:7px;border:2px solid #C9C6B4;display:grid;place-items:center;color:transparent;background:#fff}
+.goal b{display:block;font-size:15px;color:var(--navy)}
+.goal span.d{display:block;font-size:13px;color:var(--muted)}
+.goal[aria-pressed=true]{border-color:var(--orange);background:#FFF6F3}
+.goal[aria-pressed=true] .box{background:var(--orange);border-color:var(--orange);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:#fff;color:var(--navy);font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+.hint{margin:8px 0 0;font-size:13px;color:var(--muted)}
+.switch{width:100%;min-height:56px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left}
+.switch b{display:block;font-size:15px;color:var(--navy)}
+.switch span.d{display:block;font-size:13px;color:var(--muted)}
+.switch .track{width:48px;height:28px;flex-shrink:0;border-radius:999px;background:#D6D2BE;position:relative;transition:background .15s}
+.switch .track::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .15s}
+.switch[aria-checked=true]{border-color:var(--navy)}
+.switch[aria-checked=true] .track{background:var(--navy)}
+.switch[aria-checked=true] .track::after{transform:translateX(20px)}
+details.exact{border-top:1px solid var(--line);padding-top:14px}
+details.exact summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:15px;color:var(--navy)}
+details.exact summary::-webkit-details-marker{display:none}
+details.exact summary svg{transition:transform .15s}
+details.exact[open] summary svg{transform:rotate(180deg)}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:8px 0 4px}
+.num{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.num input{min-height:46px;border:1.5px solid var(--line);border-radius:12px;padding:0 12px;font-size:16px;background:var(--soft);width:100%}
+.num input:focus{outline:none;border-color:var(--navy);background:#fff}
+.finder-foot{display:flex;gap:8px;margin-top:16px}
+.btn{min-height:50px;padding:0 18px;border-radius:14px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;text-decoration:none}
 .btn:hover{border-color:var(--navy)}
 .btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
 .btn.primary:hover{background:#cf3a1b}
 .btn.dark{background:var(--navy);border-color:var(--navy);color:var(--cream)}
-.btn .count{min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--orange);color:#fff;font-size:12px;display:inline-grid;place-items:center}
-.btn .count[hidden]{display:none}
-select.btn{appearance:none;padding-right:34px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23072E44' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center}
-.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 2px}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
-.chip[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:var(--cream)}
-.filters-btn{display:none}
+.finder-foot .see{flex:1;display:none}
 
-/* Corpo */
-.layout{max-width:1240px;margin:0 auto;padding:20px 20px 60px;display:flex;gap:28px;align-items:flex-start}
-.panel{flex:0 0 290px;position:sticky;top:132px;max-height:calc(100vh - 150px);overflow:auto;background:#fff;border-radius:20px;padding:20px;border:1px solid var(--line)}
-.panel h2{margin:0 0 4px;font-family:var(--display);font-size:24px;letter-spacing:.03em;color:var(--navy);text-transform:uppercase}
-.fgroup{margin:0;padding:16px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
-.panel h2+.fgroup{border-top:0;padding-top:8px}
-.fgroup .legend{margin:0;padding:0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);}
-.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;background:var(--soft)}
-.seg button{min-height:40px;border:0;border-radius:9px;background:transparent;font-size:14px;font-weight:700;color:var(--muted)}
-.seg button[aria-pressed=true]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(7,46,68,.15)}
-.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.num{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
-.num input{min-height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font-size:16px;background:var(--soft);width:100%}
-.num input:focus{outline:none;border-color:var(--navy);background:#fff}
-.toggles{display:flex;flex-wrap:wrap;gap:6px}
-.toggles .chip{min-height:38px;font-size:13px}
-.panel-foot{display:none}
-.results{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px}
+/* Resultados: lista compacta */
+.results{min-width:0;display:flex;flex-direction:column;gap:12px}
 .results-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
 .results-head h2{margin:0;font-size:16px;font-weight:400;color:var(--muted)}
-.results-head h2 strong{font-family:var(--display);font-size:26px;color:var(--navy);letter-spacing:.02em}
-.results-tools{display:flex;gap:8px;flex-wrap:wrap}
-.active{display:flex;flex-wrap:wrap;gap:6px}
-.active button{min-height:34px;padding:0 10px;border-radius:999px;border:0;background:#FBE0D8;color:#8E2812;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
-.active .reset{background:transparent;text-decoration:underline;color:var(--navy)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.card{position:relative;background:var(--card);border-radius:18px;border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
-.card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(7,46,68,.1)}
-.card-open{flex:1;border:0;background:transparent;text-align:left;padding:16px 16px 14px;display:flex;flex-direction:column;gap:12px;border-radius:18px}
-.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding-right:34px}
-.card h3{margin:0;font-size:17px;line-height:1.25;color:var(--ink)}
-.kcal{display:flex;align-items:baseline;gap:4px}
-.kcal b{font-family:var(--display);font-size:34px;line-height:1;color:var(--navy)}
-.kcal span{font-size:13px;color:var(--muted);font-weight:700}
-.macros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.macro{background:var(--soft);border-radius:10px;padding:7px 8px;display:flex;flex-direction:column;gap:3px}
-.macro span{font-size:11px;color:var(--muted)}
-.macro b{font-size:15px;color:var(--ink)}
-.macro i{display:block;height:4px;border-radius:2px;background:var(--line)}
-.macro i em{display:block;height:100%;border-radius:2px;background:var(--orange)}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--navy)}
-.tag.nolac{background:#E3EEF4}
-.fav{position:absolute;top:10px;right:10px;width:40px;height:40px;border:0;border-radius:12px;background:transparent;color:#8A8775;display:grid;place-items:center}
-.fav[aria-pressed=true]{color:var(--orange)}
-.fav[aria-pressed=true] svg{fill:var(--orange)}
-.more{align-self:center;margin-top:6px}
-.empty{background:#fff;border-radius:20px;padding:36px 20px;text-align:center;border:1px dashed #C9C6B4}
+.results-head h2 strong{font-family:var(--display);font-size:28px;color:var(--navy);letter-spacing:.02em}
+.results-tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.small-btn{min-height:40px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.small-btn[aria-pressed=true]{background:var(--orange-soft);border-color:var(--orange-soft);color:#8E2812}
+.small-btn[aria-pressed=true] svg{fill:currentColor}
+select.small-btn{appearance:none;padding-right:30px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23072E44' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 10px center}
+.summary{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.summary button{min-height:34px;padding:0 10px;border-radius:999px;border:0;background:var(--navy-soft);color:var(--navy);font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.summary .reset{background:transparent;text-decoration:underline}
+.list{list-style:none;margin:0;padding:0;background:#fff;border-radius:20px;border:1px solid var(--line);overflow:hidden}
+.list li+li{border-top:1px solid var(--line)}
+.row{width:100%;min-height:64px;border:0;background:transparent;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;text-align:left}
+.row:hover{background:var(--soft)}
+.row .main{flex:1;min-width:0}
+.row .name{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15px;line-height:1.3;color:var(--ink)}
+.row .name svg{flex-shrink:0;color:var(--orange);fill:var(--orange)}
+.row .meta{display:block;font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .meta b{color:var(--ink);font-weight:700}
+.row .kcal{flex-shrink:0;text-align:right;line-height:1}
+.row .kcal b{display:block;font-family:var(--display);font-size:24px;color:var(--navy)}
+.row .kcal span{font-size:11px;color:var(--muted);font-weight:700}
+.row .chev{flex-shrink:0;color:#A9A692}
+.more{align-self:center}
+.empty{background:#fff;border-radius:20px;padding:32px 20px;text-align:center;border:1px dashed #C9C6B4}
 .empty h3{margin:0 0 6px;color:var(--navy)}
 .empty p{margin:0 0 16px;color:var(--muted)}
-.foot{border-top:1px solid var(--line);padding:24px 20px calc(30px + env(safe-area-inset-bottom));text-align:center;font-size:13px;color:var(--muted)}
+.foot{border-top:1px solid var(--line);padding:22px 20px calc(90px + env(safe-area-inset-bottom));text-align:center;font-size:13px;color:var(--muted)}
 .foot p{margin:4px 0}
 
-/* Painéis (detalhe da receita e filtros no celular) */
+/* Barra "Ver receitas" no celular */
+.jump{position:fixed;left:16px;right:16px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:30;min-height:56px;border-radius:16px;border:0;background:var(--orange);color:#fff;font-weight:700;font-size:17px;display:none;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 28px rgba(232,67,33,.35)}
+
+/* Detalhe da receita */
 dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none;color:var(--ink)}
 dialog::backdrop{background:rgba(32,34,31,.5)}
-.sheet{position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(720px,100%);max-height:92dvh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:26px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -12px 32px rgba(7,46,68,.25)}
+.sheet{position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(680px,100%);max-height:92dvh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:26px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -12px 32px rgba(7,46,68,.25)}
 .sheet[open]{animation:up .26s cubic-bezier(.2,.8,.2,1)}
 @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .sheet::before{content:"";position:absolute;top:9px;left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:#C9C6B4}
-.sheet-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
-.sheet-head h2{margin:0;font-size:24px;line-height:1.2;color:var(--navy)}
+.sheet-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.sheet-head h2{margin:0;font-size:23px;line-height:1.2;color:var(--navy)}
 .x{width:44px;height:44px;flex-shrink:0;border:0;border-radius:14px;background:var(--cream);color:var(--navy);display:grid;place-items:center}
-.detail-kcal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0 14px}
-.detail-kcal div{background:var(--soft);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:2px}
-.detail-kcal div:first-child{background:var(--navy);color:var(--cream)}
-.detail-kcal span{font-size:12px;opacity:.8}
-.detail-kcal b{font-size:22px;line-height:1.15}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--soft);color:var(--navy)}
+.tag.nolac{background:var(--navy-soft)}
+.macros{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.macros div{background:var(--soft);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:2px}
+.macros div:first-child{background:var(--navy);color:var(--cream)}
+.macros span{font-size:12px;opacity:.85}
+.macros b{font-size:21px;line-height:1.15}
 .detail h3{margin:18px 0 8px;font-family:var(--display);font-size:20px;letter-spacing:.03em;text-transform:uppercase;color:var(--navy)}
-.ingredients{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.ingredients{list-style:none;margin:0;padding:0}
 .ingredients label{display:flex;gap:12px;align-items:flex-start;min-height:44px;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
 .ingredients input{width:22px;height:22px;margin:0;flex-shrink:0;accent-color:var(--navy)}
 .ingredients input:checked+span{text-decoration:line-through;color:var(--muted)}
@@ -137,39 +163,36 @@ dialog::backdrop{background:rgba(32,34,31,.5)}
 .steps li::before{content:counter(s);flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;font-size:14px;display:grid;place-items:center;margin-top:1px}
 .detail-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;position:sticky;bottom:calc(-22px - env(safe-area-inset-bottom));background:#fff;padding:12px 0 4px}
 .detail-actions .btn{flex:1 1 140px}
+.detail-actions [aria-pressed=true] svg{fill:var(--orange);color:var(--orange)}
 .note{font-size:12px;color:var(--muted);margin-top:14px}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--navy);color:var(--cream);padding:12px 18px;border-radius:14px;font-weight:700;font-size:14px;z-index:100;transition:.2s;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--navy);color:var(--cream);padding:12px 18px;border-radius:14px;font-weight:700;font-size:14px;z-index:100;transition:.2s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 @media (max-width:900px){
- .panel{display:none}
- .filters-btn{display:inline-flex}
- .layout{padding:14px 16px 40px}
- .toolbar-inner{padding:10px 16px}
- .sheet.filters-sheet .panel{display:block;position:static;max-height:none;overflow:visible;border:0;padding:0}
- .sheet.filters-sheet .panel h2{display:none}
- .panel-foot{display:flex;gap:8px;position:sticky;bottom:calc(-22px - env(safe-area-inset-bottom));background:#fff;padding:12px 0 4px}
- .panel-foot .btn{flex:1}
+ .page{grid-template-columns:1fr;gap:20px;padding:16px 16px 40px}
+ .finder{position:static;max-height:none;overflow:visible;padding:20px 16px 16px}
+ .finder-foot .see{display:inline-flex}
+ .jump.show{display:flex}
 }
 @media (max-width:560px){
- .grid{grid-template-columns:1fr}
- .hero{padding:calc(18px + env(safe-area-inset-top)) 16px 20px}
- .hero::after{right:-250px;width:320px}
- .hero img{width:140px;margin-bottom:12px}
- .hero h1{font-size:36px}
- .hero p{font-size:14px;max-width:30ch}
- .hero-inner{flex-direction:column;align-items:flex-start;gap:12px}
- .insta{min-height:40px;font-size:13px;padding:0 14px}
- .results-tools{width:100%}
- .results-tools .btn span.lbl{display:none}
- .sort-wrap{flex:1}
- .sort-wrap select{width:100%}
- .detail-kcal{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero{padding:calc(14px + env(safe-area-inset-top)) 16px 14px}
+ .hero::after{right:-170px}
+ .brand{gap:12px}
+ .brand img{width:104px}
+ .brand h1{font-size:19px;padding-left:12px}
+ .insta{width:44px;padding:0}
+ .insta span{display:none}
+ .finder-head h2{font-size:26px}
+ .opt{min-height:60px;font-size:14px}
+ .macros{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .results-tools{width:100%;flex-wrap:nowrap}
+ .results-tools select{flex:1;min-width:0}
+ .results-tools .lbl{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{
  body{background:#fff}
- .hero,.toolbar,.layout,.foot,.detail-actions,.x,dialog::backdrop{display:none!important}
+ .hero,.page,.foot,.jump,.detail-actions,.x{display:none!important}
  dialog.sheet{position:static;display:block;box-shadow:none;max-height:none;width:100%;padding:0}
  .sheet::before{display:none}
 }
@@ -178,52 +201,82 @@ dialog::backdrop{background:rgba(32,34,31,.5)}
 <body>
 <header class="hero">
  <div class="hero-inner">
-  <div>
-   <img src="logo.png" alt="Demétrio Filho Nutricionista" width="2567" height="442">
-   <h1>Filtro de<br>receitas</h1>
-   <p><span id="totalCount">233</span> receitas saudáveis com calorias e macros. Escolha a que cabe no seu plano.</p>
-  </div>
-  <a class="insta" href="https://instagram.com/demetriofilhonutri" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@demetriofilhonutri</a>
+  <div class="brand"><img src="logo.png" alt="Demétrio Filho Nutricionista" width="2567" height="442"><h1>Filtro de receitas</h1></div>
+  <a class="insta" href="https://instagram.com/demetriofilhonutri" target="_blank" rel="noopener" aria-label="Instagram @demetriofilhonutri"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span>@demetriofilhonutri</span></a>
  </div>
 </header>
 
-<div class="toolbar">
- <div class="toolbar-inner">
-  <div class="search-row">
+<main class="page">
+ <section class="finder" aria-labelledby="finderTitle">
+  <div class="finder-head">
+   <h2 id="finderTitle">Encontre sua receita</h2>
+   <p>Marque o que quiser. A lista de receitas se ajusta na hora.</p>
+  </div>
+
+  <div class="step">
+   <p class="step-title"><span class="n">1</span>O que você quer comer?</p>
+   <div class="options" role="group" aria-label="Tipo de receita" data-key="type">
+    <button type="button" class="opt" data-v="doce"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11h16l-1.5 8.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5zM7 11a5 5 0 0 1 10 0M12 3v3"/></svg>Doce</button>
+    <button type="button" class="opt" data-v="salgado"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13h18a9 9 0 0 1-18 0zM8 9c0-2 2-2 2-4M13 9c0-2 2-2 2-4"/></svg>Salgado</button>
+    <button type="button" class="opt" data-v="all"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>Tanto faz</button>
+   </div>
+  </div>
+
+  <div class="step">
+   <p class="step-title"><span class="n">2</span>Qual o seu objetivo?<small>pode marcar mais de um</small></p>
+   <div class="goals" id="goals"></div>
+  </div>
+
+  <div class="step">
+   <p class="step-title"><span class="n">3</span>Como vai preparar?<small>opcional</small></p>
+   <div class="chips" id="methods" role="group" aria-label="Modo de preparo"></div>
+  </div>
+
+  <div class="step">
+   <p class="step-title"><span class="n">4</span>Alguma restrição?</p>
+   <button type="button" class="switch" role="switch" aria-checked="false" id="lactoseSwitch"><span><b>Sem lactose</b><span class="d">Mostrar só receitas sem lactose</span></span><span class="track" aria-hidden="true"></span></button>
+  </div>
+
+  <div class="step">
+   <p class="step-title"><span class="n">5</span>Tem um ingrediente em mente?<small>opcional</small></p>
    <div class="search" id="searchBox">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <label for="searchName" class="sr-only">Buscar receita ou ingrediente</label>
-    <input type="search" id="searchName" placeholder="Receita ou ingrediente" autocomplete="off" enterkeyhint="search">
+    <label for="searchName" class="sr-only">Buscar por nome ou ingrediente</label>
+    <input type="search" id="searchName" placeholder="Ex.: frango, aveia, banana" autocomplete="off" enterkeyhint="search">
     <button type="button" class="clear" id="clearSearch" aria-label="Limpar busca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
    </div>
-   <button type="button" class="btn filters-btn" id="openFilters" aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros<span class="count" id="filterCount" hidden></span></button>
   </div>
-  <div class="chips" role="group" aria-label="Atalhos" id="quick"></div>
- </div>
-</div>
 
-<main class="layout">
- <aside class="panel" id="panel" aria-label="Filtros">
-  <h2>Filtros</h2>
-  <div class="fgroup" role="group" aria-label="Tipo"><p class="legend" aria-hidden="true">Tipo</p><div class="seg" data-key="type"><button type="button" data-v="all">Todas</button><button type="button" data-v="doce">Doces</button><button type="button" data-v="salgado">Salgadas</button></div></div>
-  <div class="fgroup" role="group" aria-label="Lactose"><p class="legend" aria-hidden="true">Lactose</p><div class="seg" data-key="lactose"><button type="button" data-v="all">Todas</button><button type="button" data-v="nao">Sem</button><button type="button" data-v="sim">Com</button></div></div>
-  <div class="fgroup" role="group" aria-label="Calorias (kcal)"><p class="legend" aria-hidden="true">Calorias (kcal)</p><div class="pair"><label class="num">Mínimo<input type="number" inputmode="numeric" min="0" id="caloriesMin" placeholder="0"></label><label class="num">Máximo<input type="number" inputmode="numeric" min="0" id="caloriesMax" placeholder="sem limite"></label></div></div>
-  <div class="fgroup" role="group" aria-label="Macronutrientes (g)"><p class="legend" aria-hidden="true">Macronutrientes (g)</p><div class="pair"><label class="num">Proteína mín.<input type="number" inputmode="numeric" min="0" id="proteinMin" placeholder="0"></label><label class="num">Carboidrato máx.<input type="number" inputmode="numeric" min="0" id="carbsMax" placeholder="sem limite"></label><label class="num">Gordura máx.<input type="number" inputmode="numeric" min="0" id="fatMax" placeholder="sem limite"></label></div></div>
-  <div class="fgroup" role="group" aria-label="Modo de preparo"><p class="legend" aria-hidden="true">Modo de preparo</p><div class="toggles" id="methods"></div></div>
-  <div class="panel-foot"><button type="button" class="btn" id="resetPanel">Limpar</button><button type="button" class="btn primary" id="applyPanel">Ver receitas</button></div>
- </aside>
+  <details class="exact" id="exact">
+   <summary>Ajustar valores exatos<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+   <div class="pair">
+    <label class="num">Calorias mín.<input type="number" inputmode="numeric" min="0" id="caloriesMin" placeholder="0"></label>
+    <label class="num">Calorias máx.<input type="number" inputmode="numeric" min="0" id="caloriesMax" placeholder="sem limite"></label>
+    <label class="num">Proteína mín. (g)<input type="number" inputmode="numeric" min="0" id="proteinMin" placeholder="0"></label>
+    <label class="num">Carboidrato máx. (g)<input type="number" inputmode="numeric" min="0" id="carbsMax" placeholder="sem limite"></label>
+    <label class="num">Gordura máx. (g)<input type="number" inputmode="numeric" min="0" id="fatMax" placeholder="sem limite"></label>
+   </div>
+  </details>
 
- <section class="results" aria-labelledby="resultsTitle">
+  <div class="finder-foot">
+   <button type="button" class="btn" data-reset>Limpar</button>
+   <button type="button" class="btn primary see" data-jump>Ver receitas</button>
+  </div>
+ </section>
+
+ <section class="results" id="results" aria-labelledby="resultsTitle">
   <div class="results-head">
-   <h2 id="resultsTitle" aria-live="polite"><strong id="resultsCount">233</strong> receitas</h2>
+   <h2 id="resultsTitle" aria-live="polite"><strong id="resultsCount">233</strong><span id="resultsWord"> receitas</span></h2>
    <div class="results-tools">
-    <label class="sort-wrap"><span class="sr-only">Ordenar por</span><select class="btn" id="sort"><option value="kcal-asc">Menos calorias</option><option value="prot-desc">Mais proteína</option><option value="carb-asc">Menos carboidrato</option><option value="name">A–Z</option></select></label>
-    <button type="button" class="btn" id="pdfBtn" title="Baixar as receitas filtradas em PDF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="lbl">PDF</span></button>
+    <button type="button" class="small-btn" id="favOnly" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Favoritas</button>
+    <label class="sr-only" for="sort">Ordenar por</label>
+    <select class="small-btn" id="sort"><option value="kcal-asc">Menos calorias</option><option value="prot-desc">Mais proteína</option><option value="carb-asc">Menos carboidrato</option><option value="name">A–Z</option></select>
+    <button type="button" class="small-btn" id="pdfBtn" title="Baixar as receitas da lista em PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="lbl">PDF</span></button>
    </div>
   </div>
-  <div class="active" id="active"></div>
-  <div class="grid" id="grid"></div>
-  <button type="button" class="btn dark more" id="more" hidden>Mostrar mais receitas</button>
+  <div class="summary" id="summary"></div>
+  <div id="listWrap"></div>
+  <button type="button" class="btn dark more" id="more" hidden>Mostrar mais</button>
  </section>
 </main>
 
@@ -232,8 +285,8 @@ dialog::backdrop{background:rgba(32,34,31,.5)}
  <p>Demétrio Filho · Nutricionista · <a href="https://instagram.com/demetriofilhonutri" target="_blank" rel="noopener">@demetriofilhonutri</a></p>
 </footer>
 
+<button type="button" class="jump" id="jump" data-jump>Ver <span id="jumpCount">233</span> receitas<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
 <dialog class="sheet" id="detail" aria-labelledby="detailTitle"><div id="detailBody"></div></dialog>
-<dialog class="sheet filters-sheet" id="filtersSheet" aria-label="Filtros"><div class="sheet-head"><h2>Filtros</h2><button type="button" class="x" data-close aria-label="Fechar filtros"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="sheetSlot"></div></dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="receitas.js"></script>
@@ -243,110 +296,114 @@ dialog::backdrop{background:rgba(32,34,31,.5)}
 const recipes=[...defaultRecipes];
 let filteredRecipes=[];
 const methodLabels={fogao:'Fogão',forno:'Forno',microondas:'Micro-ondas',airfryer:'Air fryer',semfogo:'Sem fogo'};
-const PAGE=24;
+const PAGE=30;
 const $=id=>document.getElementById(id);
 const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const initial=()=>({q:'',type:'all',lactose:'all',kmin:'',kmax:'',pmin:'',cmax:'',gmax:'',methods:Object.keys(methodLabels),fav:false,sort:'kcal-asc'});
+const fmt=n=>String(n).replace('.',',');
+const initial=()=>({q:'',type:'all',nolac:false,kmin:'',kmax:'',pmin:'',cmax:'',gmax:'',methods:[],fav:false,sort:'kcal-asc'});
 let state=initial(),shown=PAGE;
 let favs=new Set();try{favs=new Set(JSON.parse(localStorage.getItem('df-receitas-favoritas')||'[]'))}catch{}
 const saveFavs=()=>{try{localStorage.setItem('df-receitas-favoritas',JSON.stringify([...favs]))}catch{}};
 
-// Atalhos: cada um liga um conjunto de filtros
-const quick=[
- {id:'fav',label:'Favoritas',on:s=>s.fav,set:(s,v)=>{s.fav=v}},
- {id:'prot',label:'Proteicas · 20 g+',on:s=>s.pmin==='20',set:(s,v)=>{s.pmin=v?'20':''}},
- {id:'light',label:'Até 250 kcal',on:s=>s.kmax==='250'&&!s.kmin,set:(s,v)=>{s.kmax=v?'250':'';if(v)s.kmin=''}},
- {id:'nolac',label:'Sem lactose',on:s=>s.lactose==='nao',set:(s,v)=>{s.lactose=v?'nao':'all'}},
- {id:'doce',label:'Doces',on:s=>s.type==='doce',set:(s,v)=>{s.type=v?'doce':'all'}},
- {id:'salgado',label:'Salgadas',on:s=>s.type==='salgado',set:(s,v)=>{s.type=v?'salgado':'all'}},
- {id:'air',label:'Air fryer',on:s=>s.methods.length===1&&s.methods[0]==='airfryer',set:(s,v)=>{s.methods=v?['airfryer']:Object.keys(methodLabels)}},
- {id:'nofire',label:'Sem fogo',on:s=>s.methods.length===1&&s.methods[0]==='semfogo',set:(s,v)=>{s.methods=v?['semfogo']:Object.keys(methodLabels)}}
+// Objetivos: atalhos para os valores exatos
+const goals=[
+ {id:'light',key:'kmax',val:'250',title:'Refeição leve',desc:'Até 250 kcal'},
+ {id:'prot',key:'pmin',val:'20',title:'Mais proteína',desc:'20 g de proteína ou mais'},
+ {id:'lowcarb',key:'cmax',val:'15',title:'Pouco carboidrato',desc:'Até 15 g de carboidrato'}
 ];
+const check='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
+const heart='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
 
-function num(v,fallback){const n=parseFloat(v);return Number.isFinite(n)?n:fallback}
+function num(v,f){const n=parseFloat(v);return Number.isFinite(n)?n:f}
 function applyFilters(){
- const q=norm(state.q).trim(),terms=q?q.split(/\s+/):[];
+ const terms=norm(state.q).trim().split(/\s+/).filter(Boolean);
  const kmin=num(state.kmin,0),kmax=num(state.kmax,Infinity),pmin=num(state.pmin,0),cmax=num(state.cmax,Infinity),gmax=num(state.gmax,Infinity);
  filteredRecipes=recipes.filter(r=>{
   const hay=norm(r.name+' '+r.ingredients);
   return terms.every(t=>hay.includes(t))&&r.calories>=kmin&&r.calories<=kmax&&r.protein>=pmin&&r.carbs<=cmax&&r.fat<=gmax
-   &&(state.type==='all'||r.type===state.type)&&(state.lactose==='all'||r.lactose===state.lactose)
-   &&state.methods.includes(r.method)&&(!state.fav||favs.has(r.id));
+   &&(state.type==='all'||r.type===state.type)&&(!state.nolac||r.lactose==='nao')
+   &&(!state.methods.length||state.methods.includes(r.method))&&(!state.fav||favs.has(r.id));
  });
- const by={'kcal-asc':(a,b)=>a.calories-b.calories,'prot-desc':(a,b)=>b.protein-a.protein,'carb-asc':(a,b)=>a.carbs-b.carbs,'name':(a,b)=>a.name.localeCompare(b.name,'pt-BR')}[state.sort];
+ const by={'kcal-asc':(a,b)=>a.calories-b.calories,'prot-desc':(a,b)=>b.protein-a.protein,'carb-asc':(a,b)=>a.carbs-b.carbs,'name':(a,b)=>a.name.localeCompare(b.name,'pt-BR')}[state.sort]||((a,b)=>a.calories-b.calories);
  filteredRecipes.sort((a,b)=>by(a,b)||a.name.localeCompare(b.name,'pt-BR'));
  render();
 }
 
-const bar=(v,max)=>`<i aria-hidden="true"><em style="width:${Math.min(100,Math.round(v/max*100))}%"></em></i>`;
-const heart='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
-function tags(r){return `<span class="tag">${r.type==='doce'?'Doce':'Salgado'}</span><span class="tag">${methodLabels[r.method]}</span>${r.lactose==='nao'?'<span class="tag nolac">Sem lactose</span>':''}`}
-function card(r){
- return `<article class="card"><button type="button" class="card-open" data-open="${r.id}" aria-label="Ver receita ${esc(r.name)}, ${r.calories} kcal">
-  <div class="card-top"><h3>${esc(r.name)}</h3></div>
-  <div class="kcal"><b>${r.calories}</b><span>kcal</span></div>
-  <div class="macros"><div class="macro"><span>Proteína</span><b>${r.protein} g</b>${bar(r.protein,40)}</div><div class="macro"><span>Carbo</span><b>${r.carbs} g</b>${bar(r.carbs,60)}</div><div class="macro"><span>Gordura</span><b>${r.fat} g</b>${bar(r.fat,25)}</div></div>
-  <div class="tags">${tags(r)}</div></button>
-  <button type="button" class="fav" data-fav="${r.id}" aria-pressed="${favs.has(r.id)}" aria-label="${favs.has(r.id)?'Remover dos favoritos':'Salvar nos favoritos'}">${heart}</button></article>`;
+function row(r){
+ const tags=[r.type==='doce'?'Doce':'Salgado',methodLabels[r.method]];if(r.lactose==='nao')tags.push('sem lactose');
+ return `<li><button type="button" class="row" data-open="${r.id}">
+  <span class="main"><span class="name">${favs.has(r.id)?heart.replace('width="20" height="20"','width="14" height="14"'):''}${esc(r.name)}</span>
+  <span class="meta">P <b>${fmt(r.protein)} g</b> · C <b>${fmt(r.carbs)} g</b> · G <b>${fmt(r.fat)} g</b> · ${tags.join(' · ')}</span></span>
+  <span class="kcal"><b>${r.calories}</b><span>kcal</span></span>
+  <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></li>`;
 }
-function activeLabels(){
- const a=[],d=initial();
- if(state.q.trim())a.push(['q',`“${state.q.trim()}”`]);
+function summaryItems(){
+ const a=[];
  if(state.type!=='all')a.push(['type',state.type==='doce'?'Doces':'Salgadas']);
- if(state.lactose!=='all')a.push(['lactose',state.lactose==='nao'?'Sem lactose':'Com lactose']);
+ goals.forEach(g=>{if(state[g.key]===g.val)a.push([g.key,g.title])});
  if(state.kmin)a.push(['kmin',`≥ ${state.kmin} kcal`]);
- if(state.kmax)a.push(['kmax',`≤ ${state.kmax} kcal`]);
- if(state.pmin)a.push(['pmin',`Proteína ≥ ${state.pmin} g`]);
- if(state.cmax)a.push(['cmax',`Carbo ≤ ${state.cmax} g`]);
+ if(state.kmax&&state.kmax!=='250')a.push(['kmax',`≤ ${state.kmax} kcal`]);
+ if(state.pmin&&state.pmin!=='20')a.push(['pmin',`Proteína ≥ ${state.pmin} g`]);
+ if(state.cmax&&state.cmax!=='15')a.push(['cmax',`Carbo ≤ ${state.cmax} g`]);
  if(state.gmax)a.push(['gmax',`Gordura ≤ ${state.gmax} g`]);
- if(state.methods.length!==d.methods.length)a.push(['methods',state.methods.map(m=>methodLabels[m]).join(', ')||'Nenhum preparo']);
+ if(state.methods.length)a.push(['methods',state.methods.map(m=>methodLabels[m]).join(' ou ')]);
+ if(state.nolac)a.push(['nolac','Sem lactose']);
+ if(state.q.trim())a.push(['q',`“${state.q.trim()}”`]);
  if(state.fav)a.push(['fav','Favoritas']);
  return a;
 }
 function render(){
- $('resultsCount').textContent=filteredRecipes.length;
- $('applyPanel').textContent=filteredRecipes.length===1?'Ver 1 receita':`Ver ${filteredRecipes.length} receitas`;
- $('resultsTitle').lastChild.textContent=filteredRecipes.length===1?' receita':' receitas';
- const grid=$('grid');
- if(!filteredRecipes.length){
-  grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><h3>${state.fav&&!favs.size?'Você ainda não salvou favoritas':'Nenhuma receita com esses filtros'}</h3><p>${state.fav&&!favs.size?'Toque no coração de uma receita para guardá-la aqui.':'Tente afrouxar um filtro ou limpar a busca.'}</p><button type="button" class="btn primary" data-reset>Limpar filtros</button></div>`;
- }else grid.innerHTML=filteredRecipes.slice(0,shown).map(card).join('');
- $('more').hidden=filteredRecipes.length<=shown;
- $('more').textContent=`Mostrar mais receitas (${filteredRecipes.length-Math.min(shown,filteredRecipes.length)})`;
- const act=activeLabels();
- $('active').innerHTML=act.map(([k,l])=>`<button type="button" data-drop="${k}" aria-label="Remover filtro ${esc(l)}">${esc(l)}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`).join('')+(act.length>1?'<button type="button" class="reset" data-reset>Limpar tudo</button>':'');
- const panelCount=act.filter(([k])=>!['q','fav'].includes(k)).length;
- $('filterCount').hidden=!panelCount;$('filterCount').textContent=panelCount;
- syncControls();writeHash();
+ const n=filteredRecipes.length,word=n===1?' receita':' receitas';
+ $('resultsCount').textContent=n;$('resultsWord').textContent=word;$('jumpCount').textContent=n;
+ document.querySelectorAll('[data-jump].see').forEach(b=>b.textContent=`Ver ${n}${word}`);
+ if(!n){
+  const noFav=state.fav&&!favs.size;
+  $('listWrap').innerHTML=`<div class="empty"><h3>${noFav?'Você ainda não tem favoritas':'Nenhuma receita encontrada'}</h3><p>${noFav?'Abra uma receita e toque em Salvar para guardá-la aqui.':'Desmarque alguma opção ou toque em Limpar para começar de novo.'}</p><button type="button" class="btn primary" data-reset>Limpar filtros</button></div>`;
+ }else $('listWrap').innerHTML=`<ul class="list">${filteredRecipes.slice(0,shown).map(row).join('')}</ul>`;
+ $('more').hidden=n<=shown;$('more').textContent=`Mostrar mais (${n-Math.min(shown,n)})`;
+ const s=summaryItems();
+ $('summary').innerHTML=s.map(([k,l])=>`<button type="button" data-drop="${k}" aria-label="Remover ${esc(l)}">${esc(l)}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`).join('')+(s.length>1?'<button type="button" class="reset" data-reset>Limpar tudo</button>':'');
+ syncControls();writeHash();updateJump();
 }
 function syncControls(){
- document.querySelectorAll('.seg').forEach(seg=>seg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(state[seg.dataset.key]===b.dataset.v))));
- [['caloriesMin','kmin'],['caloriesMax','kmax'],['proteinMin','pmin'],['carbsMax','cmax'],['fatMax','gmax']].forEach(([id,k])=>{const el=$(id);if(document.activeElement!==el)el.value=state[k]});
+ document.querySelectorAll('[data-key=type] .opt').forEach(b=>b.setAttribute('aria-pressed',String(state.type===b.dataset.v)));
+ document.querySelectorAll('#goals .goal').forEach(b=>{const g=goals.find(x=>x.id===b.dataset.goal);b.setAttribute('aria-pressed',String(state[g.key]===g.val))});
  document.querySelectorAll('#methods .chip').forEach(b=>b.setAttribute('aria-pressed',String(state.methods.includes(b.dataset.m))));
- document.querySelectorAll('#quick .chip').forEach(b=>b.setAttribute('aria-pressed',String(quick.find(q=>q.id===b.dataset.q).on(state))));
+ $('lactoseSwitch').setAttribute('aria-checked',String(state.nolac));
+ $('favOnly').setAttribute('aria-pressed',String(state.fav));
+ [['caloriesMin','kmin'],['caloriesMax','kmax'],['proteinMin','pmin'],['carbsMax','cmax'],['fatMax','gmax']].forEach(([id,k])=>{const el=$(id);if(document.activeElement!==el)el.value=state[k]});
  $('sort').value=state.sort;
  if(document.activeElement!==$('searchName'))$('searchName').value=state.q;
  $('searchBox').classList.toggle('has-value',!!state.q);
 }
 function update(fn){fn(state);shown=PAGE;applyFilters()}
 
-// Endereço compartilhável: filtros e receita aberta ficam no link
+// Link compartilhável com filtros e receita aberta
+const HK=['q','type','kmin','kmax','pmin','cmax','gmax','sort'];
 function writeHash(){
  const p=new URLSearchParams(),d=initial();
- for(const k of ['q','type','lactose','kmin','kmax','pmin','cmax','gmax','sort'])if(state[k]!==d[k])p.set(k,state[k]);
- if(state.methods.length!==d.methods.length)p.set('preparo',state.methods.join(','));
+ HK.forEach(k=>{if(state[k]!==d[k])p.set(k,state[k])});
+ if(state.methods.length)p.set('preparo',state.methods.join(','));
+ if(state.nolac)p.set('semlactose','1');
  if(state.fav)p.set('fav','1');
  const open=$('detail').open&&$('detail').dataset.id;if(open)p.set('receita',open);
  const h=p.toString();history.replaceState(null,'',h?'#'+h:location.pathname+location.search);
 }
 function readHash(){
  const p=new URLSearchParams(location.hash.slice(1)),s=initial();
- for(const k of ['q','type','lactose','kmin','kmax','pmin','cmax','gmax','sort'])if(p.has(k))s[k]=p.get(k);
+ HK.forEach(k=>{if(p.has(k))s[k]=p.get(k)});
  if(p.has('preparo'))s.methods=p.get('preparo').split(',').filter(m=>methodLabels[m]);
- s.fav=p.get('fav')==='1';
+ s.nolac=p.get('semlactose')==='1';s.fav=p.get('fav')==='1';
  return {s,open:Number(p.get('receita'))||null};
 }
+
+// Botão "Ver receitas" no celular: aparece enquanto a lista está fora da tela
+function updateJump(){
+ const top=$('results').getBoundingClientRect().top;
+ $('jump').classList.toggle('show',top>window.innerHeight-40&&!$('detail').open);
+}
+addEventListener('scroll',updateJump,{passive:true});addEventListener('resize',updateJump);
 
 function lines(t){return String(t||'').split('\n').map(l=>l.trim()).filter(Boolean)}
 function openRecipe(id){
@@ -354,29 +411,28 @@ function openRecipe(id){
  const d=$('detail');d.dataset.id=r.id;
  $('detailBody').innerHTML=`<div class="detail">
   <div class="sheet-head"><h2 id="detailTitle">${esc(r.name)}</h2><button type="button" class="x" data-close aria-label="Fechar receita"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-  <div class="tags">${tags(r)}</div>
-  <div class="detail-kcal" style="margin-top:12px"><div><span>Calorias</span><b>${r.calories}</b></div><div><span>Proteína</span><b>${r.protein} g</b></div><div><span>Carboidrato</span><b>${r.carbs} g</b></div><div><span>Gordura</span><b>${r.fat} g</b></div></div>
-  <h3>Ingredientes</h3><ul class="ingredients">${lines(r.ingredients).map((l,i)=>`<li><label><input type="checkbox"><span>${esc(l)}</span></label></li>`).join('')}</ul>
+  <div class="tags"><span class="tag">${r.type==='doce'?'Doce':'Salgado'}</span><span class="tag">${methodLabels[r.method]}</span>${r.lactose==='nao'?'<span class="tag nolac">Sem lactose</span>':''}</div>
+  <div class="macros"><div><span>Calorias</span><b>${r.calories} kcal</b></div><div><span>Proteína</span><b>${fmt(r.protein)} g</b></div><div><span>Carboidrato</span><b>${fmt(r.carbs)} g</b></div><div><span>Gordura</span><b>${fmt(r.fat)} g</b></div></div>
+  <h3>Ingredientes</h3><ul class="ingredients">${lines(r.ingredients).map(l=>`<li><label><input type="checkbox"><span>${esc(l)}</span></label></li>`).join('')}</ul>
   <h3>Modo de preparo</h3><ol class="steps">${lines(r.instructions).map(l=>`<li>${esc(l.replace(/^\d+[.)]\s*/,''))}</li>`).join('')}</ol>
   <p class="note">Valores estimados por porção.</p>
   <div class="detail-actions"><button type="button" class="btn" data-fav="${r.id}" aria-pressed="${favs.has(r.id)}">${heart}<span>${favs.has(r.id)?'Salva':'Salvar'}</span></button><button type="button" class="btn" data-share="${r.id}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartilhar</button><button type="button" class="btn primary" onclick="window.print()">Imprimir</button></div>
  </div>`;
  if(!d.open)d.showModal();
- d.scrollTop=0;writeHash();
+ d.scrollTop=0;writeHash();updateJump();
 }
-function closeDialog(d){if(d.open){d.close();}}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
 async function share(id){
  const r=recipes.find(x=>x.id===id);const url=location.href;
- const text=`${r.name} · ${r.calories} kcal · P ${r.protein} g · C ${r.carbs} g · G ${r.fat} g\n\nIngredientes:\n${lines(r.ingredients).map(l=>'• '+l).join('\n')}\n\nModo de preparo:\n${lines(r.instructions).join('\n')}\n\n${url}`;
+ const text=`${r.name} · ${r.calories} kcal · P ${fmt(r.protein)} g · C ${fmt(r.carbs)} g · G ${fmt(r.fat)} g\n\nIngredientes:\n${lines(r.ingredients).map(l=>'• '+l).join('\n')}\n\nModo de preparo:\n${lines(r.instructions).join('\n')}\n\n${url}`;
  if(navigator.share){try{await navigator.share({title:r.name,text,url});return}catch(e){if(e.name==='AbortError')return}}
  try{await navigator.clipboard.writeText(text);toast('Receita copiada. Cole no WhatsApp ou onde quiser.')}catch{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener')}
 }
 function toggleFav(id){
  if(favs.has(id))favs.delete(id);else favs.add(id);saveFavs();
  toast(favs.has(id)?'Salva nas favoritas':'Removida das favoritas');
- document.querySelectorAll(`[data-fav="${id}"]`).forEach(b=>{b.setAttribute('aria-pressed',String(favs.has(id)));const lbl=b.querySelector('span');if(lbl)lbl.textContent=favs.has(id)?'Salva':'Salvar';if(!lbl)b.setAttribute('aria-label',favs.has(id)?'Remover dos favoritos':'Salvar nos favoritos')});
- if(state.fav)applyFilters();
+ document.querySelectorAll(`[data-fav="${id}"]`).forEach(b=>{b.setAttribute('aria-pressed',String(favs.has(id)));const l=b.querySelector('span');if(l)l.textContent=favs.has(id)?'Salva':'Salvar'});
+ applyFilters();
 }
 
 function exportToPdf() {
@@ -538,34 +594,31 @@ function exportToPdf() {
         }
 
 // Montagem
-$('totalCount').textContent=recipes.length;
-$('quick').innerHTML=quick.map(q=>`<button type="button" class="chip" data-q="${q.id}" aria-pressed="false">${q.id==='fav'?heart.replace('width="20" height="20"','width="16" height="16"'):''}${q.label}</button>`).join('');
-$('methods').innerHTML=Object.entries(methodLabels).map(([m,l])=>`<button type="button" class="chip" data-m="${m}" aria-pressed="true">${l}</button>`).join('');
+$('goals').innerHTML=goals.map(g=>`<button type="button" class="goal" data-goal="${g.id}" aria-pressed="false"><span class="box">${check}</span><span><b>${g.title}</b><span class="d">${g.desc}</span></span></button>`).join('');
+$('methods').innerHTML=Object.entries(methodLabels).map(([m,l])=>`<button type="button" class="chip" data-m="${m}" aria-pressed="false">${l}</button>`).join('');
 let t;$('searchName').addEventListener('input',e=>{clearTimeout(t);const v=e.target.value;t=setTimeout(()=>update(s=>{s.q=v}),150)});
 $('clearSearch').addEventListener('click',()=>{update(s=>{s.q=''});$('searchName').focus()});
 [['caloriesMin','kmin'],['caloriesMax','kmax'],['proteinMin','pmin'],['carbsMax','cmax'],['fatMax','gmax']].forEach(([id,k])=>$(id).addEventListener('input',e=>update(s=>{s[k]=e.target.value.trim()})));
 $('sort').addEventListener('change',e=>update(s=>{s.sort=e.target.value}));
 $('more').addEventListener('click',()=>{shown+=PAGE;render()});
+$('favOnly').addEventListener('click',()=>update(s=>{s.fav=!s.fav}));
+$('lactoseSwitch').addEventListener('click',()=>update(s=>{s.nolac=!s.nolac}));
 $('pdfBtn').addEventListener('click',()=>{if(!window.jspdf){toast('Carregando o gerador de PDF… tente de novo em instantes.');return}exportToPdf()});
-const panel=$('panel'),home=panel.parentNode,homeNext=panel.nextSibling;
-$('openFilters').addEventListener('click',()=>{$('sheetSlot').appendChild(panel);$('filtersSheet').showModal()});
-$('filtersSheet').addEventListener('close',()=>home.insertBefore(panel,homeNext));
-$('applyPanel').addEventListener('click',()=>closeDialog($('filtersSheet')));
-$('resetPanel').addEventListener('click',()=>update(s=>{const q=s.q,f=s.fav,so=s.sort;Object.assign(s,initial(),{q,fav:f,sort:so})}));
-$('detail').addEventListener('close',()=>{delete $('detail').dataset.id;writeHash()});
+$('detail').addEventListener('close',()=>{delete $('detail').dataset.id;writeHash();updateJump()});
 document.addEventListener('click',e=>{
  const el=e.target.closest('button,dialog');if(!el)return;
- if(el.tagName==='DIALOG'){if(e.target===el)closeDialog(el);return}
+ if(el.tagName==='DIALOG'){if(e.target===el)el.close();return}
  const ds=el.dataset;
  if(ds.open)openRecipe(Number(ds.open));
  else if(ds.fav)toggleFav(Number(ds.fav));
  else if(ds.share)share(Number(ds.share));
- else if('close' in ds)closeDialog(el.closest('dialog'));
+ else if('close' in ds)el.closest('dialog').close();
+ else if('jump' in ds)$('results').scrollIntoView({behavior:'smooth',block:'start'});
  else if('reset' in ds)update(s=>Object.assign(s,initial(),{sort:s.sort}));
- else if(ds.drop)update(s=>{const d=initial();if(ds.drop==='methods')s.methods=d.methods;else s[ds.drop]=d[ds.drop]});
- else if(ds.q){const q=quick.find(x=>x.id===ds.q);update(s=>q.set(s,!q.on(s)))}
+ else if(ds.drop)update(s=>{s[ds.drop]=initial()[ds.drop]});
+ else if(ds.goal){const g=goals.find(x=>x.id===ds.goal);update(s=>{s[g.key]=s[g.key]===g.val?'':g.val})}
  else if(ds.m)update(s=>{s.methods=s.methods.includes(ds.m)?s.methods.filter(m=>m!==ds.m):[...s.methods,ds.m]});
- else if(ds.v&&el.parentNode.dataset.key)update(s=>{s[el.parentNode.dataset.key]=ds.v});
+ else if(ds.v&&el.parentNode.dataset.key)update(s=>{s.type=ds.v});
 });
 const start=readHash();state=start.s;applyFilters();if(start.open)openRecipe(start.open);
 </script>
